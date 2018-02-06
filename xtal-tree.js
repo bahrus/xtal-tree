@@ -5,35 +5,39 @@
         }
         set childrenFn(nodeFn) {
             this._childrenFn = nodeFn;
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.onPropsChange();
         }
         get keyFn() {
             return this._keyFn;
         }
         set keyFn(nodeFn) {
             this._keyFn = nodeFn;
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.onPropsChange();
         }
         get isOpenFn() {
             return this._isOpenFn;
         }
         set isOpenFn(nodeFn) {
             this._isOpenFn = nodeFn;
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.onPropsChange();
         }
         get nodes() {
             return this._nodes;
         }
         set nodes(nodes) {
             this._nodes = nodes;
+            this.onPropsChange();
+        }
+        onPropsChange() {
+            if (!this._isOpenFn || !this._childrenFn || !this._nodes)
+                return;
             this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            console.log(this.viewableNodes);
         }
         _calculateViewableNodes(nodes, acc) {
             // console.log({
             //     isOpenFn: this._isOpenFn,
             // });
-            if (!this._isOpenFn || !this._childrenFn || !this._nodes)
-                return;
             nodes.forEach(node => {
                 acc.push(node);
                 if (this._isOpenFn(node))

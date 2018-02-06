@@ -30,7 +30,7 @@ export interface IXtalTreeProperties{
         }
         set childrenFn(nodeFn){
             this._childrenFn = nodeFn;
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.onPropsChange();
         }
 
         _keyFn: (tn: ITreeNode) => string;
@@ -39,7 +39,7 @@ export interface IXtalTreeProperties{
         }
         set keyFn(nodeFn){
             this._keyFn = nodeFn;
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.onPropsChange();
         }
 
         _isOpenFn: (tn: ITreeNode) => boolean;
@@ -48,7 +48,7 @@ export interface IXtalTreeProperties{
         }
         set isOpenFn(nodeFn){
             this._isOpenFn = nodeFn;
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.onPropsChange();
         }
 
         _nodes: ITreeNode[];
@@ -58,7 +58,13 @@ export interface IXtalTreeProperties{
 
         set nodes(nodes){
             this._nodes = nodes;
+            this.onPropsChange();
+        }
+
+        onPropsChange(){
+            if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
             this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            console.log(this.viewableNodes);
         }
 
         _calculateViewableNodes(nodes: ITreeNode[], acc: ITreeNode[]){
@@ -66,7 +72,7 @@ export interface IXtalTreeProperties{
             //     isOpenFn: this._isOpenFn,
 
             // });
-            if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
+            
 
             nodes.forEach(node =>{
                 acc.push(node);

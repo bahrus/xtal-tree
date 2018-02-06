@@ -3,20 +3,20 @@
         get childrenFn() {
             return this._childrenFn;
         }
-        set childrenFn(node) {
-            this._childrenFn = node;
+        set childrenFn(nodeFn) {
+            this._childrenFn = nodeFn;
         }
         get keyFn() {
             return this._keyFn;
         }
-        set keyFn(node) {
-            this._keyFn = node;
+        set keyFn(nodeFn) {
+            this._keyFn = nodeFn;
         }
         get isOpenFn() {
             return this._isOpenFn;
         }
-        set isOpenFn(node) {
-            this._isOpenFn = node;
+        set isOpenFn(nodeFn) {
+            this._isOpenFn = nodeFn;
         }
         get nodes() {
             return this._nodes;
@@ -49,7 +49,16 @@
                 };
             });
         }
+        get toggleNodeFn() {
+            return this._toggleNodeFn;
+        }
+        set toggleNodeFn(nodeFn) {
+            this._toggleNodeFn = nodeFn;
+        }
         set toggledNode(node) {
+            this._toggleNodeFn(node);
+            //for now, recalculate all nodes
+            this._calculateViewableNodes(this._nodes, []);
         }
     }
     customElements.define('xtal-tree', XtalTree);

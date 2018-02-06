@@ -16,9 +16,10 @@ export interface IXtalTreeProperties{
     childrenFn: (tn: ITreeNode) => ITreeNode[];
     keyFn: (tn: ITreeNode) => string;
     isOpenFn: (tn: ITreeNode) => boolean;
+    toggleNodeFn : (tn: ITreeNode) => void;
     nodes: ITreeNode[];
-    viewableNodes: ITreeNode[];
-    toggledNode: ITreeNode;
+    viewableNodes?: ITreeNode[];
+    toggledNode?: ITreeNode;
 }
 
 (function () {
@@ -28,24 +29,24 @@ export interface IXtalTreeProperties{
         get childrenFn (){
             return this._childrenFn;
         }
-        set childrenFn(node){
-            this._childrenFn = node;
+        set childrenFn(nodeFn){
+            this._childrenFn = nodeFn;
         }
 
         _keyFn: (tn: ITreeNode) => string;
         get keyFn(){
             return this._keyFn;
         }
-        set keyFn(node){
-            this._keyFn = node;
+        set keyFn(nodeFn){
+            this._keyFn = nodeFn;
         }
 
         _isOpenFn: (tn: ITreeNode) => boolean;
         get isOpenFn(){
             return this._isOpenFn;
         }
-        set isOpenFn(node){
-            this._isOpenFn = node;
+        set isOpenFn(nodeFn){
+            this._isOpenFn = nodeFn;
         }
 
         _nodes: ITreeNode[];
@@ -91,8 +92,19 @@ export interface IXtalTreeProperties{
             })
         }
 
-        set toggledNode(node: ITreeNode){
+        _toggleNodeFn: (tn: ITreeNode) => void;
+        get toggleNodeFn(){
+            return this._toggleNodeFn;
+        }
 
+        set toggleNodeFn(nodeFn){
+            this._toggleNodeFn = nodeFn;
+        }
+
+        set toggledNode(node: ITreeNode){
+            this._toggleNodeFn(node);
+            //for now, recalculate all nodes
+            this._calculateViewableNodes(this._nodes, []);
         }
     }
 

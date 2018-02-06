@@ -2,6 +2,11 @@ interface INodeState{
     
 }
 
+interface INodePosition{
+    node: ITreeNode,
+    position: number
+}
+
 export interface ITreeNode{
     //children?: ITreeNode[];
     __memo?: INodeState;
@@ -9,11 +14,11 @@ export interface ITreeNode{
 
 export interface IXtalTreeProperties{
     childrenFn: (tn: ITreeNode) => ITreeNode[];
-    keyFn: (tn: ITreeNode) => boolean;
+    keyFn: (tn: ITreeNode) => string;
     isOpenFn: (tn: ITreeNode) => boolean;
     nodes: ITreeNode[];
-
-    
+    viewableNodes: ITreeNode[];
+    toggledNode: ITreeNode;
 }
 
 (function () {
@@ -23,24 +28,24 @@ export interface IXtalTreeProperties{
         get childrenFn (){
             return this._childrenFn;
         }
-        set childrenFn(val){
-            this._childrenFn = val;
+        set childrenFn(node){
+            this._childrenFn = node;
         }
 
-        _keyFn: (tn: ITreeNode) => boolean;
+        _keyFn: (tn: ITreeNode) => string;
         get keyFn(){
             return this._keyFn;
         }
-        set keyFn(val){
-            this._keyFn = val;
+        set keyFn(node){
+            this._keyFn = node;
         }
 
         _isOpenFn: (tn: ITreeNode) => boolean;
         get isOpenFn(){
             return this._isOpenFn;
         }
-        set isOpenFn(val){
-            this._isOpenFn = val;
+        set isOpenFn(node){
+            this._isOpenFn = node;
         }
 
         _nodes: ITreeNode[];
@@ -48,8 +53,48 @@ export interface IXtalTreeProperties{
             return this._nodes;
         }
 
-        set nodes(val){
-            this._nodes = val;
+        set nodes(nodes){
+            this._nodes = nodes;
+            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+        }
+
+        _calculateViewableNodes(nodes: ITreeNode[], acc: ITreeNode[]){
+            nodes.forEach(node =>{
+                acc.push(node);
+                if(this._isOpenFn(node)) this._calculateViewableNodes(this._childrenFn(node), acc);
+            })
+            return acc;
+        }
+
+        _viewableNodes: ITreeNode[];
+        get viewableNodes(){
+            return this._viewableNodes;
+        }
+
+
+
+        set viewableNodes(nodes){
+            this._viewableNodes = nodes;
+            this._indexViewableNodes();
+        }
+
+        _viewableNodeKeys : {[key: string]: INodePosition};
+
+
+        _indexViewableNodes(){
+            this._viewableNodeKeys = {};
+            this._viewableNodes.forEach((node, idx) =>{
+                this._viewableNodeKeys[this.keyFn(node)] = {
+                    node:node,
+                    position: idx
+                }
+            })
+        }
+
+        set toggledNode(node: ITreeNode){
+
         }
     }
+
+    customElements.define('xtal-tree', XtalTree)
 })();

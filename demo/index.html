@@ -13,6 +13,7 @@
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
+    <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
       </style>
@@ -22,6 +23,7 @@
     <div class="vertical-section-container centered">
       <h3>Basic xtal-tree demo</h3>
       <demo-snippet>
+        <template>
         <xtal-decorator>
           <script type="text/ecmascript ish">
             [{
@@ -51,16 +53,19 @@
         <dom-bind>
           <template>
               <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
-              I am here
               <xtal-tree 
                 is-open-fn="[[isOpenFn]]" 
                 key-fn="[[keyFn]]" 
                 children-fn = "[[childrenFn]]" 
-                nodes="[[directory]]">
+                nodes="[[directory]]"
+                viewable-nodes="{{viewableNodes}}"
+                >
               </xtal-tree>
+              <template is="dom-repeat" items="[[viewableNodes]]">
+                <div>[[item.name]]</div>
+              </template>
           </template>
         </dom-bind>
-        <template>
 
         </template>
       </demo-snippet>

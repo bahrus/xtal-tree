@@ -65,6 +65,14 @@ export interface IXtalTreeProperties{
             if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
             this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
             console.log(this.viewableNodes);
+            const newEvent = new CustomEvent('viewable-nodes-changed', {
+                detail: {
+                    value: this.viewableNodes
+                },
+                bubbles: true,
+                composed: true
+            } as CustomEventInit);
+            this.dispatchEvent(newEvent);
         }
 
         _calculateViewableNodes(nodes: ITreeNode[], acc: ITreeNode[]){

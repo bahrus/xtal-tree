@@ -1,0 +1,36 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="xtal-tree">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /**
+     * `xtal-tree`
+     * Provide flat, virtual snapshot of a tree
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class XtalTree extends Polymer.Element {
+      static get is() { return 'xtal-tree'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'xtal-tree'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(XtalTree.is, XtalTree);
+  </script>
+</dom-module>

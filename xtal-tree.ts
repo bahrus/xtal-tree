@@ -23,6 +23,14 @@ export interface IXtalTreeProperties{
 }
 
 (function () {
+    /**
+     * `xtal-tree`
+     *  Web component wrapper around billboard.js charting library
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
     class XtalTree extends HTMLElement implements IXtalTreeProperties{
         _childrenFn : (tn: ITreeNode) => ITreeNode[];
         get childrenFn (){
@@ -60,11 +68,7 @@ export interface IXtalTreeProperties{
             this._nodes = nodes;
             this.onPropsChange();
         }
-
-        onPropsChange(){
-            if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
-            console.log(this.viewableNodes);
+        notifyViewNodesChanged(){
             const newEvent = new CustomEvent('viewable-nodes-changed', {
                 detail: {
                     value: this.viewableNodes
@@ -73,6 +77,12 @@ export interface IXtalTreeProperties{
                 composed: true
             } as CustomEventInit);
             this.dispatchEvent(newEvent);
+        }
+        onPropsChange(){
+            if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
+            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.notifyViewNodesChanged();
+            
         }
 
         _calculateViewableNodes(nodes: ITreeNode[], acc: ITreeNode[]){
@@ -127,7 +137,8 @@ export interface IXtalTreeProperties{
         set toggledNode(node: ITreeNode){
             this._toggleNodeFn(node);
             //for now, recalculate all nodes
-            this._calculateViewableNodes(this._nodes, []);
+            this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.notifyViewNodesChanged();
         }
     }
 

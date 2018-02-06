@@ -45,7 +45,17 @@
                   value: function(node){
                     return node.children;
                   }
-                }
+                },
+                toggleNodeFn:{
+                  type: Function,
+                  value: function(node){
+                    node.expanded = !node.expanded;
+                  }
+                },
+                
+              },
+              toggleNode(e){
+                this.$.myTree.toggledNode = e.srcElement.node;
               }
             }]
           </script>
@@ -53,16 +63,18 @@
         <dom-bind>
           <template>
               <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
-              <xtal-tree 
+              <xtal-tree id="myTree"
                 is-open-fn="[[isOpenFn]]" 
                 key-fn="[[keyFn]]" 
                 children-fn = "[[childrenFn]]" 
                 nodes="[[directory]]"
+                toggle-node-fn="[[toggleNodeFn]]"
                 viewable-nodes="{{viewableNodes}}"
                 >
               </xtal-tree>
+              <div>Click on Nodes below to toggle open / closed.</div><br>
               <template is="dom-repeat" items="[[viewableNodes]]">
-                <div>[[item.name]]</div>
+                <div node="[[item]]" on-click="toggleNode">[[item.name]]</div>
               </template>
           </template>
         </dom-bind>

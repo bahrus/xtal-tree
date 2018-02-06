@@ -1,4 +1,12 @@
 (function () {
+    /**
+     * `xtal-tree`
+     *  Web component wrapper around billboard.js charting library
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
     class XtalTree extends HTMLElement {
         get childrenFn() {
             return this._childrenFn;
@@ -28,11 +36,7 @@
             this._nodes = nodes;
             this.onPropsChange();
         }
-        onPropsChange() {
-            if (!this._isOpenFn || !this._childrenFn || !this._nodes)
-                return;
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
-            console.log(this.viewableNodes);
+        notifyViewNodesChanged() {
             const newEvent = new CustomEvent('viewable-nodes-changed', {
                 detail: {
                     value: this.viewableNodes
@@ -41,6 +45,12 @@
                 composed: true
             });
             this.dispatchEvent(newEvent);
+        }
+        onPropsChange() {
+            if (!this._isOpenFn || !this._childrenFn || !this._nodes)
+                return;
+            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.notifyViewNodesChanged();
         }
         _calculateViewableNodes(nodes, acc) {
             // console.log({
@@ -80,7 +90,8 @@
         set toggledNode(node) {
             this._toggleNodeFn(node);
             //for now, recalculate all nodes
-            this._calculateViewableNodes(this._nodes, []);
+            this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.notifyViewNodesChanged();
         }
     }
     customElements.define('xtal-tree', XtalTree);

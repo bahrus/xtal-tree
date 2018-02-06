@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "ES6",
+		"module":"es6",
+		"sourceMap": true,
+		"experimentalDecorators": true,
+		"newLine": "LF"
+	},
+	"exclude":[
+		"build",
+		"bower_components",
+		"node_modules"
+	]
+
+}

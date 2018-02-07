@@ -13,6 +13,7 @@
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
+    <link rel="import" href="../../polymer/lib/elements/dom-if.html">
     <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -73,8 +74,13 @@
                 >
               </xtal-tree>
               <div>Click on Nodes below to toggle open / closed.</div><br>
-              <template is="dom-repeat" items="[[viewableNodes]]">
-                <div node="[[item]]" on-click="toggleNode">[[item.name]]</div>
+              <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
+                  
+                <div node="[[item]]" on-click="toggleNode" style="cursor:pointer">
+                    <template is="dom-if" if="[[item.expanded]]">🤮</template>
+                    <template is="dom-if" if="[[!item.expanded]]">🤢</template>
+                  [[item.name]] 
+                </div>
               </template>
           </template>
         </dom-bind>

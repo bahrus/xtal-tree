@@ -45,6 +45,7 @@
                 composed: true
             });
             this.dispatchEvent(newEvent);
+            //console.log(this.viewableNodes);
         }
         onPropsChange() {
             if (!this._isOpenFn || !this._childrenFn || !this._nodes)
@@ -56,6 +57,8 @@
             // console.log({
             //     isOpenFn: this._isOpenFn,
             // });
+            if (!nodes)
+                return;
             nodes.forEach(node => {
                 acc.push(node);
                 if (this._isOpenFn(node))
@@ -90,6 +93,7 @@
         set toggledNode(node) {
             this._toggleNodeFn(node);
             //for now, recalculate all nodes
+            this._nodes = this._nodes.slice();
             this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
             this.notifyViewNodesChanged();
         }

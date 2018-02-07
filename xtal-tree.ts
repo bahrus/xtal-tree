@@ -77,6 +77,7 @@ export interface IXtalTreeProperties{
                 composed: true
             } as CustomEventInit);
             this.dispatchEvent(newEvent);
+            //console.log(this.viewableNodes);
         }
         onPropsChange(){
             if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
@@ -91,7 +92,7 @@ export interface IXtalTreeProperties{
 
             // });
             
-
+            if(!nodes) return;
             nodes.forEach(node =>{
                 acc.push(node);
                 if(this._isOpenFn(node)) this._calculateViewableNodes(this._childrenFn(node), acc);
@@ -137,6 +138,7 @@ export interface IXtalTreeProperties{
         set toggledNode(node: ITreeNode){
             this._toggleNodeFn(node);
             //for now, recalculate all nodes
+            this._nodes = this._nodes.slice();
             this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
             this.notifyViewNodesChanged();
         }

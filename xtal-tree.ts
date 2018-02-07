@@ -81,6 +81,9 @@ export interface IXtalTreeProperties{
         }
         onPropsChange(){
             if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
+            if(this._levelSetterFn){
+                this._levelSetterFn(this._nodes, 0);
+            }
             this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
             this.notifyViewNodesChanged();
             
@@ -141,6 +144,14 @@ export interface IXtalTreeProperties{
             this._nodes = this._nodes.slice();
             this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
             this.notifyViewNodesChanged();
+        }
+
+        _levelSetterFn: (nodes:ITreeNode[], level:number) => void
+        set levelSetterFn(setter){
+            this._levelSetterFn = setter;
+        }
+        get levelSetterFn(){
+            return this._levelSetterFn;
         }
     }
 

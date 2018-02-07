@@ -53,7 +53,15 @@
                     node.expanded = !node.expanded;
                   }
                 },
-                
+                levelSetterFn:{
+                  type: Function,
+                  value: function(nodes, level){
+                    nodes.forEach(node => {
+                      node.style = 'margin-left:' + (level * 12) + 'px';
+                      if(node.children) this.levelSetterFn(node.children, level + 1)
+                    })
+                  }
+                }
               },
               toggleNode(e){
                 this.$.myTree.toggledNode = e.srcElement.node;
@@ -67,18 +75,20 @@
               <xtal-tree id="myTree"
                 is-open-fn="[[isOpenFn]]" 
                 key-fn="[[keyFn]]" 
-                children-fn = "[[childrenFn]]" 
+                children-fn = "[[childrenFn]]"
+                level-setter-fn="[[levelSetterFn]]" 
                 nodes="[[directory]]"
                 toggle-node-fn="[[toggleNodeFn]]"
                 viewable-nodes="{{viewableNodes}}"
+                
                 >
               </xtal-tree>
               <div>Click on Nodes below to toggle open / closed.</div><br>
               <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
                   
-                <div node="[[item]]" on-click="toggleNode" style="cursor:pointer">
-                    <template is="dom-if" if="[[item.expanded]]">🤮</template>
-                    <template is="dom-if" if="[[!item.expanded]]">🤢</template>
+                <div node="[[item]]" on-click="toggleNode" style$="cursor:pointer;[[item.style]]">
+                    <template is="dom-if" if="[[item.expanded]]">📖</template>
+                    <template is="dom-if" if="[[!item.expanded]]">📕</template>
                   [[item.name]] 
                 </div>
               </template>

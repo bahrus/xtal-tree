@@ -71,7 +71,12 @@
         </xtal-decorator>
         <dom-bind>
           <template>
-              <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
+            <style>
+              div.node {
+                cursor:pointer;
+              }
+            </style>
+            <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
               <xtal-tree id="myTree"
                 is-open-fn="[[isOpenFn]]" 
                 key-fn="[[keyFn]]" 
@@ -86,7 +91,7 @@
               <div>Click on Nodes below to toggle open / closed.</div><br>
               <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
                   
-                <div node="[[item]]" on-click="toggleNode" style$="cursor:pointer;[[item.style]]">
+                <div class="node" node="[[item]]" on-click="toggleNode" style$="[[item.style]]">
                     <template is="dom-if" if="[[item.expanded]]">📖</template>
                     <template is="dom-if" if="[[!item.expanded]]">📕</template>
                   [[item.name]] 

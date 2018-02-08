@@ -92,8 +92,12 @@
               <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
                   
                 <div class="node" node="[[item]]" on-click="toggleNode" style$="[[item.style]]">
-                    <template is="dom-if" if="[[item.expanded]]">📖</template>
-                    <template is="dom-if" if="[[!item.expanded]]">📕</template>
+                    <template is="dom-if" if="[[item.children]]">
+                        <template is="dom-if" if="[[item.expanded]]">📖</template>
+                        <template is="dom-if" if="[[!item.expanded]]">📕</template>
+                    </template>
+                    <template is="dom-if" if="[[!item.children]]">📝</template>
+                    
                   [[item.name]] 
                 </div>
               </template>

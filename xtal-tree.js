@@ -37,6 +37,9 @@
         }
         set searchString(val) {
             this._searchString = val;
+            if (val) {
+                this.searchNodes();
+            }
         }
         get testNodeFn() {
             return this._testNodeFn;
@@ -131,6 +134,18 @@
         search(nodes, parent) {
             nodes.forEach(node => {
                 if (this._testNodeFn(node, this._searchString)) {
+                    this.closeNode(node);
+                    if (parent)
+                        this.openNode(parent);
+                }
+                else {
+                    const children = this._childrenFn(node);
+                    if (children) {
+                        this.search(children, node);
+                        if (this._isOpenFn(node) && parent) {
+                            this.openNode(parent);
+                        }
+                    }
                 }
             });
         }

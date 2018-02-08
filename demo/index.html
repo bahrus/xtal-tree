@@ -92,8 +92,16 @@
               }
             </style>
             <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
-            <xtal-tree id="myTree" is-open-fn="[[isOpenFn]]" key-fn="[[keyFn]]" children-fn="[[childrenFn]]" level-setter-fn="[[levelSetterFn]]"
-              nodes="[[directory]]" toggle-node-fn="[[toggleNodeFn]]" search-string="[[search]]" viewable-nodes="{{viewableNodes}}">
+            <xtal-tree id="myTree" 
+              is-open-fn="[[isOpenFn]]" 
+              key-fn="[[keyFn]]" 
+              children-fn="[[childrenFn]]" 
+              level-setter-fn="[[levelSetterFn]]"
+              test-node-fn="[[testNodeFn]]"
+              toggle-node-fn="[[toggleNodeFn]]"
+              nodes="[[directory]]"  
+              search-string="[[search]]" 
+              viewable-nodes="{{viewableNodes}}">
             </xtal-tree>
             <div>Click on Nodes below to toggle open / closed.</div>
             <br>

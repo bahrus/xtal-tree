@@ -72,6 +72,9 @@ export interface IXtalTreeProperties{
         }
         set searchString(val){
             this._searchString = val;
+            if(val){
+                this.searchNodes();
+            }
         }
 
         _testNodeFn?: (tn: ITreeNode, search: string) => boolean;
@@ -181,7 +184,16 @@ export interface IXtalTreeProperties{
         search(nodes: ITreeNode[], parent: ITreeNode){
             nodes.forEach(node =>{
                 if(this._testNodeFn(node, this._searchString)){
-
+                    this.closeNode(node);
+                    if(parent) this.openNode(parent);
+                }else{
+                    const children = this._childrenFn(node);
+                    if(children){
+                        this.search(children, node);
+                        if(this._isOpenFn(node) && parent){
+                            this.openNode(parent);
+                        }
+                    }
                 }
             })
         }

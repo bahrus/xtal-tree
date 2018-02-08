@@ -1,30 +1,32 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>xtal-tree demo</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.20/build/ES6/xtal-fetch.js"></script>
-    <script async src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.12/build/ES6/xtal-decorator.js"></script>
-    <script src="../xtal-tree.js"></script>
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
-    <link rel="import" href="../../polymer/lib/elements/dom-if.html">
-    <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
-    <custom-style>
-      <style is="custom-style" include="demo-pages-shared-styles">
-      </style>
-    </custom-style>
-  </head>
-  <body>
-    <div class="vertical-section-container centered">
-      <h3>Basic xtal-tree demo</h3>
-      <demo-snippet>
-        <template>
+  <title>xtal-tree demo</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.20/build/ES6/xtal-fetch.js"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.12/build/ES6/xtal-decorator.js"></script>
+  <script src="../xtal-tree.js"></script>
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
+  <link rel="import" href="../../polymer/lib/elements/dom-if.html">
+  <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
+  <custom-style>
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </custom-style>
+</head>
+
+<body>
+  <div class="vertical-section-container centered">
+    <h3>Basic xtal-tree demo</h3>
+    <demo-snippet>
+      <template>
         <xtal-decorator>
           <script type="text/ecmascript ish">
             [{
@@ -61,6 +63,13 @@
                       if(node.children) this.levelSetterFn(node.children, level + 1)
                     })
                   }
+                },
+                testNodeFn:{
+                  type: Function,
+                  value: function(node, search){
+                    if(!node.nameLC) node.nameLC = node.name.toLowerCase();
+                    return node.nameLC.indexOf(search.toLowerCase()) > -1;
+                  }
                 }
               },
               toggleNode(e){
@@ -79,44 +88,37 @@
           <template>
             <style>
               div.node {
-                cursor:pointer;
+                cursor: pointer;
               }
             </style>
             <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
-              <xtal-tree id="myTree"
-                is-open-fn="[[isOpenFn]]" 
-                key-fn="[[keyFn]]" 
-                children-fn = "[[childrenFn]]"
-                level-setter-fn="[[levelSetterFn]]" 
-                nodes="[[directory]]"
-                toggle-node-fn="[[toggleNodeFn]]"
-                search-string="[[search]]"
-                viewable-nodes="{{viewableNodes}}"
-                
-                >
-              </xtal-tree>
-              <div>Click on Nodes below to toggle open / closed.</div><br>
-              <!-- <input type="text" value="{{search::input}}" placeholder="Search"> -->
-              <button on-click="expandAll">Expand All</button>
-              <button on-click="collapseAll">Collapse All</button>
-              <p></p>
-              <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
-                  
-                <div class="node" node="[[item]]" on-click="toggleNode" style$="[[item.style]]">
-                    <template is="dom-if" if="[[item.children]]">
-                        <template is="dom-if" if="[[item.expanded]]">📖</template>
-                        <template is="dom-if" if="[[!item.expanded]]">📕</template>
-                    </template>
-                    <template is="dom-if" if="[[!item.children]]">📝</template>
-                    
-                  [[item.name]] 
-                </div>
-              </template>
+            <xtal-tree id="myTree" is-open-fn="[[isOpenFn]]" key-fn="[[keyFn]]" children-fn="[[childrenFn]]" level-setter-fn="[[levelSetterFn]]"
+              nodes="[[directory]]" toggle-node-fn="[[toggleNodeFn]]" search-string="[[search]]" viewable-nodes="{{viewableNodes}}">
+            </xtal-tree>
+            <div>Click on Nodes below to toggle open / closed.</div>
+            <br>
+            <input type="text" value="{{search::input}}" placeholder="Search">
+            <button on-click="expandAll">Expand All</button>
+            <button on-click="collapseAll">Collapse All</button>
+            <p></p>
+            <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
+
+              <div class="node" node="[[item]]" on-click="toggleNode" style$="[[item.style]]">
+                <template is="dom-if" if="[[item.children]]">
+                  <template is="dom-if" if="[[item.expanded]]">📖</template>
+                  <template is="dom-if" if="[[!item.expanded]]">📕</template>
+                </template>
+                <template is="dom-if" if="[[!item.children]]">📝</template>
+
+                [[item.name]]
+              </div>
+            </template>
           </template>
         </dom-bind>
 
-        </template>
-      </demo-snippet>
-    </div>
-  </body>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+
 </html>

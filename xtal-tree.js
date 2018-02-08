@@ -121,19 +121,38 @@
             this.collapseAll(nodes);
             this.updateViewableNodes();
         }
+        searchNodes() {
+            if (!this._testNodeFn)
+                return;
+            this.collapseAll(this._nodes);
+            this.search(this._nodes, null);
+            this.updateViewableNodes();
+        }
+        search(nodes, parent) {
+            nodes.forEach(node => {
+                if (this._testNodeFn(node, this._searchString)) {
+                }
+            });
+        }
+        openNode(node) {
+            if (!this._isOpenFn(node))
+                this._toggleNodeFn(node);
+        }
         expandAll(nodes) {
             nodes.forEach(node => {
-                if (!this._isOpenFn(node))
-                    this._toggleNodeFn(node);
+                this.openNode(node);
                 const children = this._childrenFn(node);
                 if (children)
                     this.expandAll(children);
             });
         }
+        closeNode(node) {
+            if (this._isOpenFn(node))
+                this._toggleNodeFn(node);
+        }
         collapseAll(nodes) {
             nodes.forEach(node => {
-                if (this._isOpenFn(node))
-                    this._toggleNodeFn(node);
+                this.closeNode(node);
                 const children = this._childrenFn(node);
                 if (children)
                     this.collapseAll(children);

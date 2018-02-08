@@ -65,6 +65,9 @@
               },
               toggleNode(e){
                 this.$.myTree.toggledNode = e.srcElement.node;
+              },
+              expandAll(e){
+                this.$.myTree.allExpandedNodes = this.$.myTree.viewableNodes;
               }
             }]
           </script>
@@ -84,11 +87,15 @@
                 level-setter-fn="[[levelSetterFn]]" 
                 nodes="[[directory]]"
                 toggle-node-fn="[[toggleNodeFn]]"
+                search-string="[[search]]"
                 viewable-nodes="{{viewableNodes}}"
                 
                 >
               </xtal-tree>
               <div>Click on Nodes below to toggle open / closed.</div><br>
+              <!-- <input type="text" value="{{search::input}}" placeholder="Search"> -->
+              <button on-click="expandAll">Expand All</button>
+              <p></p>
               <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
                   
                 <div class="node" node="[[item]]" on-click="toggleNode" style$="[[item.style]]">

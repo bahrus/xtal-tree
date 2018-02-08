@@ -16,10 +16,12 @@ export interface IXtalTreeProperties{
     childrenFn: (tn: ITreeNode) => ITreeNode[];
     keyFn: (tn: ITreeNode) => string;
     isOpenFn: (tn: ITreeNode) => boolean;
+    testNodeFn?: (tn: ITreeNode, search: string) => boolean;
     toggleNodeFn : (tn: ITreeNode) => void;
     nodes: ITreeNode[];
     viewableNodes?: ITreeNode[];
     toggledNode?: ITreeNode;
+    searchString?: string;
 }
 
 (function () {
@@ -64,6 +66,22 @@ export interface IXtalTreeProperties{
             return this._nodes;
         }
 
+        _searchString: string;
+        get searchString(){
+            return this._searchString;
+        }
+        set searchString(val){
+            this._searchString = val;
+        }
+
+        _testNodeFn?: (tn: ITreeNode, search: string) => boolean;
+        get testNodeFn(){
+            return this._testNodeFn;
+        }
+        set testNodeFn(fn){
+            this._testNodeFn = fn;
+        }
+
         set nodes(nodes){
             this._nodes = nodes;
             this.onPropsChange();
@@ -90,11 +108,6 @@ export interface IXtalTreeProperties{
         }
 
         _calculateViewableNodes(nodes: ITreeNode[], acc: ITreeNode[]){
-            // console.log({
-            //     isOpenFn: this._isOpenFn,
-
-            // });
-            
             if(!nodes) return;
             nodes.forEach(node =>{
                 acc.push(node);
@@ -108,7 +121,9 @@ export interface IXtalTreeProperties{
             return this._viewableNodes;
         }
 
-
+        // testNode(node: ITreeNode){
+        //     if(!this.)
+        // }
 
         set viewableNodes(nodes){
             this._viewableNodes = nodes;
@@ -141,9 +156,23 @@ export interface IXtalTreeProperties{
         set toggledNode(node: ITreeNode){
             this._toggleNodeFn(node);
             //for now, recalculate all nodes
-            this._nodes = this._nodes.slice();
+            //this._nodes = this._nodes.slice();
             this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
             this.notifyViewNodesChanged();
+        }
+
+        set allExpandedNodes(nodes: ITreeNode[]){
+            this.expandAll(nodes);
+            this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.notifyViewNodesChanged();
+        }
+
+        expandAll(nodes: ITreeNode[]){
+            nodes.forEach(node =>{
+                if(!this._isOpenFn(node)) this._toggleNodeFn(node);
+                const children = this._childrenFn(node);
+                if(children) this.expandAll(children);
+            })
         }
 
         _levelSetterFn: (nodes:ITreeNode[], level:number) => void

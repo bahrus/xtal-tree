@@ -32,6 +32,18 @@
         get nodes() {
             return this._nodes;
         }
+        get searchString() {
+            return this._searchString;
+        }
+        set searchString(val) {
+            this._searchString = val;
+        }
+        get testNodeFn() {
+            return this._testNodeFn;
+        }
+        set testNodeFn(fn) {
+            this._testNodeFn = fn;
+        }
         set nodes(nodes) {
             this._nodes = nodes;
             this.onPropsChange();
@@ -57,9 +69,6 @@
             this.notifyViewNodesChanged();
         }
         _calculateViewableNodes(nodes, acc) {
-            // console.log({
-            //     isOpenFn: this._isOpenFn,
-            // });
             if (!nodes)
                 return;
             nodes.forEach(node => {
@@ -72,6 +81,9 @@
         get viewableNodes() {
             return this._viewableNodes;
         }
+        // testNode(node: ITreeNode){
+        //     if(!this.)
+        // }
         set viewableNodes(nodes) {
             this._viewableNodes = nodes;
             this._indexViewableNodes();
@@ -96,9 +108,23 @@
         set toggledNode(node) {
             this._toggleNodeFn(node);
             //for now, recalculate all nodes
-            this._nodes = this._nodes.slice();
+            //this._nodes = this._nodes.slice();
             this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
             this.notifyViewNodesChanged();
+        }
+        set allExpandedNodes(nodes) {
+            this.expandAll(nodes);
+            this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            this.notifyViewNodesChanged();
+        }
+        expandAll(nodes) {
+            nodes.forEach(node => {
+                if (!this._isOpenFn(node))
+                    this._toggleNodeFn(node);
+                const children = this._childrenFn(node);
+                if (children)
+                    this.expandAll(children);
+            });
         }
         set levelSetterFn(setter) {
             this._levelSetterFn = setter;

@@ -186,14 +186,25 @@ export interface IXtalTreeProperties{
 
         search(nodes: ITreeNode[], parent: ITreeNode){
             nodes.forEach(node =>{
+                // if(node['name'].indexOf('polymer') > -1){
+                //     debugger;
+                // }
+                
                 if(this._testNodeFn(node, this._searchString)){
-                    this.closeNode(node);
+                    //this.closeNode(node);
+
                     if(parent) this.openNode(parent);
                 }else{
                     const children = this._childrenFn(node);
+                    // console.log({
+                    //     name: node['name'],
+                    //     search: this._searchString,
+                    //     parent: parent,
+                    //     children: children,
+                    // })
                     if(children){
                         this.search(children, node);
-                        if(this._isOpenFn(node) && parent){
+                        if(parent && this._isOpenFn(node)){
                             this.openNode(parent);
                         }
                     }

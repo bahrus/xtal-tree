@@ -152,19 +152,23 @@ export interface IXtalTreeProperties{
         set toggleNodeFn(nodeFn){
             this._toggleNodeFn = nodeFn;
         }
-
-        set toggledNode(node: ITreeNode){
-            this._toggleNodeFn(node);
-            //for now, recalculate all nodes
-            //this._nodes = this._nodes.slice();
+        updateViewableNodes(){
             this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
             this.notifyViewNodesChanged();
+        }
+        set toggledNode(node: ITreeNode){
+            this._toggleNodeFn(node);
+            this.updateViewableNodes();
         }
 
         set allExpandedNodes(nodes: ITreeNode[]){
             this.expandAll(nodes);
-            this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
-            this.notifyViewNodesChanged();
+            this.updateViewableNodes();
+        }
+
+        set allCollapsedNodes(nodes: ITreeNode[]){
+            this.collapseAll(nodes);
+            this.updateViewableNodes();
         }
 
         expandAll(nodes: ITreeNode[]){
@@ -172,6 +176,14 @@ export interface IXtalTreeProperties{
                 if(!this._isOpenFn(node)) this._toggleNodeFn(node);
                 const children = this._childrenFn(node);
                 if(children) this.expandAll(children);
+            })
+        }
+
+        collapseAll(nodes: ITreeNode[]){
+            nodes.forEach(node =>{
+                if(this._isOpenFn(node)) this._toggleNodeFn(node);
+                const children = this._childrenFn(node);
+                if(children) this.collapseAll(children);
             })
         }
 

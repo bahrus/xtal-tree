@@ -68,6 +68,9 @@
               },
               expandAll(e){
                 this.$.myTree.allExpandedNodes = this.$.myTree.viewableNodes;
+              },
+              collapseAll(e){
+                this.$.myTree.allCollapsedNodes = this.$.myTree.viewableNodes;
               }
             }]
           </script>
@@ -95,6 +98,7 @@
               <div>Click on Nodes below to toggle open / closed.</div><br>
               <!-- <input type="text" value="{{search::input}}" placeholder="Search"> -->
               <button on-click="expandAll">Expand All</button>
+              <button on-click="collapseAll">Collapse All</button>
               <p></p>
               <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
                   

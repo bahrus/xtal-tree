@@ -113,6 +113,9 @@ export interface IXtalTreeProperties{
         _calculateViewableNodes(nodes: ITreeNode[], acc: ITreeNode[]){
             if(!nodes) return;
             nodes.forEach(node =>{
+                if(this.searchString){
+                    if(!this._isOpenFn(node) && !this._testNodeFn(node, this.searchString)) return;
+                }
                 acc.push(node);
                 if(this._isOpenFn(node)) this._calculateViewableNodes(this._childrenFn(node), acc);
             })

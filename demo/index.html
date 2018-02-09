@@ -7,7 +7,7 @@
 
   <title>xtal-tree demo</title>
 
-  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.20/build/ES6/xtal-fetch.js"></script>
   <script async src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.12/build/ES6/xtal-decorator.js"></script>
   <script src="../xtal-tree.js"></script>
@@ -75,8 +75,9 @@
                 }
               },
               toggleNode(e){
-                let node = e.srcElement.node;
-                if(!node) node = e.srcElement.parentNode.node;
+                const target = e.target || e.srcElement;
+                let node = target.node;
+                if(!node) node = target.parentNode.node;
                 this.$.myTree.toggledNode = node;
               },
               expandAll(e){

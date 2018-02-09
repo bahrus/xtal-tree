@@ -75,7 +75,9 @@
                 }
               },
               toggleNode(e){
-                this.$.myTree.toggledNode = e.srcElement.node;
+                let node = e.srcElement.node;
+                if(!node) node = e.srcElement.parentNode.node;
+                this.$.myTree.toggledNode = node;
               },
               expandAll(e){
                 this.$.myTree.allExpandedNodes = this.$.myTree.viewableNodes;
@@ -115,9 +117,9 @@
             <button on-click="collapseAll">Collapse All</button>
             <p></p>
             <!-- <template is="dom-repeat" items="[[viewableNodes]]" mutable-data> -->
-            <iron-list items="[[viewableNodes]]">
+            <iron-list items="[[viewableNodes]]" on-click="toggleNode">
               <template>
-                <div class="node" node="[[item]]" on-click="toggleNode" style$="[[item.style]]">
+                <div class="node" node="[[item]]"  style$="[[item.style]]">
                   <template is="dom-if" if="[[item.children]]">
                     <template is="dom-if" if="[[item.expanded]]">📖</template>
                     <template is="dom-if" if="[[!item.expanded]]">📕</template>

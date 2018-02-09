@@ -11,6 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.20/build/ES6/xtal-fetch.js"></script>
   <script async src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.12/build/ES6/xtal-decorator.js"></script>
   <script src="../xtal-tree.js"></script>
+  <script src="../xtal-split.js"></script>
   <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
   <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
   <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
@@ -90,6 +91,10 @@
               div.node {
                 cursor: pointer;
               }
+              span.match{
+                font-weight: bold;
+                background-color:yellow;
+              }
             </style>
             <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
             <xtal-tree id="myTree" 
@@ -118,7 +123,7 @@
                 </template>
                 <template is="dom-if" if="[[!item.children]]">📝</template>
 
-                [[item.name]]
+                <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
               </div>
             </template>
           </template>

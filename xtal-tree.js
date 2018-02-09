@@ -1,7 +1,7 @@
 (function () {
     /**
      * `xtal-tree`
-     *  Web component wrapper around billboard.js charting library
+     *  Provide flat, virtual snapshot of a tree
      *
      * @customElement
      * @polymer
@@ -40,6 +40,8 @@
             if (val) {
                 this.searchNodes();
             }
+            else {
+            }
         }
         get testNodeFn() {
             return this._testNodeFn;
@@ -68,8 +70,9 @@
             if (this._levelSetterFn) {
                 this._levelSetterFn(this._nodes, 0);
             }
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
-            this.notifyViewNodesChanged();
+            // this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            // this.notifyViewNodesChanged();
+            this.updateViewableNodes();
         }
         _calculateViewableNodes(nodes, acc) {
             if (!nodes)

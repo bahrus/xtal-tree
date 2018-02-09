@@ -27,7 +27,7 @@ export interface IXtalTreeProperties{
 (function () {
     /**
      * `xtal-tree`
-     *  Web component wrapper around billboard.js charting library
+     *  Provide flat, virtual snapshot of a tree 
      *
      * @customElement
      * @polymer
@@ -74,6 +74,8 @@ export interface IXtalTreeProperties{
             this._searchString = val;
             if(val){
                 this.searchNodes();
+            }else{
+
             }
         }
 
@@ -105,8 +107,9 @@ export interface IXtalTreeProperties{
             if(this._levelSetterFn){
                 this._levelSetterFn(this._nodes, 0);
             }
-            this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
-            this.notifyViewNodesChanged();
+            // this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
+            // this.notifyViewNodesChanged();
+            this.updateViewableNodes();
             
         }
 

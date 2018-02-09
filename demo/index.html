@@ -16,7 +16,8 @@
   <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
   <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
   <link rel="import" href="../../polymer/lib/elements/dom-if.html">
-  <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
+  <!-- <link rel="import" href="../../polymer/lib/elements/dom-repeat.html"> -->
+  <link rel="import" href="../../iron-list/iron-list.html">
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
     </style>
@@ -91,21 +92,20 @@
               div.node {
                 cursor: pointer;
               }
-              span.match{
+
+              span.match {
                 font-weight: bold;
-                background-color:yellow;
+                background-color: yellow;
+              }
+
+              iron-list {
+                height: 100vh;
+                /* don't use % values unless the parent element is sized. */
               }
             </style>
             <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
-            <xtal-tree id="myTree" 
-              is-open-fn="[[isOpenFn]]" 
-              key-fn="[[keyFn]]" 
-              children-fn="[[childrenFn]]" 
-              level-setter-fn="[[levelSetterFn]]"
-              test-node-fn="[[testNodeFn]]"
-              toggle-node-fn="[[toggleNodeFn]]"
-              nodes="[[directory]]"  
-              search-string="[[search]]" 
+            <xtal-tree id="myTree" is-open-fn="[[isOpenFn]]" key-fn="[[keyFn]]" children-fn="[[childrenFn]]" level-setter-fn="[[levelSetterFn]]"
+              test-node-fn="[[testNodeFn]]" toggle-node-fn="[[toggleNodeFn]]" nodes="[[directory]]" search-string="[[search]]"
               viewable-nodes="{{viewableNodes}}">
             </xtal-tree>
             <div>Click on Nodes below to toggle open / closed.</div>
@@ -114,18 +114,20 @@
             <button on-click="expandAll">Expand All</button>
             <button on-click="collapseAll">Collapse All</button>
             <p></p>
-            <template is="dom-repeat" items="[[viewableNodes]]" mutable-data>
+            <!-- <template is="dom-repeat" items="[[viewableNodes]]" mutable-data> -->
+            <iron-list items="[[viewableNodes]]">
+              <template>
+                <div class="node" node="[[item]]" on-click="toggleNode" style$="[[item.style]]">
+                  <template is="dom-if" if="[[item.children]]">
+                    <template is="dom-if" if="[[item.expanded]]">📖</template>
+                    <template is="dom-if" if="[[!item.expanded]]">📕</template>
+                  </template>
+                  <template is="dom-if" if="[[!item.children]]">📝</template>
 
-              <div class="node" node="[[item]]" on-click="toggleNode" style$="[[item.style]]">
-                <template is="dom-if" if="[[item.children]]">
-                  <template is="dom-if" if="[[item.expanded]]">📖</template>
-                  <template is="dom-if" if="[[!item.expanded]]">📕</template>
-                </template>
-                <template is="dom-if" if="[[!item.children]]">📝</template>
-
-                <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
-              </div>
-            </template>
+                  <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
+                </div>
+              </template>
+            </iron-list>
           </template>
         </dom-bind>
 

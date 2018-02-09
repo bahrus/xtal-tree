@@ -32,6 +32,11 @@
         get nodes() {
             return this._nodes;
         }
+        set nodes(nodes) {
+            this._nodes = nodes;
+            this.sort(false);
+            this.onPropsChange();
+        }
         get searchString() {
             return this._searchString;
         }
@@ -49,9 +54,43 @@
         set testNodeFn(fn) {
             this._testNodeFn = fn;
         }
-        set nodes(nodes) {
-            this._nodes = nodes;
-            this.onPropsChange();
+        get compareFn() {
+            return this._compareFn;
+        }
+        set compareFn(val) {
+            this._compareFn = val;
+            this.sort(true);
+        }
+        get sorted() {
+            return this._sorted;
+        }
+        set sorted(val) {
+            this._sorted = val;
+            this.sort(true);
+        }
+        sort(redraw) {
+            if (!this._sorted || !this._compareFn || !this._nodes)
+                return;
+            this.sortNodes(this._nodes);
+            if (redraw) {
+                this.updateViewableNodes();
+            }
+        }
+        sortNodes(nodes, compareFn) {
+            if (!compareFn) {
+                if (this.sorted === 'desc') {
+                    compareFn = (lhs, rhs) => -1 * this._compareFn(lhs, rhs);
+                }
+                else {
+                    compareFn = this._compareFn;
+                }
+            }
+            nodes.sort(compareFn);
+            nodes.forEach(node => {
+                const children = this._childrenFn(node);
+                if (children)
+                    this.sortNodes(children, compareFn);
+            });
         }
         notifyViewNodesChanged() {
             const newEvent = new CustomEvent('viewable-nodes-changed', {

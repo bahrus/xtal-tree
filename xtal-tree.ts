@@ -18,10 +18,12 @@ export interface IXtalTreeProperties{
     isOpenFn: (tn: ITreeNode) => boolean;
     testNodeFn?: (tn: ITreeNode, search: string) => boolean;
     toggleNodeFn : (tn: ITreeNode) => void;
+    compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
     nodes: ITreeNode[];
     viewableNodes?: ITreeNode[];
     toggledNode?: ITreeNode;
     searchString?: string;
+    sorted?: string;
 }
 
 (function () {
@@ -66,6 +68,12 @@ export interface IXtalTreeProperties{
             return this._nodes;
         }
 
+        set nodes(nodes){
+            this._nodes = nodes;
+            this.sort(false);
+            this.onPropsChange();
+        }
+
         _searchString: string;
         get searchString(){
             return this._searchString;
@@ -87,10 +95,51 @@ export interface IXtalTreeProperties{
             this._testNodeFn = fn;
         }
 
-        set nodes(nodes){
-            this._nodes = nodes;
-            this.onPropsChange();
+        _compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
+        get compareFn(){
+            return this._compareFn;
         }
+
+        set compareFn(val){
+            this._compareFn = val;
+            this.sort(true);
+        }
+
+        _sorted: string;
+        get sorted(){
+            return this._sorted;
+        }
+        set sorted(val){
+            this._sorted = val;
+            this.sort(true);
+        }
+
+        sort(redraw: boolean){
+            if(!this._sorted || !this._compareFn || !this._nodes) return;
+            this.sortNodes(this._nodes);
+            if(redraw){
+                this.updateViewableNodes();
+            }
+        }
+
+        sortNodes(nodes: ITreeNode[], compareFn?: (lhs:ITreeNode, rhs: ITreeNode) => number){
+            if(!compareFn){
+                if(this.sorted === 'desc'){
+                    compareFn = (lhs: ITreeNode, rhs: ITreeNode) => -1 * this._compareFn(lhs, rhs);
+                }else{
+                    compareFn = this._compareFn;
+                }
+            } 
+            
+            nodes.sort(compareFn);
+            nodes.forEach(node =>{
+                const children = this._childrenFn(node);
+                if(children) this.sortNodes(children, compareFn);
+            })
+            
+
+        }
+
         notifyViewNodesChanged(){
             const newEvent = new CustomEvent('viewable-nodes-changed', {
                 detail: {

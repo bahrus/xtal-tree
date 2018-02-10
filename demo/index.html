@@ -91,6 +91,18 @@
                   value: function(node){
                     return node.isSelected;
                   }
+                },
+                toggleNodeSelectionFn:{
+                  type: Function,
+                  value: function(node){
+                    node.isSelected = !node.isSelected;
+                  }
+                },
+                toggleIndeterminateFn:{
+                  type: Function,
+                  value: function(node){
+                    node.isIndeterminate = !node.isIndeterminate;
+                  }
                 }
 
               },
@@ -138,7 +150,14 @@
               nodes="[[directory]]" search-string="[[search]]"
               viewable-nodes="{{viewableNodes}}">
             </xtal-tree>
-            <xtal-cascade id="myCascade" is-open-fn="[[isOpenFn]]"  children-fn="[[childrenFn]]" nodes="[[directory]]"
+            <xtal-cascade id="myCascade" 
+                is-open-fn="[[isOpenFn]]"  
+                children-fn="[[childrenFn]]" 
+                nodes="[[directory]]"
+                is-selected-fn="[[isSelectedFn]]"
+                toggle-node-selection-fn="[[toggleNodeSelectionFn]]"
+                toggle-indeterminate-fn="[[toggleIndeterminateFn]]"
+            ></xtal-cascade>
             <div>Click on Nodes below to toggle open / closed.</div>
             <br>
             <input type="text" value="{{search::input}}" placeholder="Search">

@@ -175,11 +175,11 @@
             <iron-list items="[[viewableNodes]]" mutable-data>
               <template>
                 <div class="node"  style$="[[item.style]]">
-                  <span on-click="toggleSelectedNode">
-                    <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[item.selected]]">🗹</template>
+                  <span on-click="toggleSelectedNode" select-node="[[item]]">
+                    <template   is="dom-if" if="[[item.selected]]">🗹</template>
                     <template is="dom-if" if="[[!item.selected">
-                      <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[item.indeterminate]]">☐</template>
-                      <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[!item.indeterminate]]">🗷</template>
+                      <template   is="dom-if" if="[[item.indeterminate]]">☐</template>
+                      <template   is="dom-if" if="[[!item.indeterminate]]">🗷</template>
                     </template>
                   </span>
                   <span on-click="toggleExpandedNode" node="[[item]]">

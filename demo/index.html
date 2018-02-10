@@ -106,18 +106,16 @@
                 }
 
               },
-              toggleNode(e){
+              toggleExpandedNode(e){
                 const target = e.target || e.srcElement;
-                const action = target.getAttribute('action');
-                if(action === 'toggleSelect'){
-                  let node = target.selectNode;
+                let node = target.node;
+                if(!node) node = target.parentNode.node;
+                this.$.myTree.toggledNode = node;
+              },
+              toggleSelectedNode(e){
+                const target = e.target || e.srcElement;
+                 let node = target.selectNode;
                   this.$.myCascade.toggledNodeSelection = node;
-                }else{
-                  let node = target.node;
-                  if(!node) node = target.parentNode.node;
-                  this.$.myTree.toggledNode = node;
-                }
-
               },
               expandAll(e){
                 this.$.myTree.allExpandedNodes = this.$.myTree.viewableNodes;
@@ -152,19 +150,12 @@
               }
             </style>
             <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
-            <xtal-tree id="myTree" is-open-fn="[[isOpenFn]]"  children-fn="[[childrenFn]]" level-setter-fn="[[levelSetterFn]]"
-              test-node-fn="[[testNodeFn]]" toggle-node-fn="[[toggleNodeFn]]" compare-fn="[[compareFn]]"
-              nodes="[[directory]]" search-string="[[search]]"
+            <xtal-tree id="myTree" is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" level-setter-fn="[[levelSetterFn]]" test-node-fn="[[testNodeFn]]"
+              toggle-node-fn="[[toggleNodeFn]]" compare-fn="[[compareFn]]" nodes="[[directory]]" search-string="[[search]]"
               viewable-nodes="{{viewableNodes}}">
             </xtal-tree>
-            <xtal-cascade id="myCascade" 
-                is-open-fn="[[isOpenFn]]"  
-                children-fn="[[childrenFn]]" 
-                nodes="[[directory]]"
-                is-selected-fn="[[isSelectedFn]]"
-                toggle-node-selection-fn="[[toggleNodeSelectionFn]]"
-                toggle-indeterminate-fn="[[toggleIndeterminateFn]]"
-            ></xtal-cascade>
+            <xtal-cascade id="myCascade" is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" nodes="[[directory]]" is-selected-fn="[[isSelectedFn]]"
+              toggle-node-selection-fn="[[toggleNodeSelectionFn]]" toggle-indeterminate-fn="[[toggleIndeterminateFn]]"></xtal-cascade>
             <div>Click on Nodes below to toggle open / closed.</div>
             <br>
             <input type="text" value="{{search::input}}" placeholder="Search">
@@ -174,21 +165,32 @@
             <button on-click="sortDesc">Sort Desc</button>
             <p></p>
             <!-- <template is="dom-repeat" items="[[viewableNodes]]" mutable-data> -->
-            <iron-list items="[[viewableNodes]]" on-click="toggleNode" mutable-data>
-              <template>
-                <div class="node" node="[[item]]"  style$="[[item.style]]">
-                  <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[item.selected]]">🗹</template>
-                  <template is="dom-if" if="[[!item.selected">
-                    <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[item.indeterminate]]">☐</template>
-                    <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[!item.indeterminate]]">🗷</template>
-                  </template>
-                  <template is="dom-if" if="[[item.children]]">
-                    <template is="dom-if" if="[[item.expanded]]">📖</template>
-                    <template is="dom-if" if="[[!item.expanded]]">📕</template>
-                  </template>
-                  <template is="dom-if" if="[[!item.children]]">📝</template>
+            <xtal-decorator selector="iron-list">
+              <script type="text/ecmascript ish">
+                [{
 
-                  <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
+                }]
+                </script>
+            </xtal-decorator>
+            <iron-list items="[[viewableNodes]]" mutable-data>
+              <template>
+                <div class="node"  style$="[[item.style]]">
+                  <span on-click="toggleSelectedNode">
+                    <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[item.selected]]">🗹</template>
+                    <template is="dom-if" if="[[!item.selected">
+                      <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[item.indeterminate]]">☐</template>
+                      <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[!item.indeterminate]]">🗷</template>
+                    </template>
+                  </span>
+                  <span on-click="toggleExpandedNode" node="[[item]]">
+                    <template is="dom-if" if="[[item.children]]">
+                      <template is="dom-if" if="[[item.expanded]]">📖</template>
+                      <template is="dom-if" if="[[!item.expanded]]">📕</template>
+                    </template>
+                    <template is="dom-if" if="[[!item.children]]">📝</template>
+                    <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
+                  </span>
+
                 </div>
               </template>
             </iron-list>

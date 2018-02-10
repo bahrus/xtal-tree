@@ -13,6 +13,7 @@ export interface ITreeNode{
 export interface ITree{
     nodes: ITreeNode[];
     childrenFn: (tn: ITreeNode) => ITreeNode[];
+    
 }
 
 export interface IXtalTreeProperties extends ITree{
@@ -20,9 +21,9 @@ export interface IXtalTreeProperties extends ITree{
     isOpenFn: (tn: ITreeNode) => boolean;
     testNodeFn?: (tn: ITreeNode, search: string) => boolean;
     toggleNodeFn : (tn: ITreeNode) => void;
+    toggledNode: ITreeNode;
     compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
     viewableNodes?: ITreeNode[];
-    toggledNode?: ITreeNode;
     searchString?: string;
     sorted?: string;
 }

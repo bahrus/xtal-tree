@@ -28,11 +28,33 @@
         set isSelectedFn(nodeFn) {
             this._isSelectedFn = nodeFn;
         }
-        get selectedNodeFn() {
-            return this._selectedNodeFn;
+        get toggleNodeSelectionFn() {
+            return this._toggleNodeSelectionFn;
         }
-        set selectedNodeFn(nodeFn) {
-            this._selectedNodeFn = nodeFn;
+        set toggleNodeSelectionFn(nodeFn) {
+            this._toggleNodeSelectionFn = nodeFn;
+        }
+        set toggledNodeSelection(tn) {
+            this._toggleNodeSelectionFn(tn);
+        }
+        selectNodeShallow(tn) {
+            if (!this._isSelectedFn(tn))
+                this._toggleNodeSelectionFn(tn);
+        }
+        unselectNodeShallow(tn) {
+            if (this._isSelectedFn(tn))
+                this._toggleNodeSelectionFn(tn);
+        }
+        selectNodeAndCascade(tn) {
+            this.selectNodeRecursive(tn);
+        }
+        selectNodeRecursive(tn) {
+            this.selectNodeShallow(tn);
+            const children = this._childrenFn(tn);
+            if (children) {
+                this._selectedChildScore[this._keyFn(tn)] = children.length;
+                children.forEach(child => this.selectNodeRecursive(child));
+            }
         }
         get nodes() {
             return this._nodes;
@@ -44,10 +66,28 @@
         onPropsChange() {
             if (!this._keyFn || !this._childrenFn || !this._nodes)
                 return;
-            this.createChildToParentLookup();
+            this.startCreatingChildToParentLookup();
         }
-        createChildToParentLookup() {
+        startCreatingChildToParentLookup() {
             this._childToParentLookup = {};
+            this.createChildToParentLookup(this._nodes, this._childToParentLookup);
+        }
+        createChildToParentLookup(nodes, lookup) {
+            nodes.forEach(node => {
+                const nodeKey = this._keyFn(node);
+                const scs = this._selectedChildScore;
+                scs[nodeKey] = 0;
+                const children = this._childrenFn(node);
+                if (children) {
+                    children.forEach(child => {
+                        if (this._isSelectedFn(child))
+                            scs[nodeKey]++;
+                        const childId = this._keyFn(child);
+                        lookup[childId] = node;
+                    });
+                    this.createChildToParentLookup(children, lookup);
+                }
+            });
         }
     }
     customElements.define('xtal-cascade', XtalCascade);

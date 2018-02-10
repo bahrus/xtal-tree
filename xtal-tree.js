@@ -15,13 +15,6 @@
             this._childrenFn = nodeFn;
             this.onPropsChange();
         }
-        get keyFn() {
-            return this._keyFn;
-        }
-        set keyFn(nodeFn) {
-            this._keyFn = nodeFn;
-            this.onPropsChange();
-        }
         get isOpenFn() {
             return this._isOpenFn;
         }
@@ -101,7 +94,6 @@
                 composed: true
             });
             this.dispatchEvent(newEvent);
-            //console.log(this.viewableNodes);
         }
         onPropsChange() {
             if (!this._isOpenFn || !this._childrenFn || !this._nodes)
@@ -109,8 +101,6 @@
             if (this._levelSetterFn) {
                 this._levelSetterFn(this._nodes, 0);
             }
-            // this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
-            // this.notifyViewNodesChanged();
             this.updateViewableNodes();
         }
         _calculateViewableNodes(nodes, acc) {
@@ -130,23 +120,8 @@
         get viewableNodes() {
             return this._viewableNodes;
         }
-        // testNode(node: ITreeNode){
-        //     if(!this.)
-        // }
         set viewableNodes(nodes) {
             this._viewableNodes = nodes;
-            this._indexViewableNodes();
-        }
-        _indexViewableNodes() {
-            if (!this._viewableNodes)
-                return;
-            this._viewableNodeKeys = {};
-            this._viewableNodes.forEach((node, idx) => {
-                this._viewableNodeKeys[this.keyFn(node)] = {
-                    node: node,
-                    position: idx
-                };
-            });
         }
         get toggleNodeFn() {
             return this._toggleNodeFn;
@@ -179,22 +154,12 @@
         }
         search(nodes, parent) {
             nodes.forEach(node => {
-                // if(node['name'].indexOf('polymer') > -1){
-                //     debugger;
-                // }
                 if (this._testNodeFn(node, this._searchString)) {
-                    //this.closeNode(node);
                     if (parent)
                         this.openNode(parent);
                 }
                 else {
                     const children = this._childrenFn(node);
-                    // console.log({
-                    //     name: node['name'],
-                    //     search: this._searchString,
-                    //     parent: parent,
-                    //     children: children,
-                    // })
                     if (children) {
                         this.search(children, node);
                         if (parent && this._isOpenFn(node)) {

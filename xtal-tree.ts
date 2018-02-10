@@ -8,18 +8,19 @@ interface INodePosition{
 }
 
 export interface ITreeNode{
-    //children?: ITreeNode[];
-    __memo?: INodeState;
 }
 
-export interface IXtalTreeProperties{
+export interface ITree{
+    nodes: ITreeNode[];
     childrenFn: (tn: ITreeNode) => ITreeNode[];
-    keyFn: (tn: ITreeNode) => string;
+}
+
+export interface IXtalTreeProperties extends ITree{
+    
     isOpenFn: (tn: ITreeNode) => boolean;
     testNodeFn?: (tn: ITreeNode, search: string) => boolean;
     toggleNodeFn : (tn: ITreeNode) => void;
     compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
-    nodes: ITreeNode[];
     viewableNodes?: ITreeNode[];
     toggledNode?: ITreeNode;
     searchString?: string;
@@ -45,14 +46,7 @@ export interface IXtalTreeProperties{
             this.onPropsChange();
         }
 
-        _keyFn: (tn: ITreeNode) => string;
-        get keyFn(){
-            return this._keyFn;
-        }
-        set keyFn(nodeFn){
-            this._keyFn = nodeFn;
-            this.onPropsChange();
-        }
+
 
         _isOpenFn: (tn: ITreeNode) => boolean;
         get isOpenFn(){
@@ -149,15 +143,12 @@ export interface IXtalTreeProperties{
                 composed: true
             } as CustomEventInit);
             this.dispatchEvent(newEvent);
-            //console.log(this.viewableNodes);
         }
         onPropsChange(){
             if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
             if(this._levelSetterFn){
                 this._levelSetterFn(this._nodes, 0);
             }
-            // this.viewableNodes = this._calculateViewableNodes(this._nodes, []);
-            // this.notifyViewNodesChanged();
             this.updateViewableNodes();
             
         }
@@ -179,27 +170,8 @@ export interface IXtalTreeProperties{
             return this._viewableNodes;
         }
 
-        // testNode(node: ITreeNode){
-        //     if(!this.)
-        // }
-
         set viewableNodes(nodes){
             this._viewableNodes = nodes;
-            this._indexViewableNodes();
-        }
-
-        _viewableNodeKeys : {[key: string]: INodePosition};
-
-
-        _indexViewableNodes(){
-            if(!this._viewableNodes) return;
-            this._viewableNodeKeys = {};
-            this._viewableNodes.forEach((node, idx) =>{
-                this._viewableNodeKeys[this.keyFn(node)] = {
-                    node:node,
-                    position: idx
-                }
-            })
         }
 
         _toggleNodeFn: (tn: ITreeNode) => void;
@@ -238,22 +210,10 @@ export interface IXtalTreeProperties{
 
         search(nodes: ITreeNode[], parent: ITreeNode){
             nodes.forEach(node =>{
-                // if(node['name'].indexOf('polymer') > -1){
-                //     debugger;
-                // }
-                
                 if(this._testNodeFn(node, this._searchString)){
-                    //this.closeNode(node);
-
                     if(parent) this.openNode(parent);
                 }else{
                     const children = this._childrenFn(node);
-                    // console.log({
-                    //     name: node['name'],
-                    //     search: this._searchString,
-                    //     parent: parent,
-                    //     children: children,
-                    // })
                     if(children){
                         this.search(children, node);
                         if(parent && this._isOpenFn(node)){

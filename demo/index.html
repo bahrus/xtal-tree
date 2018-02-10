@@ -170,10 +170,10 @@
             <iron-list items="[[viewableNodes]]" on-click="toggleNode" mutable-data>
               <template>
                 <div class="node" node="[[item]]"  style$="[[item.style]]">
-                  <template is="dom-if" if="[[item.selected]]">☑️</template>
+                  <template is="dom-if" if="[[item.selected]]">🗹</template>
                   <template is="dom-if" if="[[!item.selected">
-                    <template is="dom-if" if="[[item.indeterminate]]">i</template>
-                    <template is="dom-if" if="[[item.indeterminate]]">u</template>
+                    <template is="dom-if" if="[[item.indeterminate]]">☐</template>
+                    <template is="dom-if" if="[[!item.indeterminate]]">🗷</template>
                   </template>
                   <template is="dom-if" if="[[item.children]]">
                     <template is="dom-if" if="[[item.expanded]]">📖</template>

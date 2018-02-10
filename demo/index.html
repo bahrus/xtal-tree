@@ -12,6 +12,7 @@
   <script async src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.12/build/ES6/xtal-decorator.js"></script>
   <script src="../xtal-tree.js"></script>
   <script src="../xtal-split.js"></script>
+  <script src="../xtal-cascade.js"></script>
   <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
   <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
   <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
@@ -51,6 +52,7 @@
                     node.expanded = !node.expanded;
                   }
                 },
+                /////////////  Optional -- useful if child nodes should be indented 
                 levelSetterFn:{
                   type: Function,
                   value: function(nodes, level){
@@ -60,6 +62,7 @@
                     })
                   }
                 },
+                ////////////////  Advanced -- this is only needed for search support
                 testNodeFn:{
                   type: Function,
                   value: function(node, search){
@@ -76,13 +79,20 @@
                     return 0;
                   }
                 },
-                //needed for xtal-cascade only
+               ///////////////////////////////  Super Advanced -- this is only needed for Cascading selected nodes
                 keyFn:{
                   type: Function,
                   value: function(node){
                     return node.path;
                   }
                 },
+                isSelectedFn:{
+                  type: Function,
+                  value: function(node){
+                    return node.isSelected;
+                  }
+                }
+
               },
               toggleNode(e){
                 const target = e.target || e.srcElement;
@@ -128,6 +138,7 @@
               nodes="[[directory]]" search-string="[[search]]"
               viewable-nodes="{{viewableNodes}}">
             </xtal-tree>
+            <xtal-cascade id="myCascade" is-open-fn="[[isOpenFn]]"  children-fn="[[childrenFn]]" nodes="[[directory]]"
             <div>Click on Nodes below to toggle open / closed.</div>
             <br>
             <input type="text" value="{{search::input}}" placeholder="Search">

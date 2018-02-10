@@ -3,8 +3,9 @@ export interface IXtalCascadeProperties extends ITree{
     //childrenFn: (tn: ITreeNode) => ITreeNode[];
     keyFn: (tn: ITreeNode) => string;
     isSelectedFn: (tn: ITreeNode) => boolean;
-    isIndeterminateFn: (tn: ITreeNode) => boolean;
+    //isIndeterminateFn: (tn: ITreeNode) => boolean;
     toggleNodeSelectionFn: (tn: ITreeNode) => void;
+    toggleIndeterminateFn: (tn: ITreeNode) => void;
 
 }
 
@@ -52,6 +53,14 @@ export interface IXtalCascadeProperties extends ITree{
             this._toggleNodeSelectionFn = nodeFn;
         }
 
+        _toggleInterminateFn : (tn: ITreeNode) => void;
+        get toggleIndeterminateFn(){
+            return this._toggleInterminateFn;
+        }
+        set toggleIndeterminateFn(nodeFn){
+            this._toggleInterminateFn = nodeFn;
+        }
+
         set toggledNodeSelection(tn: ITreeNode){
             this._toggleNodeSelectionFn(tn);
 
@@ -67,6 +76,50 @@ export interface IXtalCascadeProperties extends ITree{
 
         selectNodeAndCascade(tn: ITreeNode){
             this.selectNodeRecursive(tn);
+            let currentNode = tn;
+            do{
+                const thisID = this._keyFn(currentNode);
+                const parentNd = this._childToParentLookup[thisID];
+                if(parentNd) {
+                    const parentId = this._keyFn(parentNd);
+                    this._selectedChildScore[parentId]++;
+                    const children = this._childrenFn(parentNd);
+                    if(this._selectedChildScore[parentId] === children.length){
+                        this.selectNodeShallow(parentNd);
+                    }else{
+                        this._toggleInterminateFn(parentNd);
+                    }
+                }
+                currentNode = parentNd;
+            }while(currentNode);
+        }
+
+        unselectNodeAndCascade(tn: ITreeNode){
+            this.unselectNodeRecursive(tn);
+            let currentNode = tn;
+            do{
+                const thisID = this._keyFn(currentNode);
+                const parentNd = this._childToParentLookup[thisID];
+                if(parentNd) {
+                    const parentId = this._keyFn(parentNd);
+                    this._selectedChildScore[parentId]--;
+                    const children = this._childrenFn(parentNd);
+                    if(this._selectedChildScore[parentId] === 0){
+                        this.unselectNodeShallow(parentNd);
+                    }else{
+                        this._toggleInterminateFn(parentNd);
+                    }
+                }
+                currentNode = parentNd;
+            }while(currentNode);
+        }
+
+        set newSelectedNodeToggle(tn: ITreeNode){
+            if(this._isSelectedFn(tn)){
+                this.unselectNodeAndCascade(tn);
+            }else{
+                this.selectNodeAndCascade(tn);
+            }
             
         }
 
@@ -76,6 +129,14 @@ export interface IXtalCascadeProperties extends ITree{
             if(children) {
                 this._selectedChildScore[this._keyFn(tn)] = children.length;
                 children.forEach(child => this.selectNodeRecursive(child));
+            }
+        }
+
+        unselectNodeRecursive(tn: ITreeNode){
+            this.unselectNodeShallow(tn);
+            const children = this._childrenFn(tn);
+            if(children){
+                this._selectedChildScore[this._keyFn(tn)] = 0;
             }
         }
 
@@ -90,7 +151,8 @@ export interface IXtalCascadeProperties extends ITree{
         }
 
         onPropsChange(){
-            if(!this._keyFn || !this._childrenFn || !this._nodes) return;
+            if(!this._keyFn || !this._childrenFn || !this._nodes || 
+                !this._isSelectedFn || !this._toggleNodeSelectionFn || !this._toggleInterminateFn) return;
             this.startCreatingChildToParentLookup();
         }
         _selectedChildScore : {[key: string] : number};
@@ -112,6 +174,11 @@ export interface IXtalCascadeProperties extends ITree{
                         const childId = this._keyFn(child);
                         lookup[childId] = node;
                     });
+                    if(scs[nodeKey] === children.length){
+                        this.selectNodeShallow(node);
+                    }else if(scs[nodeKey] > 0){
+                        this._toggleInterminateFn(node);
+                    }
                     this.createChildToParentLookup(children, lookup);
                 }
             })

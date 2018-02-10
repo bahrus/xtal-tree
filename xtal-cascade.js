@@ -34,6 +34,12 @@
         set toggleNodeSelectionFn(nodeFn) {
             this._toggleNodeSelectionFn = nodeFn;
         }
+        get toggleIndeterminateFn() {
+            return this._toggleInterminateFn;
+        }
+        set toggleIndeterminateFn(nodeFn) {
+            this._toggleInterminateFn = nodeFn;
+        }
         set toggledNodeSelection(tn) {
             this._toggleNodeSelectionFn(tn);
         }
@@ -47,6 +53,51 @@
         }
         selectNodeAndCascade(tn) {
             this.selectNodeRecursive(tn);
+            let currentNode = tn;
+            do {
+                const thisID = this._keyFn(currentNode);
+                const parentNd = this._childToParentLookup[thisID];
+                if (parentNd) {
+                    const parentId = this._keyFn(parentNd);
+                    this._selectedChildScore[parentId]++;
+                    const children = this._childrenFn(parentNd);
+                    if (this._selectedChildScore[parentId] === children.length) {
+                        this.selectNodeShallow(parentNd);
+                    }
+                    else {
+                        this._toggleInterminateFn(parentNd);
+                    }
+                }
+                currentNode = parentNd;
+            } while (currentNode);
+        }
+        unselectNodeAndCascade(tn) {
+            this.unselectNodeRecursive(tn);
+            let currentNode = tn;
+            do {
+                const thisID = this._keyFn(currentNode);
+                const parentNd = this._childToParentLookup[thisID];
+                if (parentNd) {
+                    const parentId = this._keyFn(parentNd);
+                    this._selectedChildScore[parentId]--;
+                    const children = this._childrenFn(parentNd);
+                    if (this._selectedChildScore[parentId] === 0) {
+                        this.unselectNodeShallow(parentNd);
+                    }
+                    else {
+                        this._toggleInterminateFn(parentNd);
+                    }
+                }
+                currentNode = parentNd;
+            } while (currentNode);
+        }
+        set newSelectedNodeToggle(tn) {
+            if (this._isSelectedFn(tn)) {
+                this.unselectNodeAndCascade(tn);
+            }
+            else {
+                this.selectNodeAndCascade(tn);
+            }
         }
         selectNodeRecursive(tn) {
             this.selectNodeShallow(tn);
@@ -54,6 +105,13 @@
             if (children) {
                 this._selectedChildScore[this._keyFn(tn)] = children.length;
                 children.forEach(child => this.selectNodeRecursive(child));
+            }
+        }
+        unselectNodeRecursive(tn) {
+            this.unselectNodeShallow(tn);
+            const children = this._childrenFn(tn);
+            if (children) {
+                this._selectedChildScore[this._keyFn(tn)] = 0;
             }
         }
         get nodes() {
@@ -64,7 +122,8 @@
             this.onPropsChange();
         }
         onPropsChange() {
-            if (!this._keyFn || !this._childrenFn || !this._nodes)
+            if (!this._keyFn || !this._childrenFn || !this._nodes ||
+                !this._isSelectedFn || !this._toggleNodeSelectionFn || !this._toggleInterminateFn)
                 return;
             this.startCreatingChildToParentLookup();
         }
@@ -85,6 +144,12 @@
                         const childId = this._keyFn(child);
                         lookup[childId] = node;
                     });
+                    if (scs[nodeKey] === children.length) {
+                        this.selectNodeShallow(node);
+                    }
+                    else if (scs[nodeKey] > 0) {
+                        this._toggleInterminateFn(node);
+                    }
                     this.createChildToParentLookup(children, lookup);
                 }
             });

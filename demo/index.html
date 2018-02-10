@@ -137,7 +137,7 @@
             <button on-click="sortDesc">Sort Desc</button>
             <p></p>
             <!-- <template is="dom-repeat" items="[[viewableNodes]]" mutable-data> -->
-            <iron-list items="[[viewableNodes]]" on-click="toggleNode">
+            <iron-list items="[[viewableNodes]]" on-click="toggleNode" mutable-data>
               <template>
                 <div class="node" node="[[item]]"  style$="[[item.style]]">
                   <template is="dom-if" if="[[item.children]]">

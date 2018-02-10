@@ -108,9 +108,16 @@
               },
               toggleNode(e){
                 const target = e.target || e.srcElement;
-                let node = target.node;
-                if(!node) node = target.parentNode.node;
-                this.$.myTree.toggledNode = node;
+                const action = target.getAttribute('action');
+                if(action === 'toggleSelect'){
+                  let node = target.selectNode;
+                  this.$.myCascade.toggledNodeSelection = node;
+                }else{
+                  let node = target.node;
+                  if(!node) node = target.parentNode.node;
+                  this.$.myTree.toggledNode = node;
+                }
+
               },
               expandAll(e){
                 this.$.myTree.allExpandedNodes = this.$.myTree.viewableNodes;
@@ -170,10 +177,10 @@
             <iron-list items="[[viewableNodes]]" on-click="toggleNode" mutable-data>
               <template>
                 <div class="node" node="[[item]]"  style$="[[item.style]]">
-                  <template is="dom-if" if="[[item.selected]]">🗹</template>
+                  <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[item.selected]]">🗹</template>
                   <template is="dom-if" if="[[!item.selected">
-                    <template is="dom-if" if="[[item.indeterminate]]">☐</template>
-                    <template is="dom-if" if="[[!item.indeterminate]]">🗷</template>
+                    <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[item.indeterminate]]">☐</template>
+                    <template action="toggleSelect" select-node="[[item]]" is="dom-if" if="[[!item.indeterminate]]">🗷</template>
                   </template>
                   <template is="dom-if" if="[[item.children]]">
                     <template is="dom-if" if="[[item.expanded]]">📖</template>

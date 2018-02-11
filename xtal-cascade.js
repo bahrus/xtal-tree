@@ -44,6 +44,9 @@
             if (!this._isSelectedFn(tn)) {
                 this.selectNodeAndCascade(tn);
             }
+            else {
+                this.unselectNodeAndCascade(tn);
+            }
             //this._toggleNodeSelectionFn(tn);
         }
         selectNodeShallow(tn) {
@@ -115,6 +118,7 @@
             const children = this._childrenFn(tn);
             if (children) {
                 this._selectedChildScore[this._keyFn(tn)] = 0;
+                children.forEach(child => this.unselectNodeRecursive(child));
             }
         }
         get nodes() {

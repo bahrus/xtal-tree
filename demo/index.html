@@ -110,20 +110,18 @@
                 const target = e.target || e.srcElement;
                 let node = target.node;
                 if(!node) node = target.parentNode.node;
-                //const physicalTop = this.$.nodeList._physicalTop;
+                const fvi = this.$.nodeList.firstVisibleIndex;
                 this.$.myTree.toggledNode = node;
-                
+                this.$.nodeList.scrollToIndex(fvi);
                 //this.$.nodeList.scrollToItem(node); //TODO use index
               },
               toggleSelectedNode(e){
                 const target = e.target || e.srcElement;
                 let node = target.selectNode;
-                this.$.myCascade.toggledNodeSelection = node;
-                //this.$.myTree.viewableNodes = this.$.myTree.viewableNodes.slice(0);
                 const fvi = this.$.nodeList.firstVisibleIndex;
+                this.$.myCascade.toggledNodeSelection = node;
                 this.$.nodeList.items = this.$.nodeList.items.slice(0);
                 this.$.nodeList.scrollToIndex(fvi);
-                //this.$.nodeList.scrollToItem(node); //TODO use index
               },
               expandAll(e){
                 this.$.myTree.allExpandedNodes = this.$.myTree.viewableNodes;

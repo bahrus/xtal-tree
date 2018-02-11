@@ -12,7 +12,7 @@ xtal-tree takes a "watcha-got?" approach to the data -- it allows the specific s
 
 xtal-tree also takes a "whatcha-want?" approach to what is displayed.  You can display the data as a classic tree, or as a treegrid, or as any other way you want.  The only assumption xtal-tree makes is that you want to build the display from a flat list generator, like dom-repeat, iron-list, or a flat grid.  
 
-Think of xtal-tree is a reusable "View Model" component.
+Think of xtal-tree as a reusable "View Model" component.
 
 The markup xtal-tree expects looks like this:
 
@@ -88,7 +88,7 @@ The test-node-fn property is also an optional function property that allows a se
 
 The compare-fn property is also an optional function property that specifies how to compare two nodes, for sorting purposes.  The sorted property, not shown in the markup above, indicates whether the sort should be ascending ('asc') or descending ('desc').
 
-With the respect to the search, this github repo contains another web component, xtal-split, which is a ~500 byte dependency free web component that will split text into regions (spans) matching a search string.  Those spans can be styled to highlight the text that matches the search.
+With respect to the search, this github repo contains another web component, xtal-split, which is a ~500 byte dependency free web component that will split text into regions (spans) matching a search string.  Those spans can be styled to highlight the text that matches the search.
 
 ### Super Advanced
 

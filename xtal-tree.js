@@ -8,6 +8,31 @@
      * @demo demo/index.html
      */
     class XtalTree extends HTMLElement {
+        static get properties() {
+            return {
+                childrenFn: null,
+                compareFn: null,
+                isOpenFn: null,
+                nodes: null,
+                searchString: null,
+                sorted: null,
+                testNodeFn: null,
+                toggledNode: null,
+                toggleNodeFn: null,
+            };
+        }
+        _upgradeProperty(prop) {
+            if (this.hasOwnProperty(prop)) {
+                let value = this[prop];
+                delete this[prop];
+                this[prop] = value;
+            }
+        }
+        connectedCallback() {
+            for (const key in XtalTree.properties) {
+                this._upgradeProperty(key);
+            }
+        }
         get childrenFn() {
             return this._childrenFn;
         }

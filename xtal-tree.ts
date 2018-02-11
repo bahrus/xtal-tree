@@ -1,26 +1,26 @@
-interface INodeState{
-    
+interface INodeState {
+
 }
 
-interface INodePosition{
+interface INodePosition {
     node: ITreeNode,
     position: number
 }
 
-export interface ITreeNode{
+export interface ITreeNode {
 }
 
-export interface ITree{
+export interface ITree {
     nodes: ITreeNode[];
     childrenFn: (tn: ITreeNode) => ITreeNode[];
-    
+
 }
 
-export interface IXtalTreeProperties extends ITree{
-    
+export interface IXtalTreeProperties extends ITree {
+
     isOpenFn: (tn: ITreeNode) => boolean;
     testNodeFn?: (tn: ITreeNode, search: string) => boolean;
-    toggleNodeFn : (tn: ITreeNode) => void;
+    toggleNodeFn: (tn: ITreeNode) => void;
     toggledNode: ITreeNode;
     compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
     viewableNodes?: ITreeNode[];
@@ -37,12 +37,41 @@ export interface IXtalTreeProperties extends ITree{
      * @polymer
      * @demo demo/index.html
      */
-    class XtalTree extends HTMLElement implements IXtalTreeProperties{
-        _childrenFn : (tn: ITreeNode) => ITreeNode[];
-        get childrenFn (){
+    class XtalTree extends HTMLElement implements IXtalTreeProperties {
+
+        static get properties(): IXtalTreeProperties {
+            return {
+                childrenFn: null,
+                compareFn: null,
+                isOpenFn: null,
+                nodes: null,
+                searchString: null,
+                sorted: null,
+                testNodeFn: null,
+                toggledNode: null,
+                toggleNodeFn: null,
+            }
+        }
+
+        _upgradeProperty(prop) {
+            if (this.hasOwnProperty(prop)) {
+                let value = this[prop];
+                delete this[prop];
+                this[prop] = value;
+            }
+        }
+
+        connectedCallback(){
+            for(const key in XtalTree.properties){
+                this._upgradeProperty(key);
+            }
+        }
+
+        _childrenFn: (tn: ITreeNode) => ITreeNode[];
+        get childrenFn() {
             return this._childrenFn;
         }
-        set childrenFn(nodeFn){
+        set childrenFn(nodeFn) {
             this._childrenFn = nodeFn;
             this.onPropsChange();
         }
@@ -50,92 +79,92 @@ export interface IXtalTreeProperties extends ITree{
 
 
         _isOpenFn: (tn: ITreeNode) => boolean;
-        get isOpenFn(){
+        get isOpenFn() {
             return this._isOpenFn;
         }
-        set isOpenFn(nodeFn){
+        set isOpenFn(nodeFn) {
             this._isOpenFn = nodeFn;
             this.onPropsChange();
         }
 
         _nodes: ITreeNode[];
-        get nodes(){
+        get nodes() {
             return this._nodes;
         }
 
-        set nodes(nodes){
+        set nodes(nodes) {
             this._nodes = nodes;
             this.sort(false);
             this.onPropsChange();
         }
 
         _searchString: string;
-        get searchString(){
+        get searchString() {
             return this._searchString;
         }
-        set searchString(val){
+        set searchString(val) {
             this._searchString = val;
-            if(val){
+            if (val) {
                 this.searchNodes();
-            }else{
+            } else {
 
             }
         }
 
         _testNodeFn?: (tn: ITreeNode, search: string) => boolean;
-        get testNodeFn(){
+        get testNodeFn() {
             return this._testNodeFn;
         }
-        set testNodeFn(fn){
+        set testNodeFn(fn) {
             this._testNodeFn = fn;
         }
 
         _compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
-        get compareFn(){
+        get compareFn() {
             return this._compareFn;
         }
 
-        set compareFn(val){
+        set compareFn(val) {
             this._compareFn = val;
             this.sort(true);
         }
 
         _sorted: string;
-        get sorted(){
+        get sorted() {
             return this._sorted;
         }
-        set sorted(val){
+        set sorted(val) {
             this._sorted = val;
             this.sort(true);
         }
 
-        sort(redraw: boolean){
-            if(!this._sorted || !this._compareFn || !this._nodes) return;
+        sort(redraw: boolean) {
+            if (!this._sorted || !this._compareFn || !this._nodes) return;
             this.sortNodes(this._nodes);
-            if(redraw){
+            if (redraw) {
                 this.updateViewableNodes();
             }
         }
 
-        sortNodes(nodes: ITreeNode[], compareFn?: (lhs:ITreeNode, rhs: ITreeNode) => number){
-            if(!compareFn){
-                if(this.sorted === 'desc'){
+        sortNodes(nodes: ITreeNode[], compareFn?: (lhs: ITreeNode, rhs: ITreeNode) => number) {
+            if (!compareFn) {
+                if (this.sorted === 'desc') {
                     compareFn = (lhs: ITreeNode, rhs: ITreeNode) => -1 * this._compareFn(lhs, rhs);
-                }else{
+                } else {
                     compareFn = this._compareFn;
                 }
-            } 
-            
+            }
+
             nodes.sort(compareFn);
-            nodes.forEach(node =>{
+            nodes.forEach(node => {
                 const children = this._childrenFn(node);
-                if(children) this.sortNodes(children, compareFn);
+                if (children) this.sortNodes(children, compareFn);
             })
-            
+
 
         }
 
-        notifyViewNodesChanged(){
+        notifyViewNodesChanged() {
             const newEvent = new CustomEvent('viewable-nodes-changed', {
                 detail: {
                     value: this.viewableNodes
@@ -145,79 +174,79 @@ export interface IXtalTreeProperties extends ITree{
             } as CustomEventInit);
             this.dispatchEvent(newEvent);
         }
-        onPropsChange(){
-            if(!this._isOpenFn || !this._childrenFn || !this._nodes) return;
-            if(this._levelSetterFn){
+        onPropsChange() {
+            if (!this._isOpenFn || !this._childrenFn || !this._nodes) return;
+            if (this._levelSetterFn) {
                 this._levelSetterFn(this._nodes, 0);
             }
             this.updateViewableNodes();
-            
+
         }
 
-        _calculateViewableNodes(nodes: ITreeNode[], acc: ITreeNode[]){
-            if(!nodes) return;
-            nodes.forEach(node =>{
-                if(this.searchString){
-                    if(!this._isOpenFn(node) && !this._testNodeFn(node, this.searchString)) return;
+        _calculateViewableNodes(nodes: ITreeNode[], acc: ITreeNode[]) {
+            if (!nodes) return;
+            nodes.forEach(node => {
+                if (this.searchString) {
+                    if (!this._isOpenFn(node) && !this._testNodeFn(node, this.searchString)) return;
                 }
                 acc.push(node);
-                if(this._isOpenFn(node)) this._calculateViewableNodes(this._childrenFn(node), acc);
+                if (this._isOpenFn(node)) this._calculateViewableNodes(this._childrenFn(node), acc);
             })
             return acc;
         }
 
         _viewableNodes: ITreeNode[];
-        get viewableNodes(){
+        get viewableNodes() {
             return this._viewableNodes;
         }
 
-        set viewableNodes(nodes){
+        set viewableNodes(nodes) {
             this._viewableNodes = nodes;
         }
 
         _toggleNodeFn: (tn: ITreeNode) => void;
-        get toggleNodeFn(){
+        get toggleNodeFn() {
             return this._toggleNodeFn;
         }
 
-        set toggleNodeFn(nodeFn){
+        set toggleNodeFn(nodeFn) {
             this._toggleNodeFn = nodeFn;
         }
-        updateViewableNodes(){
+        updateViewableNodes() {
             this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
             this.notifyViewNodesChanged();
         }
-        set toggledNode(node: ITreeNode){
+        set toggledNode(node: ITreeNode) {
             this._toggleNodeFn(node);
             this.updateViewableNodes();
         }
 
-        set allExpandedNodes(nodes: ITreeNode[]){
+        set allExpandedNodes(nodes: ITreeNode[]) {
             this.expandAll(nodes);
             this.updateViewableNodes();
         }
 
-        set allCollapsedNodes(nodes: ITreeNode[]){
+        set allCollapsedNodes(nodes: ITreeNode[]) {
             this.collapseAll(nodes);
             this.updateViewableNodes();
         }
 
-        searchNodes(){
-            if(!this._testNodeFn) return;
+        searchNodes() {
+            if (!this._testNodeFn) return;
             this.collapseAll(this._nodes);
             this.search(this._nodes, null);
             this.updateViewableNodes();
         }
 
-        search(nodes: ITreeNode[], parent: ITreeNode){
-            nodes.forEach(node =>{
-                if(this._testNodeFn(node, this._searchString)){
-                    if(parent) this.openNode(parent);
-                }else{
+        search(nodes: ITreeNode[], parent: ITreeNode) {
+            nodes.forEach(node => {
+                if (this._testNodeFn(node, this._searchString)) {
+                    if (parent) this.openNode(parent);
+                } else {
                     const children = this._childrenFn(node);
-                    if(children){
+                    if (children) {
                         this.search(children, node);
-                        if(parent && this._isOpenFn(node)){
+                        if (parent && this._isOpenFn(node)) {
                             this.openNode(parent);
                         }
                     }
@@ -225,33 +254,33 @@ export interface IXtalTreeProperties extends ITree{
             })
         }
 
-        openNode(node){
-            if(!this._isOpenFn(node)) this._toggleNodeFn(node);
+        openNode(node) {
+            if (!this._isOpenFn(node)) this._toggleNodeFn(node);
         }
 
-        expandAll(nodes: ITreeNode[]){
-            nodes.forEach(node =>{
+        expandAll(nodes: ITreeNode[]) {
+            nodes.forEach(node => {
                 this.openNode(node);
                 const children = this._childrenFn(node);
-                if(children) this.expandAll(children);
+                if (children) this.expandAll(children);
             })
         }
-        closeNode(node){
-            if(this._isOpenFn(node)) this._toggleNodeFn(node);
+        closeNode(node) {
+            if (this._isOpenFn(node)) this._toggleNodeFn(node);
         }
-        collapseAll(nodes: ITreeNode[]){
-            nodes.forEach(node =>{
+        collapseAll(nodes: ITreeNode[]) {
+            nodes.forEach(node => {
                 this.closeNode(node);
                 const children = this._childrenFn(node);
-                if(children) this.collapseAll(children);
+                if (children) this.collapseAll(children);
             })
         }
 
-        _levelSetterFn: (nodes:ITreeNode[], level:number) => void
-        set levelSetterFn(setter){
+        _levelSetterFn: (nodes: ITreeNode[], level: number) => void
+        set levelSetterFn(setter) {
             this._levelSetterFn = setter;
         }
-        get levelSetterFn(){
+        get levelSetterFn() {
             return this._levelSetterFn;
         }
     }

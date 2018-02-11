@@ -30,7 +30,7 @@ The markup xtal-tree expects looks like this:
     </xtal-tree>
 ```
 
-The properties required to show a tree are isOpenFn, childrenFn and nodes (that has the actual data).   The viewableNodes property / change event tells other components what nodes need to display and in what order, and changes as nodes are opened / closed, searchedd, sorted.
+The properties required to show a tree are isOpenFn, childrenFn and nodes (that has the actual data).   The viewableNodes property / change event tells other components what flat array of nodes need to display and in what order, and the list changes as nodes are opened / closed, searched, sorted.
 
 The toggleNodeFn property is an optional function property that allows one to add a toggle ability to the tree.  Applying the toggleNodeFn repeatedly to a node should cause the isOpenFn function to toggle between true and false when applied to the same node.   
 
@@ -39,6 +39,8 @@ The levelSetterFn property is an optional function property that, if provided, t
 The test-node-fn property is also an optional function property that allows a search of the tree to be done, based on the value of searchString.
 
 The compare-fn property is also an optional function property that specifies how to compare two nodes, for sorting purposes.  The sorted property, not shown in the markup above, indicates whether the sort should be ascending ('asc') or descending ('desc').
+
+
 
 ## Install the Polymer-CLI
 

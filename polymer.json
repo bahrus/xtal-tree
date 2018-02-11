@@ -1,7 +1,22 @@
 {
+  "sources":[
+    "xtal-tree.js",
+    "xtal-split.js",
+    "xtal-cascade.js"
+  ],
   "lint": {
     "rules": [
       "polymer-2"
     ]
-  }
+  },
+  "builds":[
+    {
+      "name": "ES5",
+      "js": {"minify": true, "compile": true}
+    },
+    {
+      "name": "ES6",
+      "js": {"minify": true, "compile": false}
+    }    
+  ]
 }

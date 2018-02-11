@@ -34,25 +34,28 @@
           <script type="text/ecmascript ish">
             [{
               polymerProperties:{
+                // Define how xtal-tree should define an open or expanded node
                 isOpenFn:{
                     type: Function,
                     value: function(node){
                       return node.expanded;
                     }
                 },
+                // Specify how to get the children of a node.
                 childrenFn:{
                   type: Function,
                   value: function(node){
                     return node.children;
                   }
                 },
+                // Define how to toggle nodes between open/expanded vs closed/minimized.
                 toggleNodeFn:{
                   type: Function,
                   value: function(node){
                     node.expanded = !node.expanded;
                   }
                 },
-                /////////////  Optional -- useful if child nodes should be indented 
+                // Optional -- useful if child nodes should be indented 
                 levelSetterFn:{
                   type: Function,
                   value: function(nodes, level){
@@ -92,6 +95,12 @@
                     return node.isSelected;
                   }
                 },
+                isIndeterminateFn:{
+                  type: Function,
+                  value: function(node){
+                    return node.isIndeterminate;
+                  }
+                },
                 toggleNodeSelectionFn:{
                   type: Function,
                   value: function(node){
@@ -106,6 +115,7 @@
                 }
 
               },
+              ////////////////////  Event handlers
               toggleExpandedNode(e){
                 const target = e.target || e.srcElement;
                 let node = target.node;
@@ -160,7 +170,9 @@
               toggle-node-fn="[[toggleNodeFn]]" compare-fn="[[compareFn]]" nodes="[[directory]]" search-string="[[search]]"
               viewable-nodes="{{viewableNodes}}">
             </xtal-tree>
-            <xtal-cascade id="myCascade" key-fn="[[keyFn]]" is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" nodes="[[directory]]" is-selected-fn="[[isSelectedFn]]"
+            <xtal-cascade id="myCascade" key-fn="[[keyFn]]" 
+              is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" nodes="[[directory]]" 
+              is-selected-fn="[[isSelectedFn]]" is-indeterminate-fn="[[isIndeterminateFn]]"
               toggle-node-selection-fn="[[toggleNodeSelectionFn]]" toggle-indeterminate-fn="[[toggleIndeterminateFn]]"></xtal-cascade>
             <div>Click on Nodes below to toggle open / closed.</div>
             <br>

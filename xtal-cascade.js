@@ -28,6 +28,12 @@
         set isSelectedFn(nodeFn) {
             this._isSelectedFn = nodeFn;
         }
+        get isIndeterminateFn() {
+            return this._isIndeterminateFn;
+        }
+        set isIndeterminateFn(nodeFn) {
+            this._isIndeterminateFn = nodeFn;
+        }
         get toggleNodeSelectionFn() {
             return this._toggleNodeSelectionFn;
         }
@@ -52,10 +58,14 @@
         selectNodeShallow(tn) {
             if (!this._isSelectedFn(tn))
                 this._toggleNodeSelectionFn(tn);
+            if (this._isIndeterminateFn(tn))
+                this._toggleInterminateFn(tn);
         }
         unselectNodeShallow(tn) {
             if (this._isSelectedFn(tn))
                 this._toggleNodeSelectionFn(tn);
+            if (this._isIndeterminateFn(tn))
+                this._toggleInterminateFn(tn);
         }
         selectNodeAndCascade(tn) {
             this.selectNodeRecursive(tn);
@@ -72,7 +82,6 @@
                         this.selectNodeShallow(parentNd);
                     }
                     else {
-                        //debugger;
                         this._toggleInterminateFn(parentNd);
                     }
                 }
@@ -80,6 +89,7 @@
             } while (currentNode);
         }
         unselectNodeAndCascade(tn) {
+            //debugger;
             this.unselectNodeRecursive(tn);
             let currentNode = tn;
             do {
@@ -88,7 +98,7 @@
                 if (parentNd) {
                     const parentId = this._keyFn(parentNd);
                     this._selectedChildScore[parentId]--;
-                    const children = this._childrenFn(parentNd);
+                    //const children = this._childrenFn(parentNd);
                     if (this._selectedChildScore[parentId] === 0) {
                         this.unselectNodeShallow(parentNd);
                     }

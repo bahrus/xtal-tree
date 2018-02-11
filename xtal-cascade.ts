@@ -3,6 +3,7 @@ export interface IXtalCascadeProperties extends ITree{
     //childrenFn: (tn: ITreeNode) => ITreeNode[];
     keyFn: (tn: ITreeNode) => string;
     isSelectedFn: (tn: ITreeNode) => boolean;
+    isIndeterminateFn: (tn: ITreeNode) => boolean;
     //isIndeterminateFn: (tn: ITreeNode) => boolean;
     toggleNodeSelectionFn: (tn: ITreeNode) => void;
     toggleIndeterminateFn: (tn: ITreeNode) => void;
@@ -45,6 +46,14 @@ export interface IXtalCascadeProperties extends ITree{
             this._isSelectedFn = nodeFn;
         }
 
+        _isIndeterminateFn: (tn:ITreeNode) => boolean;
+        get isIndeterminateFn(){
+            return this._isIndeterminateFn;
+        }
+        set isIndeterminateFn(nodeFn){
+            this._isIndeterminateFn = nodeFn;
+        }
+
         _toggleNodeSelectionFn: (tn: ITreeNode) => boolean;
         get toggleNodeSelectionFn(){
             return this._toggleNodeSelectionFn;
@@ -73,10 +82,12 @@ export interface IXtalCascadeProperties extends ITree{
 
         selectNodeShallow(tn: ITreeNode){
             if(!this._isSelectedFn(tn)) this._toggleNodeSelectionFn(tn);
+            if(this._isIndeterminateFn(tn)) this._toggleInterminateFn(tn);
         }
 
         unselectNodeShallow(tn: ITreeNode){
             if(this._isSelectedFn(tn)) this._toggleNodeSelectionFn(tn);
+            if(this._isIndeterminateFn(tn)) this._toggleInterminateFn(tn);
         }
 
         selectNodeAndCascade(tn: ITreeNode){
@@ -93,7 +104,6 @@ export interface IXtalCascadeProperties extends ITree{
                     if(this._selectedChildScore[parentId] === children.length){
                         this.selectNodeShallow(parentNd);
                     }else{
-                        //debugger;
                         this._toggleInterminateFn(parentNd);
                     }
                 }
@@ -102,6 +112,7 @@ export interface IXtalCascadeProperties extends ITree{
         }
 
         unselectNodeAndCascade(tn: ITreeNode){
+            //debugger;
             this.unselectNodeRecursive(tn);
             let currentNode = tn;
             do{
@@ -110,7 +121,7 @@ export interface IXtalCascadeProperties extends ITree{
                 if(parentNd) {
                     const parentId = this._keyFn(parentNd);
                     this._selectedChildScore[parentId]--;
-                    const children = this._childrenFn(parentNd);
+                    //const children = this._childrenFn(parentNd);
                     if(this._selectedChildScore[parentId] === 0){
                         this.unselectNodeShallow(parentNd);
                     }else{

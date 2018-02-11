@@ -184,8 +184,8 @@
                   <span on-click="toggleSelectedNode" select-node="[[item]]">
                     <template   is="dom-if" if="[[item.isSelected]]">🗹</template>
                     <template is="dom-if" if="[[!item.isSelected]]">
-                      <template   is="dom-if" if="[[item.indeterminate]]">☐</template>
-                      <template   is="dom-if" if="[[!item.indeterminate]]">🗷</template>
+                      <template   is="dom-if" if="[[item.isIndeterminate]]">☐</template>
+                      <template   is="dom-if" if="[[!item.isIndeterminate]]">🗷</template>
                     </template>
                   </span>
                   <span on-click="toggleExpandedNode" node="[[item]]">

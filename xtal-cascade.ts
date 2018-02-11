@@ -83,6 +83,7 @@ export interface IXtalCascadeProperties extends ITree{
             this.selectNodeRecursive(tn);
             let currentNode = tn;
             do{
+                //debugger;
                 const thisID = this._keyFn(currentNode);
                 const parentNd = this._childToParentLookup[thisID];
                 if(parentNd) {
@@ -92,6 +93,7 @@ export interface IXtalCascadeProperties extends ITree{
                     if(this._selectedChildScore[parentId] === children.length){
                         this.selectNodeShallow(parentNd);
                     }else{
+                        //debugger;
                         this._toggleInterminateFn(parentNd);
                     }
                 }

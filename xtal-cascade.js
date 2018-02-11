@@ -61,6 +61,7 @@
             this.selectNodeRecursive(tn);
             let currentNode = tn;
             do {
+                //debugger;
                 const thisID = this._keyFn(currentNode);
                 const parentNd = this._childToParentLookup[thisID];
                 if (parentNd) {
@@ -71,6 +72,7 @@
                         this.selectNodeShallow(parentNd);
                     }
                     else {
+                        //debugger;
                         this._toggleInterminateFn(parentNd);
                     }
                 }

@@ -41,7 +41,10 @@
             this._toggleInterminateFn = nodeFn;
         }
         set toggledNodeSelection(tn) {
-            this._toggleNodeSelectionFn(tn);
+            if (!this._isSelectedFn(tn)) {
+                this.selectNodeAndCascade(tn);
+            }
+            //this._toggleNodeSelectionFn(tn);
         }
         selectNodeShallow(tn) {
             if (!this._isSelectedFn(tn))
@@ -129,6 +132,7 @@
         }
         startCreatingChildToParentLookup() {
             this._childToParentLookup = {};
+            this._selectedChildScore = {};
             this.createChildToParentLookup(this._nodes, this._childToParentLookup);
         }
         createChildToParentLookup(nodes, lookup) {

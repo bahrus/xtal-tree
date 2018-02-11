@@ -62,7 +62,10 @@ export interface IXtalCascadeProperties extends ITree{
         }
 
         set toggledNodeSelection(tn: ITreeNode){
-            this._toggleNodeSelectionFn(tn);
+            if(!this._isSelectedFn(tn)){
+                this.selectNodeAndCascade(tn);
+            }
+            //this._toggleNodeSelectionFn(tn);
 
         }
 
@@ -159,6 +162,7 @@ export interface IXtalCascadeProperties extends ITree{
         _childToParentLookup: {[key: string]: ITreeNode};
         startCreatingChildToParentLookup(){
             this._childToParentLookup = {};
+            this._selectedChildScore = {};
             this.createChildToParentLookup(this._nodes, this._childToParentLookup);
         }
 

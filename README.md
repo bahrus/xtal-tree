@@ -88,7 +88,13 @@ The test-node-fn property is also an optional function property that allows a se
 
 The compare-fn property is also an optional function property that specifies how to compare two nodes, for sorting purposes.  The sorted property, not shown in the markup above, indicates whether the sort should be ascending ('asc') or descending ('desc').
 
+With the respect to the search, this github repo contains another web component, xtal-split, which is a ~500 byte dependency free web component that will split text into regions (spans) matching a search string.  Those spans can be styled to highlight the text that matches the search.
 
+### Super Advanced
+
+Sometimes we want our tree to support node selection.  This is a particularly complex requirement, if you want to indicate partial selection, and if you want selections to cascade up and down the tree for logical consistency.
+
+This is where the 800 byte (gzipped and minified) dependency free web component xtal-cascade fits in.
 
 ## Install the Polymer-CLI
 

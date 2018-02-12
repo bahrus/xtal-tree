@@ -90,6 +90,10 @@ export interface IXtalCascadeProperties extends ITree{
             if(this._isIndeterminateFn(tn)) this._toggleInterminateFn(tn);
         }
 
+        setNodeIndeterminate(tn: ITreeNode){
+            if(!this._isIndeterminateFn(tn)) this._toggleInterminateFn(tn);
+        }
+
         selectNodeAndCascade(tn: ITreeNode){
             this.selectNodeRecursive(tn);
             let currentNode = tn;
@@ -104,7 +108,8 @@ export interface IXtalCascadeProperties extends ITree{
                     if(this._selectedChildScore[parentId] === children.length){
                         this.selectNodeShallow(parentNd);
                     }else{
-                        this._toggleInterminateFn(parentNd);
+                        //this._toggleInterminateFn(parentNd);
+                        this.setNodeIndeterminate(parentNd);
                     }
                 }
                 currentNode = parentNd;

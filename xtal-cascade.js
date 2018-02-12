@@ -67,6 +67,10 @@
             if (this._isIndeterminateFn(tn))
                 this._toggleInterminateFn(tn);
         }
+        setNodeIndeterminate(tn) {
+            if (!this._isIndeterminateFn(tn))
+                this._toggleInterminateFn(tn);
+        }
         selectNodeAndCascade(tn) {
             this.selectNodeRecursive(tn);
             let currentNode = tn;
@@ -82,7 +86,8 @@
                         this.selectNodeShallow(parentNd);
                     }
                     else {
-                        this._toggleInterminateFn(parentNd);
+                        //this._toggleInterminateFn(parentNd);
+                        this.setNodeIndeterminate(parentNd);
                     }
                 }
                 currentNode = parentNd;

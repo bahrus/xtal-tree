@@ -117,7 +117,6 @@ export interface IXtalCascadeProperties extends ITree{
         }
 
         unselectNodeAndCascade(tn: ITreeNode){
-            //debugger;
             this.unselectNodeRecursive(tn);
             let currentNode = tn;
             do{
@@ -130,8 +129,7 @@ export interface IXtalCascadeProperties extends ITree{
                     if(this._selectedChildScore[parentId] === 0){
                         this.unselectNodeShallow(parentNd);
                     }else{
-                        //debugger;
-                        this._toggleInterminateFn(parentNd);
+                        if(!this._isIndeterminateFn(parentNd)) this._toggleInterminateFn(parentNd);
                         if(this._isSelectedFn(parentNd)) this._toggleNodeSelectionFn(parentNd);
                     }
                 }

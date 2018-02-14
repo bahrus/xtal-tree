@@ -95,7 +95,6 @@
             } while (currentNode);
         }
         unselectNodeAndCascade(tn) {
-            //debugger;
             this.unselectNodeRecursive(tn);
             let currentNode = tn;
             do {
@@ -109,8 +108,8 @@
                         this.unselectNodeShallow(parentNd);
                     }
                     else {
-                        //debugger;
-                        this._toggleInterminateFn(parentNd);
+                        if (!this._isIndeterminateFn(parentNd))
+                            this._toggleInterminateFn(parentNd);
                         if (this._isSelectedFn(parentNd))
                             this._toggleNodeSelectionFn(parentNd);
                     }

@@ -1,6 +1,6 @@
 {
-  "name":"xtal-tree",
-  "version": "0.0.10",
+  "name": "xtal-tree",
+  "version": "0.0.11",
   "flat": true,
   "dependencies": {
     "@bower_components/accessibility-developer-tools": "GoogleChrome/accessibility-developer-tools#^2.10.0",

@@ -8,7 +8,7 @@ Often we want to take advantage of a nice flat list generator component, like do
 
 This scenario seems to come up so frequently with various components, that this component strives to genericize that requirement.
 
-xtal-tree takes a "watcha-got?" approach to the data -- it allows the specific structure of the tree data to be pretty much anything, and passes no judgment on it.   It doesn't accidentally overwrite anything it shouldn't, without specific permission from the developer. The user of xtal-tree, ie the developer, then needs to train xtal-tree how to interpret the data -- how to get the children, how to represent an open node vs a closed node, etc.
+xtal-tree takes a "watcha-got?" approach to the data -- it allows the specific structure of the tree data to be pretty much anything, and passes no judgment on it.   It doesn't accidentally overwrite anything it shouldn't, without specific permission from the developer. The user of xtal-tree, i.e. the developer, then needs to train xtal-tree how to interpret the data -- how to get the children, how to represent an open node vs a closed node, etc.
 
 xtal-tree also takes a "whatcha-want?" approach to what is displayed.  You can display the data as a classic tree, or as a treegrid, or as any other way you want.  The only assumption xtal-tree makes is that you want to build the display from a flat list generator, like dom-repeat, iron-list, or a flat grid.  
 
@@ -92,11 +92,11 @@ With respect to the search, this github repo contains another web component, xta
 
 ### Super Advanced
 
-Sometimes we want our tree to support node selection, following an assumption that the state of a parent reflects the aggregation of all its children.  This is a particularly complex requirement, if you want to indicate partial selection, and if you want selections to cascade up and down the tree for logical consistency.  What makes this feature significantly more complex than a simple expandable collapsible tree, is that for node selection, we need three states to track - selected, unselected, and indeterminate.
+Sometimes we want our tree to support node selection, following an assumption that the state of a parent reflects the aggregation of all its children.  This is a particularly complex requirement.  What makes this feature significantly more complex than a simple expandable/collapsible tree, is that for node selection, we need three states to track - selected, unselected, and indeterminate.
 
 If all of a nodes's children are selected, that is assumed to be logically equivalent to the parent being selected.  If none of the children are selected, then the parent is assumed to not be selected.  If some children are selected, but not others, then the parent goes into the indeterminate state.  Users can only select or unselect nodes, but the side effects of that choice will cascade up and down the tree.
 
-This is where the 800 byte (gzipped and minified) dependency free web component xtal-cascade fits in.  Because we now have three states, we need the developer to specify two toggle functions, rather than one.  The markup looks as follows in the demo:
+This is where the 1k (gzipped and minified) dependency free web component xtal-cascade fits in.  Because we now have three states, we need the developer to specify two toggle functions, rather than one.  The markup looks as follows in the demo:
 
 ```html
     <xtal-cascade id="myCascade" key-fn="[[keyFn]]" 
@@ -109,9 +109,9 @@ This is where the 800 byte (gzipped and minified) dependency free web component 
     </xtal-cascade>
 ```
 
-The "output" of xtal-tree,"viewable-nodes" is the array of "viewableNodes" which will tend to be quite large.
+Recall that the "output" of xtal-tree,"viewable-nodes," is the array of "viewableNodes" which will tend to be quite large.
 
-On the other hand, the "output" of the xtal-cascade component is:  "selected-root-nodes," which provides the smallest set of nodes that indicate what nodes are selected.  Since all the children of a selected node are selected for logical consistencies, there is no need to specify this as it is redundant.
+On the other hand, here the "output" of the xtal-cascade component is:  "selected-root-nodes," which provides the smallest set of nodes that indicate what nodes are selected.  Since all the children of a selected node are selected for logical consistencies, there is no need to include them because that would be redundant.
 
 ## Install the Polymer-CLI
 

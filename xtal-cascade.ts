@@ -130,7 +130,9 @@ export interface IXtalCascadeProperties extends ITree{
                     if(this._selectedChildScore[parentId] === 0){
                         this.unselectNodeShallow(parentNd);
                     }else{
+                        //debugger;
                         this._toggleInterminateFn(parentNd);
+                        if(this._isSelectedFn(parentNd)) this._toggleNodeSelectionFn(parentNd);
                     }
                 }
                 currentNode = parentNd;

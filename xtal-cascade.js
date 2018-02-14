@@ -109,7 +109,10 @@
                         this.unselectNodeShallow(parentNd);
                     }
                     else {
+                        //debugger;
                         this._toggleInterminateFn(parentNd);
+                        if (this._isSelectedFn(parentNd))
+                            this._toggleNodeSelectionFn(parentNd);
                     }
                 }
                 currentNode = parentNd;

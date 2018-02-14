@@ -92,7 +92,7 @@ With respect to the search, this github repo contains another web component, xta
 
 ### Super Advanced
 
-Sometimes we want our tree to support node selection, following an assumption that the state of a parent reflects the aggregation of all its children.  This is a particularly complex requirement, if you want to indicate partial selection, and if you want selections to cascade up and down the tree for logical consistency.  What makes this feature significantly more complex that a simple expandable collapsible tree, is that for node selection, we need three states to track - selected, unselected, and indeterminate.
+Sometimes we want our tree to support node selection, following an assumption that the state of a parent reflects the aggregation of all its children.  This is a particularly complex requirement, if you want to indicate partial selection, and if you want selections to cascade up and down the tree for logical consistency.  What makes this feature significantly more complex than a simple expandable collapsible tree, is that for node selection, we need three states to track - selected, unselected, and indeterminate.
 
 If all of a nodes's children are selected, that is assumed to be logically equivalent to the parent being selected.  If none of the children are selected, then the parent is assumed to not be selected.  If some children are selected, but not others, then the parent goes into the indeterminate state.  Users can only select or unselect nodes, but the side effects of that choice will cascade up and down the tree.
 

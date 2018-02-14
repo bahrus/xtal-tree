@@ -54,6 +54,7 @@
                 this.unselectNodeAndCascade(tn);
             }
             //this._toggleNodeSelectionFn(tn);
+            this.updateSelectedRootNodes();
         }
         selectNodeShallow(tn) {
             if (!this._isSelectedFn(tn))
@@ -114,14 +115,14 @@
                 currentNode = parentNd;
             } while (currentNode);
         }
-        set newSelectedNodeToggle(tn) {
-            if (this._isSelectedFn(tn)) {
-                this.unselectNodeAndCascade(tn);
-            }
-            else {
-                this.selectNodeAndCascade(tn);
-            }
-        }
+        // set newSelectedNodeToggle(tn: ITreeNode){
+        //     if(this._isSelectedFn(tn)){
+        //         this.unselectNodeAndCascade(tn);
+        //     }else{
+        //         this.selectNodeAndCascade(tn);
+        //     }
+        //     this.updateSelectedRootNodes();bba
+        // }
         selectNodeRecursive(tn) {
             this.selectNodeShallow(tn);
             const children = this._childrenFn(tn);
@@ -178,6 +179,41 @@
                     this.createChildToParentLookup(children, lookup);
                 }
             });
+            this.updateSelectedRootNodes();
+        }
+        updateSelectedRootNodes() {
+            this._selectedRootNodes = this._calculateSelectedRootNodes(this._nodes, []);
+            this.notifySelectedRootNodesChanged();
+        }
+        notifySelectedRootNodesChanged() {
+            const newEvent = new CustomEvent('selected-root-nodes-changed', {
+                detail: {
+                    value: this._selectedRootNodes
+                },
+                bubbles: true,
+                composed: true
+            });
+            this.dispatchEvent(newEvent);
+        }
+        _calculateSelectedRootNodes(nodes, acc) {
+            nodes.forEach(node => {
+                if (this._isSelectedFn(node)) {
+                    acc.push(node);
+                }
+                else if (this._isIndeterminateFn(node)) {
+                    const children = this._childrenFn(node);
+                    if (children) {
+                        this._calculateSelectedRootNodes(children, acc);
+                    }
+                }
+            });
+            return acc;
+        }
+        get selectedRootNodes() {
+            return this._selectedRootNodes;
+        }
+        set selectedRootNodes(nodes) {
+            this._selectedRootNodes = nodes;
         }
     }
     customElements.define('xtal-cascade', XtalCascade);

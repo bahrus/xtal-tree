@@ -173,7 +173,11 @@
             <xtal-cascade id="myCascade" key-fn="[[keyFn]]" 
               is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" nodes="[[directory]]" 
               is-selected-fn="[[isSelectedFn]]" is-indeterminate-fn="[[isIndeterminateFn]]"
-              toggle-node-selection-fn="[[toggleNodeSelectionFn]]" toggle-indeterminate-fn="[[toggleIndeterminateFn]]"></xtal-cascade>
+              toggle-node-selection-fn="[[toggleNodeSelectionFn]]" 
+              toggle-indeterminate-fn="[[toggleIndeterminateFn]]"
+              selected-root-nodes="{{selectedRootNodes}}"
+            >
+            </xtal-cascade>
             <div>Click on Nodes below to toggle open / closed.</div>
             <br>
             <input type="text" value="{{search::input}}" placeholder="Search">
@@ -183,13 +187,6 @@
             <button on-click="sortDesc">Sort Desc</button>
             <p></p>
             <!-- <template is="dom-repeat" items="[[viewableNodes]]" mutable-data> -->
-            <xtal-decorator selector="iron-list">
-              <script type="text/ecmascript ish">
-                [{
-
-                }]
-                </script>
-            </xtal-decorator>
             <iron-list id="nodeList" items="[[viewableNodes]]" mutable-data>
               <template>
                 <div class="node"  style$="[[item.style]]">
@@ -212,6 +209,15 @@
                 </div>
               </template>
             </iron-list>
+
+            <h2>Root Selected Nodes:</h2>
+
+            <iron-list  items="[[selectedRootNodes]]" mutable-data>
+              <template>
+                <div>[[item.path]]</div>
+              </template>
+            </iron-list>
+
           </template>
         </dom-bind>
 

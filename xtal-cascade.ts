@@ -7,7 +7,7 @@ export interface IXtalCascadeProperties extends ITree{
     //isIndeterminateFn: (tn: ITreeNode) => boolean;
     toggleNodeSelectionFn: (tn: ITreeNode) => void;
     toggleIndeterminateFn: (tn: ITreeNode) => void;
-
+    selectedRootNodes: ITreeNode[];
 }
 
 (function () {
@@ -77,7 +77,7 @@ export interface IXtalCascadeProperties extends ITree{
                 this.unselectNodeAndCascade(tn);
             }
             //this._toggleNodeSelectionFn(tn);
-
+            this.updateSelectedRootNodes();
         }
 
         selectNodeShallow(tn: ITreeNode){
@@ -137,14 +137,14 @@ export interface IXtalCascadeProperties extends ITree{
             }while(currentNode);
         }
 
-        set newSelectedNodeToggle(tn: ITreeNode){
-            if(this._isSelectedFn(tn)){
-                this.unselectNodeAndCascade(tn);
-            }else{
-                this.selectNodeAndCascade(tn);
-            }
-            
-        }
+        // set newSelectedNodeToggle(tn: ITreeNode){
+        //     if(this._isSelectedFn(tn)){
+        //         this.unselectNodeAndCascade(tn);
+        //     }else{
+        //         this.selectNodeAndCascade(tn);
+        //     }
+        //     this.updateSelectedRootNodes();bba
+        // }
 
         selectNodeRecursive(tn: ITreeNode){
             this.selectNodeShallow(tn);
@@ -207,7 +207,42 @@ export interface IXtalCascadeProperties extends ITree{
                     this.createChildToParentLookup(children, lookup);
                 }
             })
-            
+            this.updateSelectedRootNodes();
+        }
+        updateSelectedRootNodes() {
+            this._selectedRootNodes = this._calculateSelectedRootNodes(this._nodes, []);
+            this.notifySelectedRootNodesChanged();
+        }
+        notifySelectedRootNodesChanged() {
+            const newEvent = new CustomEvent('selected-root-nodes-changed', {
+                detail: {
+                    value: this._selectedRootNodes
+                },
+                bubbles: true,
+                composed: true
+            } as CustomEventInit);
+            this.dispatchEvent(newEvent);
+        }
+        _calculateSelectedRootNodes(nodes: ITreeNode[], acc: ITreeNode[]) {
+            nodes.forEach(node =>{
+                if(this._isSelectedFn(node)){
+                    acc.push(node);
+                }else if(this._isIndeterminateFn(node)){
+                    const children = this._childrenFn(node);
+                    if(children){
+                        this._calculateSelectedRootNodes(children, acc);
+                    }
+                }
+            })
+            return acc;
+        }
+
+        _selectedRootNodes : ITreeNode[];
+        get selectedRootNodes(){
+            return this._selectedRootNodes;
+        }
+        set selectedRootNodes(nodes: ITreeNode[]){
+            this._selectedRootNodes = nodes;
         }
 
     }

@@ -65,7 +65,7 @@
                     })
                   }
                 },
-                ////////////////  Advanced -- this is only needed for search support
+                //  Advanced -- this is only needed for search support
                 testNodeFn:{
                   type: Function,
                   value: function(node, search){
@@ -73,6 +73,9 @@
                     return node.nameLC.indexOf(search.toLowerCase()) > -1;
                   }
                 },
+                //  Advanced -- this is only neeeded for sorting support.
+                //  The search is case sensitive.  To make it case sensitive, do something
+                //  similar to what was done for search above.
                 compareFn:{
                   type: Function,
                   value: function(lhs, rhs){
@@ -82,31 +85,36 @@
                     return 0;
                   }
                 },
-               ///////////////////////////////  Super Advanced -- this is only needed for Cascading selected nodes
+                /////////////////   Super Advanced -- this is only needed for Cascading selected nodes
+                //  This is needed for quick traversal of the tree.
                 keyFn:{
                   type: Function,
                   value: function(node){
                     return node.path;
                   }
                 },
+                //  This being true should be mutually exclusive with isIndeterminateFn evaluating to true.
                 isSelectedFn:{
                   type: Function,
                   value: function(node){
                     return node.isSelected;
                   }
                 },
+                //  This being true should be mutually exclusive with isSelectedFn being true.
                 isIndeterminateFn:{
                   type: Function,
                   value: function(node){
                     return node.isIndeterminate;
                   }
                 },
+                //  Users will cause this function to be called directly on the node they click
                 toggleNodeSelectionFn:{
                   type: Function,
                   value: function(node){
                     node.isSelected = !node.isSelected;
                   }
                 },
+                //  This will only be called by the cascading logic.
                 toggleIndeterminateFn:{
                   type: Function,
                   value: function(node){

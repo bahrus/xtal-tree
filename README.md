@@ -92,9 +92,26 @@ With respect to the search, this github repo contains another web component, xta
 
 ### Super Advanced
 
-Sometimes we want our tree to support node selection.  This is a particularly complex requirement, if you want to indicate partial selection, and if you want selections to cascade up and down the tree for logical consistency.
+Sometimes we want our tree to support node selection, following an assumption that the state of a parent reflects the aggregation of all its children.  This is a particularly complex requirement, if you want to indicate partial selection, and if you want selections to cascade up and down the tree for logical consistency.  What makes this feature significantly more complex that a simple expandable collapsible tree, is that for node selection, we need three states to track - selected, unselected, and indeterminate.
 
-This is where the 800 byte (gzipped and minified) dependency free web component xtal-cascade fits in.
+If all of a nodes's children are selected, that is assumed to be logically equivalent to the parent being selected.  If none of the children are selected, then the parent is assumed to not be selected.  If some children are selected, but not others, then the parent goes into the indeterminate state.  Users can only select or unselect nodes, but the side effects of that choice will cascade up and down the tree.
+
+This is where the 800 byte (gzipped and minified) dependency free web component xtal-cascade fits in.  Because we now have three states, we need the developer to specify two toggle functions, rather than one.  The markup looks as follows in the demo:
+
+```html
+    <xtal-cascade id="myCascade" key-fn="[[keyFn]]" 
+        is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" nodes="[[directory]]" 
+        is-selected-fn="[[isSelectedFn]]" is-indeterminate-fn="[[isIndeterminateFn]]"
+        toggle-node-selection-fn="[[toggleNodeSelectionFn]]" 
+        toggle-indeterminate-fn="[[toggleIndeterminateFn]]"
+        selected-root-nodes="{{selectedRootNodes}}"
+    >
+    </xtal-cascade>
+```
+
+The "output" of xtal-tree,"viewable-nodes" is the array of "viewableNodes" which will tend to be quite large.
+
+On the other hand, the "output" of the xtal-cascade component is:  "selected-root-nodes," which provides the smallest set of nodes that indicate what nodes are selected.  Since all the children of a selected node are selected for logical consistencies, there is no need to specify this as it is redundant.
 
 ## Install the Polymer-CLI
 

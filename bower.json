@@ -4,7 +4,8 @@
   "main": "xtal-tree.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "iron-list": "PolymerElements/iron-list#^2.0.12"
+    "iron-list": "PolymerElements/iron-list#^2.0.12",
+    "vaadin-checkbox": "vaadin/vaadin-checkbox#^1.0.3"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",

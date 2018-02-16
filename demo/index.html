@@ -136,6 +136,7 @@
               toggleSelectedNode(e){
                 const target = e.target || e.srcElement;
                 let node = target.selectNode;
+                if(!node) node=target.parentNode.selectNode;
                 const fvi = this.$.nodeList.firstVisibleIndex;
                 this.$.myCascade.toggledNodeSelection = node;
                 this.$.nodeList.items = this.$.nodeList.items.slice(0);
@@ -198,20 +199,20 @@
             <iron-list id="nodeList" items="[[viewableNodes]]" mutable-data>
               <template>
                 <div class="node"  style$="[[item.style]]">
-                  <span on-click="toggleSelectedNode" select-node="[[item]]">
-                    <template   is="dom-if" if="[[item.isSelected]]">🗹</template>
-                    <template is="dom-if" if="[[!item.isSelected]]">
-                      <template   is="dom-if" if="[[item.isIndeterminate]]">☐</template>
-                      <template   is="dom-if" if="[[!item.isIndeterminate]]">🗷</template>
-                    </template>
-                  </span>
                   <span on-click="toggleExpandedNode" node="[[item]]">
-                    <template is="dom-if" if="[[item.children]]">
-                      <template is="dom-if" if="[[item.expanded]]">📖</template>
-                      <template is="dom-if" if="[[!item.expanded]]">📕</template>
-                    </template>
-                    <template is="dom-if" if="[[!item.children]]">📝</template>
-                    <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
+                      <template is="dom-if" if="[[item.children]]">
+                          <template is="dom-if" if="[[item.expanded]]">📖</template>
+                          <template is="dom-if" if="[[!item.expanded]]">📕</template>
+                        </template>
+                        <template is="dom-if" if="[[!item.children]]">📝</template>
+                  </span>
+                  <span on-click="toggleSelectedNode" select-node="[[item]]">
+                      <template   is="dom-if" if="[[item.isSelected]]">🗹</template>
+                      <template is="dom-if" if="[[!item.isSelected]]">
+                        <template   is="dom-if" if="[[item.isIndeterminate]]">☐</template>
+                        <template   is="dom-if" if="[[!item.isIndeterminate]]">🗷</template>
+                      </template>
+                      <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
                   </span>
 
                 </div>

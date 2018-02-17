@@ -7,8 +7,7 @@
 <custom-element-demo style="height:600px">
   <template>
     
-    <script src="billboard-charts.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xtal-fetch/build/ES6/json-fetch.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.20/build/ES6/xtal-fetch.js"></script>
     <script async src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.12/build/ES6/xtal-decorator.js"></script>
     <script src="xtal-tree.js"></script>
     <script src="xtal-split.js"></script>
@@ -162,7 +161,7 @@
                 /* don't use % values unless the parent element is sized. */
               }
             </style>
-            <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
+            <xtal-fetch fetch href="demo/directory.json" as="json" result="{{directory}}"></xtal-fetch>
             <xtal-tree id="myTree" is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" level-setter-fn="[[levelSetterFn]]" test-node-fn="[[testNodeFn]]"
               toggle-node-fn="[[toggleNodeFn]]" compare-fn="[[compareFn]]" nodes="[[directory]]" search-string="[[search]]"
               viewable-nodes="{{viewableNodes}}">

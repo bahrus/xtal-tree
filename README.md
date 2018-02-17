@@ -2,6 +2,221 @@
 
 # \<xtal-tree\>
 
+<!--
+```
+<custom-element-demo style="height:600px">
+  <template>
+    
+    <script src="billboard-charts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xtal-fetch/build/ES6/json-fetch.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.12/build/ES6/xtal-decorator.js"></script>
+    <script src="xtal-tree.js"></script>
+    <script src="xtal-split.js"></script>
+    <script src="xtal-cascade.js"></script>
+    <link rel="import" href="../polymer/polymer-element.html">
+    <link rel="import" href="../polymer/lib/elements/dom-bind.html">
+    <link rel="import" href="../polymer/lib/elements/dom-if.html">
+    <link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+    <link rel="import" href="../iron-list/iron-list.html">
+            <xtal-decorator>
+          <script type="text/ecmascript ish">
+            [{
+              polymerProperties:{
+                // Define how xtal-tree should define an open or expanded node
+                isOpenFn:{
+                    type: Function,
+                    value: function(node){
+                      return node.expanded;
+                    }
+                },
+                // Specify how to get the children of a node.
+                childrenFn:{
+                  type: Function,
+                  value: function(node){
+                    return node.children;
+                  }
+                },
+                // Define how to toggle nodes between open/expanded vs closed/minimized.
+                toggleNodeFn:{
+                  type: Function,
+                  value: function(node){
+                    node.expanded = !node.expanded;
+                  }
+                },
+                // Optional -- useful if child nodes should be indented 
+                levelSetterFn:{
+                  type: Function,
+                  value: function(nodes, level){
+                    nodes.forEach(node => {
+                      node.style = 'margin-left:' + (level * 12) + 'px';
+                      if(node.children) this.levelSetterFn(node.children, level + 1)
+                    })
+                  }
+                },
+                //  Advanced -- this is only needed for search support
+                testNodeFn:{
+                  type: Function,
+                  value: function(node, search){
+                    if(!node.nameLC) node.nameLC = node.name.toLowerCase();
+                    return node.nameLC.indexOf(search.toLowerCase()) > -1;
+                  }
+                },
+                //  Advanced -- this is only neeeded for sorting support.
+                //  The search is case sensitive.  To make it case sensitive, do something
+                //  similar to what was done for search above.
+                compareFn:{
+                  type: Function,
+                  value: function(lhs, rhs){
+                    
+                    if(lhs.name < rhs.name) return -1 ;
+                    if(lhs.name > rhs.name) return 1;
+                    return 0;
+                  }
+                },
+                /////////////////   Super Advanced -- this is only needed for Cascading selected nodes
+                //  This is needed for quick traversal of the tree.
+                keyFn:{
+                  type: Function,
+                  value: function(node){
+                    return node.path;
+                  }
+                },
+                //  This being true should be mutually exclusive with isIndeterminateFn evaluating to true.
+                isSelectedFn:{
+                  type: Function,
+                  value: function(node){
+                    return node.isSelected;
+                  }
+                },
+                //  This being true should be mutually exclusive with isSelectedFn being true.
+                isIndeterminateFn:{
+                  type: Function,
+                  value: function(node){
+                    return node.isIndeterminate;
+                  }
+                },
+                //  Users will cause this function to be called directly on the node they click
+                toggleNodeSelectionFn:{
+                  type: Function,
+                  value: function(node){
+                    node.isSelected = !node.isSelected;
+                  }
+                },
+                //  This will only be called by the cascading logic.
+                toggleIndeterminateFn:{
+                  type: Function,
+                  value: function(node){
+                    node.isIndeterminate = !node.isIndeterminate;
+                  }
+                }
+
+              },
+              ////////////////////  Event handlers
+              toggleExpandedNode(e){
+                const target = e.target || e.srcElement;
+                let node = target.node;
+                if(!node) node = target.parentNode.node;
+                const fvi = this.$.nodeList.firstVisibleIndex;
+                this.$.myTree.toggledNode = node;
+                this.$.nodeList.scrollToIndex(fvi);
+                //this.$.nodeList.scrollToItem(node); //TODO use index
+              },
+              toggleSelectedNode(e){
+                const target = e.target || e.srcElement;
+                let node = target.selectNode;
+                if(!node) node=target.parentNode.selectNode;
+                const fvi = this.$.nodeList.firstVisibleIndex;
+                this.$.myCascade.toggledNodeSelection = node;
+                this.$.nodeList.items = this.$.nodeList.items.slice(0);
+                this.$.nodeList.scrollToIndex(fvi);
+              },
+              expandAll(e){
+                this.$.myTree.allExpandedNodes = this.$.myTree.viewableNodes;
+              },
+              collapseAll(e){
+                this.$.myTree.allCollapsedNodes = this.$.myTree.viewableNodes;
+              },
+              sortAsc(e){
+                this.$.myTree.sorted = 'asc';
+              },
+              sortDesc(e){
+                this.$.myTree.sorted = 'desc'
+              }
+            }]
+          </script>
+        </xtal-decorator>
+        <dom-bind>
+          <template>
+            <style>
+              div.node {
+                cursor: pointer;
+              }
+
+              span.match {
+                font-weight: bold;
+                background-color: yellow;
+              }
+
+              iron-list {
+                height: 50vh;
+                /* don't use % values unless the parent element is sized. */
+              }
+            </style>
+            <xtal-fetch fetch href="directory.json" as="json" result="{{directory}}"></xtal-fetch>
+            <xtal-tree id="myTree" is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" level-setter-fn="[[levelSetterFn]]" test-node-fn="[[testNodeFn]]"
+              toggle-node-fn="[[toggleNodeFn]]" compare-fn="[[compareFn]]" nodes="[[directory]]" search-string="[[search]]"
+              viewable-nodes="{{viewableNodes}}">
+            </xtal-tree>
+            <xtal-cascade id="myCascade" key-fn="[[keyFn]]" 
+              is-open-fn="[[isOpenFn]]" children-fn="[[childrenFn]]" nodes="[[directory]]" 
+              is-selected-fn="[[isSelectedFn]]" is-indeterminate-fn="[[isIndeterminateFn]]"
+              toggle-node-selection-fn="[[toggleNodeSelectionFn]]" 
+              toggle-indeterminate-fn="[[toggleIndeterminateFn]]"
+              selected-root-nodes="{{selectedRootNodes}}"
+            >
+            </xtal-cascade>
+            <div>Click on Nodes below to toggle open / closed.</div>
+            <br>
+            <input type="text" value="{{search::input}}" placeholder="Search">
+            <button on-click="expandAll">Expand All</button>
+            <button on-click="collapseAll">Collapse All</button>
+            <button on-click="sortAsc">Sort Asc</button>
+            <button on-click="sortDesc">Sort Desc</button>
+            <p></p>
+            <iron-list id="nodeList" items="[[viewableNodes]]" mutable-data>
+              <template>
+                <div class="node"  style$="[[item.style]]">
+                  <span on-click="toggleExpandedNode" node="[[item]]">
+                      <template is="dom-if" if="[[item.children]]">
+                          <template is="dom-if" if="[[item.expanded]]">📖</template>
+                          <template is="dom-if" if="[[!item.expanded]]">📕</template>
+                        </template>
+                        <template is="dom-if" if="[[!item.children]]">📝</template>
+                  </span>
+                  <span on-click="toggleSelectedNode" select-node="[[item]]">
+                      <vaadin-checkbox checked="[[item.isSelected]]" indeterminate="[[item.isIndeterminate]]"></vaadin-checkbox>
+                      <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
+                  </span>
+
+                </div>
+              </template>
+            </iron-list>
+
+            <h2>Root Selected Nodes:</h2>
+
+            <iron-list  items="[[selectedRootNodes]]" mutable-data>
+              <template>
+                <div>[[item.path]]</div>
+              </template>
+            </iron-list>
+
+          </template>
+        </dom-bind>
+        </template>
+</custom-element-demo>
+```
+-->
+
 \<xtal-tree\> is a dependency free web component that provides  a flat, virtual snapshot of a tree.  It is ~1kb, gzipped and minified.
 
 Often we want to take advantage of a nice flat list generator component, like dom-repeat, or iron-list, but we want to use it to display and manipulate tree data.

@@ -38,7 +38,25 @@ export interface IXtalTreeProperties extends ITree {
      * @demo demo/index.html
      */
     class XtalTree extends HTMLElement implements IXtalTreeProperties {
+        static get observedAttributes() {
+            return ['search-string', 'sorted'];
+        }
 
+        attributeChangedCallback(name, oldValue, newValue) {
+                
+            switch (name) {
+
+                case 'search-string':
+                    this._searchString = newValue;
+                    this.searchNodes();
+                    break;
+                case 'sorted':
+                    this._sorted = newValue;
+                    this.sort(true);
+                    break;
+            }
+
+        }
         static get properties(): IXtalTreeProperties {
             return {
                 childrenFn: null,
@@ -103,12 +121,13 @@ export interface IXtalTreeProperties extends ITree {
             return this._searchString;
         }
         set searchString(val) {
-            this._searchString = val;
-            if (val) {
-                this.searchNodes();
-            } else {
+            this.setAttribute('search-string', val);
+            // this._searchString = val;
+            // if (val) {
+            //     this.searchNodes();
+            // } else {
 
-            }
+            // }
         }
 
         _testNodeFn?: (tn: ITreeNode, search: string) => boolean;
@@ -134,8 +153,9 @@ export interface IXtalTreeProperties extends ITree {
             return this._sorted;
         }
         set sorted(val) {
-            this._sorted = val;
-            this.sort(true);
+            // this._sorted = val;
+            // this.sort(true);
+            this.setAttribute('sorted', val);
         }
 
         sort(redraw: boolean) {

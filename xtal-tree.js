@@ -8,6 +8,21 @@
      * @demo demo/index.html
      */
     class XtalTree extends HTMLElement {
+        static get observedAttributes() {
+            return ['search-string', 'sorted'];
+        }
+        attributeChangedCallback(name, oldValue, newValue) {
+            switch (name) {
+                case 'search-string':
+                    this._searchString = newValue;
+                    this.searchNodes();
+                    break;
+                case 'sorted':
+                    this._sorted = newValue;
+                    this.sort(true);
+                    break;
+            }
+        }
         static get properties() {
             return {
                 childrenFn: null,
@@ -59,12 +74,12 @@
             return this._searchString;
         }
         set searchString(val) {
-            this._searchString = val;
-            if (val) {
-                this.searchNodes();
-            }
-            else {
-            }
+            this.setAttribute('search-string', val);
+            // this._searchString = val;
+            // if (val) {
+            //     this.searchNodes();
+            // } else {
+            // }
         }
         get testNodeFn() {
             return this._testNodeFn;
@@ -83,8 +98,9 @@
             return this._sorted;
         }
         set sorted(val) {
-            this._sorted = val;
-            this.sort(true);
+            // this._sorted = val;
+            // this.sort(true);
+            this.setAttribute('sorted', val);
         }
         sort(redraw) {
             if (!this._sorted || !this._compareFn || !this._nodes)

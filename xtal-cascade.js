@@ -56,6 +56,30 @@
             //this._toggleNodeSelectionFn(tn);
             this.updateSelectedRootNodes();
         }
+        _upgradeProperty(prop) {
+            if (this.hasOwnProperty(prop)) {
+                let value = this[prop];
+                delete this[prop];
+                this[prop] = value;
+            }
+        }
+        connectedCallback() {
+            for (const key in XtalCascade.properties) {
+                this._upgradeProperty(key);
+            }
+        }
+        static get properties() {
+            return {
+                childrenFn: null,
+                nodes: null,
+                keyFn: null,
+                isSelectedFn: null,
+                isIndeterminateFn: null,
+                selectedRootNodes: null,
+                toggleIndeterminateFn: null,
+                toggleNodeSelectionFn: null,
+            };
+        }
         selectNodeShallow(tn) {
             if (!this._isSelectedFn(tn))
                 this._toggleNodeSelectionFn(tn);

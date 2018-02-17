@@ -208,11 +208,6 @@
                         <template is="dom-if" if="[[!item.children]]">📝</template>
                   </span>
                   <span on-click="toggleSelectedNode" select-node="[[item]]">
-                      <!-- <template   is="dom-if" if="[[item.isSelected]]">🗹</template>
-                      <template is="dom-if" if="[[!item.isSelected]]">
-                        <template   is="dom-if" if="[[item.isIndeterminate]]">☐</template>
-                        <template   is="dom-if" if="[[!item.isIndeterminate]]">🗷</template>
-                      </template> -->
                       <vaadin-checkbox checked="[[item.isSelected]]" indeterminate="[[item.isIndeterminate]]"></vaadin-checkbox>
                       <xtal-split search="[[search]]" text-content="[[item.name]]"></xtal-split>
                   </span>

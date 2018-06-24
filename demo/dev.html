@@ -61,8 +61,10 @@
     <button onclick="collapseAll()">Collapse All</button>
     <button onclick="sortAsc()">Sort Asc</button>
     <button onclick="sortDesc()">Sort Desc</button>
+    <input type="text" placeholder="Search">
+    <p-d on="input" to="#myTree{searchString}" m="1"></p-d>
     <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
-    <p-d on="result-changed" to="#myTree{nodes}"></p-d>
+    <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
     <script type="module ish">
       ({
         childrenFn: node => node.children,
@@ -72,6 +74,7 @@
           node.expanded = !node.expanded;
         },
         testNodeFn: (node, search) =>{
+          if(!search) return true;
           if(!node.nameLC) node.nameLC = node.name.toLowerCase();
           return node.nameLC.indexOf(search.toLowerCase()) > -1;
         },

@@ -47,10 +47,15 @@ Provide flat, virtual snapshot of a tree
         background-color: yellowgreen;
       }
     </style>
-        <button onclick="expandAll()">Expand All</button>
+    <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>
-        <button onclick="sortAsc()">Sort Asc</button>
+    <button onclick="sortAsc()">Sort Asc</button>
     <button onclick="sortDesc()">Sort Desc</button>
+    <input type="text" placeholder="Search">
+    <p-d on="input" to="#myTree{searchString}" m="1"></p-d>
+    <br>
+    <input type="text" placeholder="Search">
+    <p-d on="input" to="#myTree{search}"></p-d>
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.22/directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}"></p-d>
     <script type="module ish">
@@ -62,6 +67,7 @@ Provide flat, virtual snapshot of a tree
           node.expanded = !node.expanded;
         },
         testNodeFn: (node, search) =>{
+          if(!search) return true;
           if(!node.nameLC) node.nameLC = node.name.toLowerCase();
           return node.nameLC.indexOf(search.toLowerCase()) > -1;
         },

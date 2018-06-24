@@ -1,6 +1,6 @@
 {
   "name": "xtal-tree",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Provide flat, virtual snapshot of a tree",
   "repository": "https://github.com/bahrus/json-merge",
   "author": "bahrus <anderson.bruce.b@gmail.com>",

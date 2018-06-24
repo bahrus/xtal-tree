@@ -67,7 +67,7 @@ Provide flat, virtual snapshot of a tree
     <p-d-x on="eval" to="{childrenFn:childrenFn;isOpenFn:isOpenFn;levelSetterFn:levelSetterFn;toggleNodeFn:toggleNodeFn;testNodeFn:testNodeFn;compareFn:compareFn}"></p-d-x>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="{items}"></p-d>
-    <iron-list id="nodeList" mutable-data>
+    <iron-list  style="height:400px"  id="nodeList" mutable-data>
         <template>
           <div class="node"  style$="[[item.style]]">
             <span  node="[[item]]">

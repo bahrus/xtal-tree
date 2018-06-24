@@ -1,3 +1,7 @@
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/bahrus/xtal-tree)
+
+<a href="https://nodei.co/npm/xtal-tree/"><img src="https://nodei.co/npm/xtal-tree.png"></a>
+
 # \<xtal-tree\>
 
 Provide flat, virtual snapshot of a tree
@@ -12,10 +16,10 @@ Provide flat, virtual snapshot of a tree
   </script>
   <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
   <script src="https://unpkg.com/xtal-splitting@0.0.1/xtal-splitting.js"></script>
-  <script src="https://unpkg.com/p-d.p-u@0.0.21/p-d.p-d-x.p-u.js"></script>
+  <script src="https://unpkg.com/p-d.p-u@0.0.22/p-d.p-d-x.p-u.js"></script>
   <script src="https://unpkg.com/xtal-fetch@0.0.34/xtal-fetch.js"></script>
 
-  <script type="module" src="https://unpkg.com/xtal-tree@0.0.17/xtal-tree.js?module"></script>
+  <script type="module" src="https://unpkg.com/xtal-tree@0.0.25/xtal-tree.js?module"></script>
 
       <script>
       function levelSetter(nodes, level) {
@@ -53,8 +57,6 @@ Provide flat, virtual snapshot of a tree
     <button onclick="sortDesc()">Sort Desc</button>
     <input type="text" placeholder="Search"/>
     <p-d id="searchProp" on="input" to="#myTree{searchString};xtal-split{search}"></p-d>
-    <br>
-    <p-d on="input" to="#myTree{search}"></p-d>
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.22/directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}"></p-d>
     <script type="module ish">
@@ -100,6 +102,17 @@ Provide flat, virtual snapshot of a tree
 </custom-element-demo>
 ```
 -->
+
+Often we want to take advantage of a nice flat list generator component, like dom-repeat, or iron-list, but we want to use it to display and manipulate tree data.
+
+This scenario seems to come up so frequently with various components, that this component strives to genericize that requirement.
+
+xtal-tree takes a "watcha-got?" approach to the data -- it allows the specific structure of the tree data to be pretty much anything, and passes no judgment on it.   It doesn't accidentally overwrite anything it shouldn't, without specific permission from the developer. The user of xtal-tree, i.e. the developer, then needs to train xtal-tree how to interpret the data -- how to get the children, how to represent an open node vs a closed node, etc.
+
+xtal-tree also takes a "whatcha-want?" approach to what is displayed.  You can display the data as a classic tree, or as a treegrid, or as any other way you want.  The only assumption xtal-tree makes is that you want to build the display from a flat list generator, like dom-repeat, iron-list, or a flat grid.  
+
+Think of xtal-tree as a reusable "View Model" component.
+
 
 ## Install the Polymer-CLI
 

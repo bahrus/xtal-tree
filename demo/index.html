@@ -13,10 +13,10 @@
   </script>
   <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
   <script src="https://unpkg.com/xtal-splitting@0.0.1/xtal-splitting.js"></script>
-  <script src="https://unpkg.com/p-d.p-u@0.0.21/p-d.p-d-x.p-u.js"></script>
+  <script src="https://unpkg.com/p-d.p-u@0.0.22/p-d.p-d-x.p-u.js"></script>
   <script src="https://unpkg.com/xtal-fetch@0.0.34/xtal-fetch.js"></script>
 
-  <script type="module" src="https://unpkg.com/xtal-tree@0.0.17/xtal-tree.js?module"></script>
+  <script type="module" src="https://unpkg.com/xtal-tree@0.0.25/xtal-tree.js?module"></script>
 
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
@@ -34,6 +34,18 @@
           if (node.children) levelSetter(node.children, level + 1)
         })
       }
+      function expandAll(e){
+        myTree.allExpandedNodes = myTree.viewableNodes;
+      }
+      function collapseAll(e){
+        myTree.allCollapsedNodes = myTree.viewableNodes;
+      }
+      function sortAsc(e){
+        myTree.sorted = 'asc';
+      }
+      function sortDesc(e){
+        myTree.sorted = 'desc';
+      }
     </script>
     <style>
       div.node {
@@ -45,8 +57,14 @@
         background-color: yellowgreen;
       }
     </style>
+    <button onclick="expandAll()">Expand All</button>
+    <button onclick="collapseAll()">Collapse All</button>
+    <button onclick="sortAsc()">Sort Asc</button>
+    <button onclick="sortDesc()">Sort Desc</button>
+    <input type="text" placeholder="Search">
+    <p-d id="searchProp" on="input" to="#myTree{searchString};xtal-split{search}"></p-d>
     <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
-    <p-d on="result-changed" to="#myTree{nodes}"></p-d>
+    <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
     <script type="module ish">
       ({
         childrenFn: node => node.children,
@@ -56,6 +74,7 @@
           node.expanded = !node.expanded;
         },
         testNodeFn: (node, search) =>{
+          if(!search) return true;
           if(!node.nameLC) node.nameLC = node.name.toLowerCase();
           return node.nameLC.indexOf(search.toLowerCase()) > -1;
         },
@@ -69,9 +88,9 @@
     <p-d-x on="eval" to="{childrenFn:childrenFn;isOpenFn:isOpenFn;levelSetterFn:levelSetterFn;toggleNodeFn:toggleNodeFn;testNodeFn:testNodeFn;compareFn:compareFn}"></p-d-x>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="{items}"></p-d>
-    <iron-list id="nodeList" mutable-data>
+    <iron-list style="height:400px" id="nodeList" mutable-data p-d-if="#searchProp">
         <template>
-          <div class="node"  style$="[[item.style]]">
+          <div class="node"  style$="[[item.style]]"  p-d-if="#searchProp">
             <span  node="[[item]]">
                 <template is="dom-if" if="[[item.children]]">
                     <template is="dom-if" if="[[item.expanded]]">📖</template>
@@ -80,9 +99,7 @@
                   <template is="dom-if" if="[[!item.children]]">📝</template>
             </span>
             <p-u on="click" noinit to="/myTree{toggledNode:target.node}"></p-u>
-            <span>
-                <xtal-split node="[[item]]"  search="[[search]]" text-content="[[item.name]]"></xtal-split>
-            </span>
+            <xtal-split node="[[item]]"  search="[[search]]" text-content="[[item.name]]"></xtal-split>
             <p-u on="click" noinit to="/myTree{toggledNode:target.node}"></p-u>
           </div>
         </template>

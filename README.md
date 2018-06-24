@@ -30,6 +30,12 @@ Provide flat, virtual snapshot of a tree
       function collapseAll(e){
         myTree.allCollapsedNodes = myTree.viewableNodes;
       }
+      function sortAsc(e){
+        myTree.sorted = 'asc';
+      }
+      function sortDesc(e){
+        myTree.sorted = 'desc';
+      }
     </script>
     <style>
       div.node {
@@ -43,7 +49,9 @@ Provide flat, virtual snapshot of a tree
     </style>
         <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>
-    <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
+        <button onclick="sortAsc()">Sort Asc</button>
+    <button onclick="sortDesc()">Sort Desc</button>
+    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.22/directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}"></p-d>
     <script type="module ish">
       ({

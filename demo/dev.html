@@ -62,7 +62,7 @@
     <button onclick="sortAsc()">Sort Asc</button>
     <button onclick="sortDesc()">Sort Desc</button>
     <input type="text" placeholder="Search">
-    <p-d on="input" to="#myTree{searchString}" m="1"></p-d>
+    <p-d id="searchProp" on="input" to="#myTree{searchString};xtal-split{search}"></p-d>
     <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
     <script type="module ish">
@@ -88,9 +88,9 @@
     <p-d-x on="eval" to="{childrenFn:childrenFn;isOpenFn:isOpenFn;levelSetterFn:levelSetterFn;toggleNodeFn:toggleNodeFn;testNodeFn:testNodeFn;compareFn:compareFn}"></p-d-x>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="{items}"></p-d>
-    <iron-list style="height:400px" id="nodeList" mutable-data>
+    <iron-list style="height:400px" id="nodeList" mutable-data p-d-if="#searchProp">
         <template>
-          <div class="node"  style$="[[item.style]]">
+          <div class="node"  style$="[[item.style]]"  p-d-if="#searchProp">
             <span  node="[[item]]">
                 <template is="dom-if" if="[[item.children]]">
                     <template is="dom-if" if="[[item.expanded]]">📖</template>
@@ -99,9 +99,7 @@
                   <template is="dom-if" if="[[!item.children]]">📝</template>
             </span>
             <p-u on="click" noinit to="/myTree{toggledNode:target.node}"></p-u>
-            <span>
-                <xtal-split node="[[item]]"  search="[[search]]" text-content="[[item.name]]"></xtal-split>
-            </span>
+            <xtal-split node="[[item]]"  search="[[search]]" text-content="[[item.name]]"></xtal-split>
             <p-u on="click" noinit to="/myTree{toggledNode:target.node}"></p-u>
           </div>
         </template>

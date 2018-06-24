@@ -51,10 +51,9 @@ Provide flat, virtual snapshot of a tree
     <button onclick="collapseAll()">Collapse All</button>
     <button onclick="sortAsc()">Sort Asc</button>
     <button onclick="sortDesc()">Sort Desc</button>
-    <input type="text" placeholder="Search">
-    <p-d on="input" to="#myTree{searchString}" m="1"></p-d>
+    <input type="text" placeholder="Search"/>
+    <p-d id="searchProp" on="input" to="#myTree{searchString};xtal-split{search}"></p-d>
     <br>
-    <input type="text" placeholder="Search">
     <p-d on="input" to="#myTree{search}"></p-d>
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.22/directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}"></p-d>
@@ -81,9 +80,9 @@ Provide flat, virtual snapshot of a tree
     <p-d-x on="eval" to="{childrenFn:childrenFn;isOpenFn:isOpenFn;levelSetterFn:levelSetterFn;toggleNodeFn:toggleNodeFn;testNodeFn:testNodeFn;compareFn:compareFn}"></p-d-x>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="{items}"></p-d>
-    <iron-list  style="height:400px"  id="nodeList" mutable-data>
+    <iron-list mutable-data p-d-if="#searchProp" style="height:400px"  id="nodeList" mutable-data>
         <template>
-          <div class="node"  style$="[[item.style]]">
+          <div mutable-data p-d-if="#searchProp" class="node"  style$="[[item.style]]">
             <span  node="[[item]]">
                 <template is="dom-if" if="[[item.children]]">
                     <template is="dom-if" if="[[item.expanded]]">📖</template>
@@ -92,9 +91,7 @@ Provide flat, virtual snapshot of a tree
                   <template is="dom-if" if="[[!item.children]]">📝</template>
             </span>
             <p-u on="click" noinit to="/myTree{toggledNode:target.node}"></p-u>
-            <span>
-                <xtal-split node="[[item]]"  search="[[search]]" text-content="[[item.name]]"></xtal-split>
-            </span>
+            <xtal-split node="[[item]]"  search="[[search]]" text-content="[[item.name]]"></xtal-split>
             <p-u on="click" noinit to="/myTree{toggledNode:target.node}"></p-u>
           </div>
         </template>

@@ -24,6 +24,12 @@ Provide flat, virtual snapshot of a tree
           if (node.children) levelSetter(node.children, level + 1)
         })
       }
+      function expandAll(e){
+        myTree.allExpandedNodes = myTree.viewableNodes;
+      }
+      function collapseAll(e){
+        myTree.allCollapsedNodes = myTree.viewableNodes;
+      }
     </script>
     <style>
       div.node {
@@ -35,6 +41,8 @@ Provide flat, virtual snapshot of a tree
         background-color: yellowgreen;
       }
     </style>
+        <button onclick="expandAll()">Expand All</button>
+    <button onclick="collapseAll()">Collapse All</button>
     <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}"></p-d>
     <script type="module ish">

@@ -34,6 +34,12 @@
           if (node.children) levelSetter(node.children, level + 1)
         })
       }
+      function expandAll(e){
+        myTree.allExpandedNodes = myTree.viewableNodes;
+      }
+      function collapseAll(e){
+        myTree.allCollapsedNodes = myTree.viewableNodes;
+      }
     </script>
     <style>
       div.node {
@@ -45,6 +51,8 @@
         background-color: yellowgreen;
       }
     </style>
+    <button onclick="expandAll()">Expand All</button>
+    <button onclick="collapseAll()">Collapse All</button>
     <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}"></p-d>
     <script type="module ish">
@@ -69,7 +77,7 @@
     <p-d-x on="eval" to="{childrenFn:childrenFn;isOpenFn:isOpenFn;levelSetterFn:levelSetterFn;toggleNodeFn:toggleNodeFn;testNodeFn:testNodeFn;compareFn:compareFn}"></p-d-x>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="{items}"></p-d>
-    <iron-list id="nodeList" mutable-data>
+    <iron-list style="height:400px" id="nodeList" mutable-data>
         <template>
           <div class="node"  style$="[[item.style]]">
             <span  node="[[item]]">

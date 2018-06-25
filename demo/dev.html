@@ -60,7 +60,8 @@
     <button data-dir="desc">Sort Desc</button>
     <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
     <input type="text" placeholder="Search">
-    <p-d id="searchProp" on="input" to="#myTree{searchString};xtal-split{search}"></p-d>
+    <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
+    <p-d on="input" to="#myTree{searchString}"></p-d>
     <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
     <script type="module ish">

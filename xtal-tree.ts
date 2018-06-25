@@ -142,14 +142,9 @@ class XtalTree extends  XtallatX(HTMLElement) {
     }
 
     notifyViewNodesChanged() {
-        const newEvent = new CustomEvent('viewable-nodes-changed', {
-            detail: {
-                value: this.viewableNodes
-            },
-            bubbles: true,
-            composed: true
-        } as CustomEventInit);
-        this.dispatchEvent(newEvent);
+        this.de('viewable-nodes',{
+            value: this.viewableNodes
+        })
     }
     onPropsChange() {
         if (!this._isOpenFn || !this._childrenFn || !this._nodes) return;
@@ -194,6 +189,9 @@ class XtalTree extends  XtallatX(HTMLElement) {
         this.notifyViewNodesChanged();
     }
     set toggledNode(node: ITreeNode) {
+        this.de('toggled-node', {
+            value: node
+        })
         this._toggleNodeFn(node);
         this.updateViewableNodes();
     }

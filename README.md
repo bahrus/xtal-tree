@@ -10,18 +10,19 @@ Provide flat, virtual snapshot of a tree
 ```
 <custom-element-demo>
   <template>
-  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script type="module">
     import "https://unpkg.com/@polymer/polymer@3.0.2/lib/elements/dom-if.js?module";
   </script>
   <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
   <script src="https://unpkg.com/xtal-splitting@0.0.1/xtal-splitting.js"></script>
-  <script src="https://unpkg.com/p-d.p-u@0.0.22/p-d.p-d-x.p-u.js"></script>
+  <script src="https://unpkg.com/p-d.p-u@0.0.24/p-d.p-d-x.p-u.js"></script>
   <script src="https://unpkg.com/xtal-fetch@0.0.34/xtal-fetch.js"></script>
 
   <script type="module" src="https://unpkg.com/xtal-tree@0.0.25/xtal-tree.js?module"></script>
 
       <script>
+      //Used to indent nodes of the tree
       function levelSetter(nodes, level) {
         nodes.forEach(node => {
           node.style = 'margin-left:' + (level * 12) + 'px';
@@ -33,12 +34,6 @@ Provide flat, virtual snapshot of a tree
       }
       function collapseAll(e){
         myTree.allCollapsedNodes = myTree.viewableNodes;
-      }
-      function sortAsc(e){
-        myTree.sorted = 'asc';
-      }
-      function sortDesc(e){
-        myTree.sorted = 'desc';
       }
     </script>
     <style>
@@ -53,8 +48,10 @@ Provide flat, virtual snapshot of a tree
     </style>
     <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>
-    <button onclick="sortAsc()">Sort Asc</button>
-    <button onclick="sortDesc()">Sort Desc</button>
+    <button data-dir="asc">Sort Asc</button>
+    <p-d on="click" noinit to="#myTree{sorted:target.dataset.dir}"></p-d>
+    <button data-dir="desc">Sort Desc</button>
+    <p-d on="click" noinit to="#myTree{sorted:target.dataset.dir}"></p-d>
     <input type="text" placeholder="Search"/>
     <p-d id="searchProp" on="input" to="#myTree{searchString};xtal-split{search}"></p-d>
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.22/directory.json" as="json"></xtal-fetch>

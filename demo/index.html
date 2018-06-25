@@ -13,10 +13,10 @@
   </script>
   <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
   <script src="https://unpkg.com/xtal-splitting@0.0.1/xtal-splitting.js"></script>
-  <script src="https://unpkg.com/p-d.p-u@0.0.24/p-d.p-d-x.p-u.js"></script>
+  <script src="https://unpkg.com/p-d.p-u@0.0.25/p-d.p-d-x.p-u.js"></script>
   <script src="https://unpkg.com/xtal-fetch@0.0.34/xtal-fetch.js"></script>
 
-  <script type="module" src="https://unpkg.com/xtal-tree@0.0.25/xtal-tree.js?module"></script>
+  <script type="module" src="https://unpkg.com/xtal-tree@0.0.26/xtal-tree.js?module"></script>
 
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
@@ -28,6 +28,7 @@
   <div class="vertical-section-container centered">
     <h3>Basic xtal-tree demo</h3>
     <script>
+       var fvi = -1;
       function levelSetter(nodes, level) {
         nodes.forEach(node => {
           node.style = 'margin-left:' + (level * 12) + 'px';
@@ -68,7 +69,9 @@
         isOpenFn: node => node.expanded,
         levelSetterFn: levelSetter,
         toggleNodeFn: node => {
+          
           node.expanded = !node.expanded;
+          
         },
         testNodeFn: (node, search) =>{
           if(!search) return true;
@@ -84,7 +87,8 @@
     </script>
     <p-d-x on="eval" to="{childrenFn:childrenFn;isOpenFn:isOpenFn;levelSetterFn:levelSetterFn;toggleNodeFn:toggleNodeFn;testNodeFn:testNodeFn;compareFn:compareFn}"></p-d-x>
     <xtal-tree id="myTree"></xtal-tree>
-    <p-d on="viewable-nodes-changed" to="{items}"></p-d>
+    <p-d on="viewable-nodes-changed" to="iron-list{items};#viewNodesChangeHandler{input}"></p-d>
+    <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
     <iron-list style="height:400px" id="nodeList" mutable-data p-d-if="#searchProp">
         <template>
           <div class="node"  style$="[[item.style]]"  p-d-if="#searchProp">
@@ -101,7 +105,25 @@
           </div>
         </template>
       </iron-list>
+      <script type="module ish">
+        inp => {
+          if(typeof(fvi) !== 'undefined' && fvi > -1){
+            nodeList.scrollToIndex(fvi);
+          }
+        }
+      </script>
+      <p-d id="viewNodesChangeHandler" on="eval" to="{whoknows}"></p-d>
+      <script type="module ish">
+        inp =>{
+          fvi = nodeList.firstVisibleIndex;
+        }
+      </script>
+      <p-d id="toggledNodeChangeHandler" on="eval" to="{whoknows}"></p-d>
   </div>
+  <script>
+   
+
+  </script>
 </body>
 
 </html>

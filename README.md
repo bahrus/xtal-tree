@@ -16,12 +16,13 @@ Provide flat, virtual snapshot of a tree
   </script>
   <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
   <script src="https://unpkg.com/xtal-splitting@0.0.1/xtal-splitting.js"></script>
-  <script src="https://unpkg.com/p-d.p-u@0.0.24/p-d.p-d-x.p-u.js"></script>
+  <script src="https://unpkg.com/p-d.p-u@0.0.27/p-d.p-d-x.p-u.js"></script>
   <script src="https://unpkg.com/xtal-fetch@0.0.34/xtal-fetch.js"></script>
 
   <script type="module" src="https://unpkg.com/xtal-tree@0.0.25/xtal-tree.js?module"></script>
 
       <script>
+      var fvi = -1; //first viewable index
       //Used to indent nodes of the tree
       function levelSetter(nodes, level) {
         nodes.forEach(node => {
@@ -49,9 +50,9 @@ Provide flat, virtual snapshot of a tree
     <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>
     <button data-dir="asc">Sort Asc</button>
-    <p-d on="click" noinit to="#myTree{sorted:target.dataset.dir}"></p-d>
+    <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
     <button data-dir="desc">Sort Desc</button>
-    <p-d on="click" noinit to="#myTree{sorted:target.dataset.dir}"></p-d>
+    <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
     <input type="text" placeholder="Search"/>
     <p-d id="searchProp" on="input" to="#myTree{searchString};xtal-split{search}"></p-d>
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.22/directory.json" as="json"></xtal-fetch>
@@ -78,7 +79,8 @@ Provide flat, virtual snapshot of a tree
     </script>
     <p-d-x on="eval" to="{childrenFn:childrenFn;isOpenFn:isOpenFn;levelSetterFn:levelSetterFn;toggleNodeFn:toggleNodeFn;testNodeFn:testNodeFn;compareFn:compareFn}"></p-d-x>
     <xtal-tree id="myTree"></xtal-tree>
-    <p-d on="viewable-nodes-changed" to="{items}"></p-d>
+    <p-d on="viewable-nodes-changed" to="iron-list{items};#viewNodesChangeHandler{input}"></p-d>
+    <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
     <iron-list mutable-data p-d-if="#searchProp" style="height:400px"  id="nodeList" mutable-data>
         <template>
           <div mutable-data p-d-if="#searchProp" class="node"  style$="[[item.style]]">
@@ -89,12 +91,26 @@ Provide flat, virtual snapshot of a tree
                   </template>
                   <template is="dom-if" if="[[!item.children]]">📝</template>
             </span>
-            <p-u on="click" noinit to="/myTree{toggledNode:target.node}"></p-u>
+            <p-u on="click" if="span" to="/myTree{toggledNode:target.node}"></p-u>
             <xtal-split node="[[item]]"  search="[[search]]" text-content="[[item.name]]"></xtal-split>
-            <p-u on="click" noinit to="/myTree{toggledNode:target.node}"></p-u>
+            <p-u on="click" if="xtal-split" to="/myTree{toggledNode:target.node}"></p-u>
           </div>
         </template>
       </iron-list>
+      <script type="module ish">
+        inp => {
+          if(typeof(fvi) !== 'undefined' && fvi > -1){
+            nodeList.scrollToIndex(fvi);
+          }
+        }
+      </script>
+      <p-d id="viewNodesChangeHandler" on="eval" to="{whoknows}"></p-d>
+      <script type="module ish">
+        inp =>{
+          fvi = nodeList.firstVisibleIndex;
+        }
+      </script>
+      <p-d id="toggledNodeChangeHandler" on="eval" to="{whoknows}"></p-d>
   </template>
 </custom-element-demo>
 ```

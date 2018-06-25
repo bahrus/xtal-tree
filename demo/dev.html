@@ -28,6 +28,7 @@
   <div class="vertical-section-container centered">
     <h3>Basic xtal-tree demo</h3>
     <script>
+       var fvi = -1;
       function levelSetter(nodes, level) {
         nodes.forEach(node => {
           node.style = 'margin-left:' + (level * 12) + 'px';
@@ -87,6 +88,7 @@
     <p-d-x on="eval" to="{childrenFn:childrenFn;isOpenFn:isOpenFn;levelSetterFn:levelSetterFn;toggleNodeFn:toggleNodeFn;testNodeFn:testNodeFn;compareFn:compareFn}"></p-d-x>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="iron-list{items};#viewNodesChangeHandler{input}"></p-d>
+    <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
     <iron-list style="height:400px" id="nodeList" mutable-data p-d-if="#searchProp">
         <template>
           <div class="node"  style$="[[item.style]]"  p-d-if="#searchProp">
@@ -111,21 +113,17 @@
         }
       </script>
       <p-d id="viewNodesChangeHandler" on="eval" to="{whoknows}"></p-d>
+      <script type="module ish">
+        inp =>{
+          debugger;
+          fvi = nodeList.firstVisibleIndex;
+        }
+      </script>
+      <p-d id="toggledNodeChangeHandler" on="eval" to="{whoknows}"></p-d>
   </div>
   <script>
-    var fvi = -1;
-      // myTree.addEventListener('viewable-nodes-changed', e=>{
-      //   if(fvi > -1){
-      //     nodeList.scrollToIndex(fvi);
-      //   }
+   
 
-      // })
-      myTree.addEventListener('toggled-node-changed', e =>{
-        fvi = nodeList.firstVisibleIndex;
-        console.log({
-          tnc: e
-        })
-      })
   </script>
 </body>
 

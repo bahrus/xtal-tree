@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "xtal-tree.js",
   "dependencies": {
-    "xtal-latx": "^0.0.17"
+    "xtal-latx": "0.0.17"
   },
   "devDependencies": {
     "@polymer/polymer": "^3.0.0",

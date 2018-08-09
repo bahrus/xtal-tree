@@ -9,7 +9,7 @@ const sorted = 'sorted';
  * @polymer
  * @demo demo/index.html
  */
-class XtalTree extends XtallatX(HTMLElement) {
+export class XtalTree extends XtallatX(HTMLElement) {
     static get observedAttributes() {
         return [search_string, sorted];
     }

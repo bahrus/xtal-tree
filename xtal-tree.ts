@@ -1,4 +1,5 @@
 import {XtallatX} from 'xtal-latx/xtal-latx.js';
+import {define} from 'xtal-latx/define.js';
 
 interface INodeState {
 }
@@ -28,6 +29,7 @@ const sorted = 'sorted';
  * @demo demo/index.html
  */
 export class XtalTree extends  XtallatX(HTMLElement) {
+    static get is(){return 'xtal-tree';}
     static get observedAttributes() {
         return [search_string, sorted];
     }
@@ -261,4 +263,4 @@ export class XtalTree extends  XtallatX(HTMLElement) {
     }
 }
 
-customElements.define('xtal-tree', XtalTree)
+define(XtalTree);

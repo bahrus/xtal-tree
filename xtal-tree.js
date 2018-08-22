@@ -1,4 +1,5 @@
 import { XtallatX } from 'xtal-latx/xtal-latx.js';
+import { define } from 'xtal-latx/define.js';
 const search_string = 'search-string';
 const sorted = 'sorted';
 /**
@@ -10,6 +11,7 @@ const sorted = 'sorted';
  * @demo demo/index.html
  */
 export class XtalTree extends XtallatX(HTMLElement) {
+    static get is() { return 'xtal-tree'; }
     static get observedAttributes() {
         return [search_string, sorted];
     }
@@ -213,5 +215,5 @@ export class XtalTree extends XtallatX(HTMLElement) {
         return this._levelSetterFn;
     }
 }
-customElements.define('xtal-tree', XtalTree);
+define(XtalTree);
 //# sourceMappingURL=xtal-tree.js.map

@@ -56,7 +56,7 @@
     <input type="text" placeholder="Search">
     <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
     <p-d on="input" to="#myTree{searchString}"></p-d>
-    <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
+    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.22/directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
     <script type="module ish">
       ({

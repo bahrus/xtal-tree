@@ -18,7 +18,7 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
       <script src="https://unpkg.com/p-d.p-u@0.0.27/p-d.p-d-x.p-u.js"></script>
       <script src="https://unpkg.com/xtal-fetch@0.0.34/xtal-fetch.js"></script>
     
-      <script type="module" src="https://unpkg.com/xtal-tree@0.0.28/xtal-tree.js?module"></script>
+      <script type="module" src="https://unpkg.com/xtal-tree@0.0.32/xtal-tree.js?module"></script>
     <h3>Basic xtal-tree demo</h3>
     <script>
        var fvi = -1;
@@ -55,7 +55,7 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
     <input type="text" placeholder="Search">
     <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
     <p-d on="input" to="#myTree{searchString}"></p-d>
-    <xtal-fetch fetch href="directory.json" as="json"></xtal-fetch>
+    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.22/directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
     <script type="module ish">
       ({

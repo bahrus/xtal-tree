@@ -10,11 +10,13 @@
     "xtal-latx": "0.0.19"
   },
   "devDependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
-    "@polymer/iron-list": "^3.0.0-pre.21",
+    "@types/node": "^10.1.0",
     "@webcomponents/webcomponentsjs": "^2.0.0",
-    "wct-browser-legacy": "^1.0.0",
-    "jiife": "0.0.4"
+    "jiife": "^0.0.4",
+    "puppeteer": "1.7.0",
+    "@types/puppeteer": "1.6.0",
+    "@types/tape": "4.2.32",
+    "tape": "^4.9.1",
+    "serve": "10.0.0"
   }
 }

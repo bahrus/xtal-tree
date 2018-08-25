@@ -47,7 +47,10 @@ export class XtalTree extends  XtallatX(HTMLElement) {
         }
 
     }
-
+    constructor(){
+        super();
+        this.style.display = 'none';
+    }
     connectedCallback() {
         this._upgradeProperties(['childrenFn', 'compareFn', 'isOpenFn', 'nodes', 'searchString', sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn'])
     }

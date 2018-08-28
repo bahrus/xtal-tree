@@ -1,6 +1,6 @@
 {
   "name": "xtal-tree",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "Provide flat, virtual snapshot of a tree",
   "repository": "https://github.com/bahrus/xtal-tree",
   "author": "bahrus <anderson.bruce.b@gmail.com>",

@@ -28,6 +28,7 @@ export class XtalTree extends XtallatX(HTMLElement) {
         }
     }
     connectedCallback() {
+        this.style.display = 'none';
         this._upgradeProperties(['childrenFn', 'compareFn', 'isOpenFn', 'nodes', 'searchString', sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn']);
     }
     get childrenFn() {

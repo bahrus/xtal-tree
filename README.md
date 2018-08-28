@@ -20,7 +20,7 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
     <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
     <!-- End Polyer Elements -->
 
-    <script src="https://unpkg.com/xtal-splitting@0.0.7/xtal-splitting.js"></script>
+    <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
     <script src="https://unpkg.com/p-d.p-u@0.0.67/p-d.p-d-x.p-u.js"></script>
     <script src="https://unpkg.com/xtal-fetch@0.0.40/xtal-fetch.js"></script>
     <script src="https://unpkg.com/xtal-decorator@0.0.20/xtal-decorator.iife.js"></script>

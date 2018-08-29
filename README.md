@@ -6,7 +6,7 @@
 
 # \<xtal-tree\>
 
-Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzipped.
+Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzipped.
 
 <!--
 ```

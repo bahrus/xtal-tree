@@ -62,10 +62,10 @@
         <button data-nodes="allExpandedNodes" >Expand All</button>
         <button data-nodes="allCollapsedNodes">Collapse All</button>
     </span>
-    
-    <button data-dir="asc">Sort Asc</button>
-    <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
-    <button data-dir="desc">Sort Desc</button>
+    <span>
+      <button data-dir="asc">Sort Asc</button>
+      <button data-dir="desc">Sort Desc</button>
+    </span>
     <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
     <input type="text" placeholder="Search">
     <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>

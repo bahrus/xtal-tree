@@ -26,7 +26,7 @@
     <script src="https://unpkg.com/p-d.p-u@0.0.67/p-d.p-d-x.p-u.js"></script>
     <script src="https://unpkg.com/xtal-fetch@0.0.40/xtal-fetch.js"></script>
     <script src="https://unpkg.com/xtal-decorator@0.0.20/xtal-decorator.iife.js"></script>
-    <script type="module" src="https://unpkg.com/xtal-tree@0.0.34/xtal-tree.iife.js"></script>
+    <script type="module" src="https://unpkg.com/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
     <h3>Basic xtal-tree demo</h3>
     <script>
       var firstVisibleIndex = -1; 
@@ -84,12 +84,22 @@
             if (lhs.name < rhs.name) return -1;
             if (lhs.name > rhs.name) return 1;
             return 0;
+          },
+          on:{
+            'viewable-nodes-changed': function(e){
+              if(firstVisibleIndex > -1){
+                nodeList.scrollToIndex(firstVisibleIndex);
+              }
+            },
+            'toggled-node-changed': function(e){
+              firstVisibleIndex = nodeList.firstVisibleIndex;
+            }
           }
         })
       </script>
     </xtal-deco>
     <xtal-tree id="myTree"></xtal-tree>
-    <p-d on="viewable-nodes-changed" to="iron-list{items};#viewNodesChangeHandler{input}"></p-d>
+    <p-d on="viewable-nodes-changed" to="iron-list{items}"></p-d>
     <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
 
     <!-- ==============  Styling of iron-list ================== -->
@@ -103,7 +113,7 @@
         background-color: yellowgreen;
       }
     </style>
-    <iron-list style="height:400px" id="nodeList" mutable-data p-d-if="#searchProp">
+    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="#searchProp">
       <template>
         <div class="node" style$="[[item.style]]" p-d-if="#searchProp">
           <span node="[[item]]">
@@ -120,21 +130,6 @@
       </template>
     </iron-list>
 
-    <!-- ================== Miscellaneous event handlers, needed to reset scroll position  ======================  -->
-    <script nomodule>
-        inp => {
-          if(typeof(firstVisibleIndex) !== 'undefined' && firstVisibleIndex > -1){
-            nodeList.scrollToIndex(firstVisibleIndex);
-          }
-        }
-      </script>
-    <p-d id="viewNodesChangeHandler" on="eval" to="{NA}"></p-d>
-    <script nomodule>
-        inp =>{
-          firstVisibleIndex = nodeList.firstVisibleIndex;
-        }
-      </script>
-    <p-d id="toggledNodeChangeHandler" on="eval" to="{NA}"></p-d>
   </div>
 </body>
 

@@ -11,6 +11,7 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
 <custom-element-demo>
   <template>
   <div>
+  <div>
     <!-- Polyfill for re(dge)tro browsers -->
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <!-- Polyfill for re(dge)tro browsers -->
@@ -18,7 +19,7 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
     <!-- Polymer Elements -->
     <script type="module" src="https://unpkg.com/@polymer/polymer@3.0.5/lib/elements/dom-if.js?module"></script>
     <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
-    <!-- End Polyer Elements -->
+    <!-- End Polymer Elements -->
 
     <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
     <script src="https://unpkg.com/p-d.p-u@0.0.67/p-d.p-d-x.p-u.js"></script>
@@ -27,24 +28,9 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
     <script type="module" src="https://unpkg.com/xtal-tree@0.0.34/xtal-tree.iife.js"></script>
     <h3>Basic xtal-tree demo</h3>
     <script>
-      var fvi = -1;
-      function levelSetter(nodes, level) {
-        nodes.forEach(node => {
-          node.style = 'margin-left:' + (level * 12) + 'px';
-          if (node.children) levelSetter(node.children, level + 1)
-        })
-      }
+      var firstVisibleIndex = -1; 
     </script>
-    <style>
-      div.node {
-        cursor: pointer;
-      }
-
-      span.match {
-        font-weight: bold;
-        background-color: yellowgreen;
-      }
-    </style>
+    <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     <xtal-deco>
       <script nomodule>
       ({
@@ -60,22 +46,31 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
         <button data-nodes="allExpandedNodes" >Expand All</button>
         <button data-nodes="allCollapsedNodes">Collapse All</button>
     </span>
-    
-    <button data-dir="asc">Sort Asc</button>
-    <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
-    <button data-dir="desc">Sort Desc</button>
+    <span>
+      <button data-dir="asc">Sort Asc</button>
+      <button data-dir="desc">Sort Desc</button>
+    </span>
     <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
     <input type="text" placeholder="Search">
     <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
     <p-d on="input" to="#myTree{searchString}"></p-d>
+
+    <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
+
+    <!-- ================= Train xtal-tree how to expand / collapse nodes ========================= -->
     <xtal-deco>
       <script nomodule>
         ({
           childrenFn: node => node.children,
           isOpenFn: node => node.expanded,
-          levelSetterFn: levelSetter,
+          levelSetterFn: function (nodes, level) {
+            nodes.forEach(node => {
+              node.style = 'margin-left:' + (level * 12) + 'px';
+              if (node.children) this.levelSetterFn(node.children, level + 1)
+            })
+          },
           toggleNodeFn: node => {
             node.expanded = !node.expanded;
           },
@@ -95,6 +90,18 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="iron-list{items};#viewNodesChangeHandler{input}"></p-d>
     <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
+
+    <!-- ==============  Styling of iron-list ================== -->
+    <style>
+      div.node {
+        cursor: pointer;
+      }
+
+      span.match {
+        font-weight: bold;
+        background-color: yellowgreen;
+      }
+    </style>
     <iron-list style="height:400px" id="nodeList" mutable-data p-d-if="#searchProp">
       <template>
         <div class="node" style$="[[item.style]]" p-d-if="#searchProp">
@@ -111,20 +118,22 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.4kb minified / gzi
         </div>
       </template>
     </iron-list>
-    <script type="module ish">
+
+    <!-- ================== Miscellaneous event handlers, needed to reset scroll position  ======================  -->
+    <script nomodule>
         inp => {
-          if(typeof(fvi) !== 'undefined' && fvi > -1){
-            nodeList.scrollToIndex(fvi);
+          if(typeof(firstVisibleIndex) !== 'undefined' && firstVisibleIndex > -1){
+            nodeList.scrollToIndex(firstVisibleIndex);
           }
         }
       </script>
-    <p-d id="viewNodesChangeHandler" on="eval" to="{whoknows}"></p-d>
-    <script type="module ish">
+    <p-d id="viewNodesChangeHandler" on="eval" to="{NA}"></p-d>
+    <script nomodule>
         inp =>{
-          fvi = nodeList.firstVisibleIndex;
+          firstVisibleIndex = nodeList.firstVisibleIndex;
         }
       </script>
-    <p-d id="toggledNodeChangeHandler" on="eval" to="{whoknows}"></p-d>
+    <p-d id="toggledNodeChangeHandler" on="eval" to="{NA}"></p-d>
   </div>
   </template>
 </custom-element-demo>

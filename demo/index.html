@@ -20,7 +20,7 @@
     <!-- Polymer Elements -->
     <script type="module" src="https://unpkg.com/@polymer/polymer@3.0.5/lib/elements/dom-if.js?module"></script>
     <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
-    <!-- End Polyer Elements -->
+    <!-- End Polymer Elements -->
 
     <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
     <script src="https://unpkg.com/p-d.p-u@0.0.67/p-d.p-d-x.p-u.js"></script>
@@ -29,19 +29,9 @@
     <script type="module" src="https://unpkg.com/xtal-tree@0.0.34/xtal-tree.iife.js"></script>
     <h3>Basic xtal-tree demo</h3>
     <script>
-      var fvi = -1;
-      
+      var firstVisibleIndex = -1; 
     </script>
-    <style>
-      div.node {
-        cursor: pointer;
-      }
-
-      span.match {
-        font-weight: bold;
-        background-color: yellowgreen;
-      }
-    </style>
+    <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     <xtal-deco>
       <script nomodule>
       ({
@@ -65,8 +55,12 @@
     <input type="text" placeholder="Search">
     <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
     <p-d on="input" to="#myTree{searchString}"></p-d>
+
+    <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch>
     <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
+
+    <!-- ================= Train xtal-tree how to expand / collapse nodes ========================= -->
     <xtal-deco>
       <script nomodule>
         ({
@@ -97,6 +91,18 @@
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="iron-list{items};#viewNodesChangeHandler{input}"></p-d>
     <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
+
+    <!-- ==============  Styling of iron-list ================== -->
+    <style>
+      div.node {
+        cursor: pointer;
+      }
+
+      span.match {
+        font-weight: bold;
+        background-color: yellowgreen;
+      }
+    </style>
     <iron-list style="height:400px" id="nodeList" mutable-data p-d-if="#searchProp">
       <template>
         <div class="node" style$="[[item.style]]" p-d-if="#searchProp">
@@ -113,20 +119,22 @@
         </div>
       </template>
     </iron-list>
+
+    <!-- ================== Miscellaneous event handlers, needed to reset scroll position  ======================  -->
     <script nomodule>
         inp => {
-          if(typeof(fvi) !== 'undefined' && fvi > -1){
-            nodeList.scrollToIndex(fvi);
+          if(typeof(firstVisibleIndex) !== 'undefined' && firstVisibleIndex > -1){
+            nodeList.scrollToIndex(firstVisibleIndex);
           }
         }
       </script>
-    <p-d id="viewNodesChangeHandler" on="eval" to="{whoknows}"></p-d>
+    <p-d id="viewNodesChangeHandler" on="eval" to="{NA}"></p-d>
     <script nomodule>
         inp =>{
-          fvi = nodeList.firstVisibleIndex;
+          firstVisibleIndex = nodeList.firstVisibleIndex;
         }
       </script>
-    <p-d id="toggledNodeChangeHandler" on="eval" to="{whoknows}"></p-d>
+    <p-d id="toggledNodeChangeHandler" on="eval" to="{NA}"></p-d>
   </div>
 </body>
 

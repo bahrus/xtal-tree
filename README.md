@@ -2,7 +2,7 @@
 
 <a href="https://nodei.co/npm/xtal-tree/"><img src="https://nodei.co/npm/xtal-tree.png"></a>
 
-<img src="http://img.badgesize.io/https://unpkg.com/xtal-splitting@0.0.34/build/ES6/xtal-tree.iife.js?compression=gzip">
+<img src="http://img.badgesize.io/https://unpkg.com/xtal-tree@0.0.34/build/ES6/xtal-tree.iife.js?compression=gzip">
 
 # \<xtal-tree\>
 

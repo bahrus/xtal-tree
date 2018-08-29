@@ -30,12 +30,7 @@
     <h3>Basic xtal-tree demo</h3>
     <script>
       var fvi = -1;
-      function levelSetter(nodes, level) {
-        nodes.forEach(node => {
-          node.style = 'margin-left:' + (level * 12) + 'px';
-          if (node.children) levelSetter(node.children, level + 1)
-        })
-      }
+      
     </script>
     <style>
       div.node {
@@ -77,7 +72,12 @@
         ({
           childrenFn: node => node.children,
           isOpenFn: node => node.expanded,
-          levelSetterFn: levelSetter,
+          levelSetterFn: function (nodes, level) {
+            nodes.forEach(node => {
+              node.style = 'margin-left:' + (level * 12) + 'px';
+              if (node.children) this.levelSetterFn(node.children, level + 1)
+            })
+          },
           toggleNodeFn: node => {
             node.expanded = !node.expanded;
           },
@@ -113,7 +113,7 @@
         </div>
       </template>
     </iron-list>
-    <script type="module ish">
+    <script nomodule>
         inp => {
           if(typeof(fvi) !== 'undefined' && fvi > -1){
             nodeList.scrollToIndex(fvi);
@@ -121,7 +121,7 @@
         }
       </script>
     <p-d id="viewNodesChangeHandler" on="eval" to="{whoknows}"></p-d>
-    <script type="module ish">
+    <script nomodule>
         inp =>{
           fvi = nodeList.firstVisibleIndex;
         }

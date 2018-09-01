@@ -32,7 +32,7 @@
       var firstVisibleIndex = -1; 
     </script>
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
-    <xtal-deco>
+    <!-- <xtal-deco>
       <script nomodule>
       ({
         on:{
@@ -42,11 +42,13 @@
         }
       })
     </script>
-    </xtal-deco>
-    <span>
+    </xtal-deco> -->
+    <span id="outlineButtons">
         <button data-nodes="allExpandedNodes" >Expand All</button>
         <button data-nodes="allCollapsedNodes">Collapse All</button>
     </span>
+    <p-d on="click" if="button[data-nodes='allExpandedNodes']" to="#myTree{allExpandedNodes:target.parentElement.viewableNodes}" m="1"></p-d>
+    <p-d on="click" if="button[data-nodes='allCollapsedNodes']" to="#myTree{allCollapsedNodes:target.parentElement.viewableNodes}" m="1"></p-d>
     <span>
       <button data-dir="asc">Sort Asc</button>
       <button data-dir="desc">Sort Desc</button>
@@ -100,6 +102,7 @@
     </xtal-deco>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="iron-list{items}"></p-d>
+    <p-u on="viewable-nodes-changed" to="/outlineButtons{viewableNodes}"></p-u>
     <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
 
     <!-- ==============  Styling of iron-list ================== -->
@@ -113,6 +116,7 @@
         background-color: yellowgreen;
       }
     </style>
+    
     <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="#searchProp">
       <template>
         <div class="node" style$="[[item.style]]" p-d-if="#searchProp">

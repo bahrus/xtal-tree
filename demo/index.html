@@ -13,6 +13,11 @@
 
   <div data-pd>
     <pass-down></pass-down>
+    <xtal-state-watch watch level="local" 
+      data-on="history-changed: 
+                pass-to:xtal-tree{firstVisibleIndex:target.history.firstVisibleIndex}
+              "
+    ></xtal-state-watch>
     <h3>Basic xtal-tree demo</h3>
     <script>
       var firstVisibleIndex = -1; 
@@ -67,18 +72,9 @@
             if (lhs.name > rhs.name) return 1;
             return 0;
           },
-          on:{
-            'viewable-nodes-changed': function(e){
-              if(firstVisibleIndex > -1){
-                nodeList.scrollToIndex(firstVisibleIndex);
-              }
-            },
-            'toggled-node-changed': function(e){
-              firstVisibleIndex = nodeList.firstVisibleIndex;
-            }
-          },
           props:{
-              expandCmd: ''
+              expandCmd: '',
+              fistVisibleIndex: -1
             },
             onPropsChange(name, newVal){
               switch(name){
@@ -92,7 +88,7 @@
       </script>
     </xtal-deco>
     <xtal-tree id="myTree"
-      data-on="viewable-nodes-changed: pass-to:iron-list{items:target.viewableNodes}{1}"
+      data-on="viewable-nodes-changed: pass-to:iron-list{items:target.viewableNodes;newFirstVisibleIndex:target.firstVisibleIndex}{1}"
     ></xtal-tree>
 
     <!-- ==============  Styling of iron-list ================== -->
@@ -107,6 +103,22 @@
       }
     </style>
     
+    <xtal-deco>
+        <script nomodule>
+          ({
+            props: {
+              newFirstVisibleIndex: -1,
+            },
+            onPropsChange: function (name, newVal) {
+              switch (name) {
+                case 'newFirstVisibleIndex':
+                  if(!this.items || this.newFirstVisibleIndex < 0) return;
+                  this.scrollToIndex(this.newFirstVisibleIndex);
+              }
+            }
+          })
+        </script>
+      </xtal-deco>
     <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data data-pd
       data-on="scroll: pass-to-next:{history:target.firstVisibleIndex}"
     >

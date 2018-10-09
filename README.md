@@ -20,9 +20,6 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
               "
     ></xtal-state-watch>
     <h3>Basic xtal-tree demo</h3>
-    <script>
-      var firstVisibleIndex = -1; 
-    </script>
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     
     <button disabled data-expand-cmd="allExpandedNodes"

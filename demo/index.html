@@ -119,8 +119,10 @@
             </template>
             <template is="dom-if" if="[[!item.children]]">📝</template>
           </span>
-          <xtal-split node="[[item]]" search="[[search]]" text-content="[[item.name]]"></xtal-split>
-          <p-u on="click" if="xtal-split" to="/myTree{toggledNode:target.node}"></p-u>
+          <xtal-split node="[[item]]" search="[[search]]" text-content="[[item.name]]"
+            data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"
+          ></xtal-split>
+          
         </div>
       </template>
     </iron-list>

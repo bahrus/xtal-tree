@@ -107,7 +107,9 @@
       }
     </style>
     
-    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data data-pd>
+    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data data-pd
+      data-on="scroll: pass-to-next:{history:target.firstVisibleIndex}"
+    >
       <template>
         <div class="node" style$="[[item.style]]" data-pd>
           <span node="[[item]]"
@@ -126,6 +128,7 @@
         </div>
       </template>
     </iron-list>
+    <xtal-state-commit level="local" rewrite href="/scroll" with-path="firstVisibleIndex"></xtal-state-commit>
     <!-- Polyfill for retro browsers -->
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <!-- Polyfill for retro browsers -->
@@ -136,11 +139,11 @@
     <!-- End Polymer Elements -->
 
     <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
-    <script src="https://unpkg.com/p-d.p-u@0.0.67/p-d.p-d-x.p-u.js"></script>
     <script src="https://unpkg.com/xtal-fetch@0.0.40/xtal-fetch.js"></script>
     <script src="https://unpkg.com/xtal-decorator@0.0.27/xtal-decorator.iife.js"></script>
     <script type="module" src="https://unpkg.com/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
     <script type="module" src="https://unpkg.com/pass-down@0.0.10/pass-down.iife.js"></script>
+    <script type="module" src="https://unpkg.com/xtal-state@0.0.20/xtal-state.js"></script>
   </div>
 </body>
 

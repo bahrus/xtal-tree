@@ -20,17 +20,17 @@
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     
     <button disabled data-expand-cmd="allExpandedNodes"
-      data-on="click: pass-to:#myTree{expandCmd:target.dataset.expandCmd}{1} skip-init"
+      data-on="click: pass-to:xtal-tree{expandCmd:target.dataset.expandCmd}{1} skip-init"
     >Expand All</button>
     <button disabled data-expand-cmd="allCollapsedNodes"
-      data-on="click: pass-to:#myTree{expandCmd:target.dataset.expandCmd}{1} skip-init"
+      data-on="click: pass-to:xtal-tree{expandCmd:target.dataset.expandCmd}{1} skip-init"
     >Collapse All</button>
-    
-    <span>
-      <button data-dir="asc">Sort Asc</button>
-      <button data-dir="desc">Sort Desc</button>
-    </span>
-    <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
+    <button disabled data-dir="asc"
+      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}"
+    >Sort Asc</button>
+    <button disabled data-dir="desc"
+      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}"
+    >Sort Desc</button>
     <input type="text" placeholder="Search">
     <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
     <p-d on="input" to="#myTree{searchString}" m="1"></p-d>

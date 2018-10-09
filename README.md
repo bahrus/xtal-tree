@@ -12,53 +12,41 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
 ```
 <custom-element-demo>
   <template>
-    <div>
-    <!-- Polyfill for re(dge)tro browsers -->
-    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <!-- Polyfill for re(dge)tro browsers -->
-
-    <!-- Polymer Elements -->
-    <script type="module" src="https://unpkg.com/@polymer/polymer@3.0.5/lib/elements/dom-if.js?module"></script>
-    <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
-    <!-- End Polymer Elements -->
-
-    <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
-    <script src="https://unpkg.com/p-d.p-u@0.0.67/p-d.p-d-x.p-u.js"></script>
-    <script src="https://unpkg.com/xtal-fetch@0.0.40/xtal-fetch.js"></script>
-    <script src="https://unpkg.com/xtal-decorator@0.0.20/xtal-decorator.iife.js"></script>
-    <script type="module" src="https://unpkg.com/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
+  <div data-pd>
+    <pass-down></pass-down>
+    <xtal-state-watch watch level="local" 
+      data-on="history-changed: 
+                pass-to:xtal-tree{firstVisibleIndex:target.history.firstVisibleIndex}
+              "
+    ></xtal-state-watch>
     <h3>Basic xtal-tree demo</h3>
     <script>
       var firstVisibleIndex = -1; 
     </script>
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
-    <xtal-deco>
-      <script nomodule>
-      ({
-        on:{
-          'click': function(e){
-            myTree[e.target.dataset.nodes] = myTree.viewableNodes;
-          }
-        }
-      })
-    </script>
-    </xtal-deco>
-    <span>
-        <button data-nodes="allExpandedNodes" >Expand All</button>
-        <button data-nodes="allCollapsedNodes">Collapse All</button>
-    </span>
-    <span>
-      <button data-dir="asc">Sort Asc</button>
-      <button data-dir="desc">Sort Desc</button>
-    </span>
-    <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
-    <input type="text" placeholder="Search">
-    <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
-    <p-d on="input" to="#myTree{searchString}"></p-d>
+    
+    <button disabled data-expand-cmd="allExpandedNodes"
+      data-on="click: pass-to:xtal-tree{expandCmd:target.dataset.expandCmd}{1} skip-init"
+    >Expand All</button>
+    <button disabled data-expand-cmd="allCollapsedNodes"
+      data-on="click: pass-to:xtal-tree{expandCmd:target.dataset.expandCmd}{1} skip-init"
+    >Collapse All</button>
+    <button disabled data-dir="asc"
+      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}{1} skip-init"
+    >Sort Asc</button>
+    <button disabled data-dir="desc"
+      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}{1} skip-init"
+    >Sort Desc</button>
+    <input disabled type="text" placeholder="Search"
+      data-on="input: pass-to:xtal-split{search:target.value} and-pass-to:xtal-tree{searchString:target.value}{1} recursive"
+    >
+    
 
     <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
-    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch>
-    <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
+    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"
+      data-on="fetch-complete: pass-to:xtal-tree{nodes:target.value}{1}"
+    ></xtal-fetch>
+    
 
     <!-- ================= Train xtal-tree how to expand / collapse nodes ========================= -->
     <xtal-deco>
@@ -85,22 +73,24 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
             if (lhs.name > rhs.name) return 1;
             return 0;
           },
-          on:{
-            'viewable-nodes-changed': function(e){
-              if(firstVisibleIndex > -1){
-                nodeList.scrollToIndex(firstVisibleIndex);
-              }
+          props:{
+              expandCmd: '',
+              fistVisibleIndex: -1
             },
-            'toggled-node-changed': function(e){
-              firstVisibleIndex = nodeList.firstVisibleIndex;
+            onPropsChange(name, newVal){
+              switch(name){
+                case 'expandCmd':
+                  this[this.expandCmd] = this.viewableNodes;
+                  break;
+                  
+              }
             }
-          }
         })
       </script>
     </xtal-deco>
-    <xtal-tree id="myTree"></xtal-tree>
-    <p-d on="viewable-nodes-changed" to="iron-list{items}"></p-d>
-    <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
+    <xtal-tree id="myTree"
+      data-on="viewable-nodes-changed: pass-to:iron-list{items:target.viewableNodes;newFirstVisibleIndex:target.firstVisibleIndex}{1}"
+    ></xtal-tree>
 
     <!-- ==============  Styling of iron-list ================== -->
     <style>
@@ -113,23 +103,60 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
         background-color: yellowgreen;
       }
     </style>
-    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="#searchProp">
+    
+    <xtal-deco>
+        <script nomodule>
+          ({
+            props: {
+              newFirstVisibleIndex: -1,
+            },
+            onPropsChange: function (name, newVal) {
+              switch (name) {
+                case 'newFirstVisibleIndex':
+                  if(!this.items || this.newFirstVisibleIndex < 0) return;
+                  this.scrollToIndex(this.newFirstVisibleIndex);
+              }
+            }
+          })
+        </script>
+      </xtal-deco>
+    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data data-pd
+      data-on="scroll: pass-to-next:{history:target.firstVisibleIndex}"
+    >
       <template>
-        <div class="node" style$="[[item.style]]" p-d-if="#searchProp">
-          <span node="[[item]]">
+        <div class="node" style$="[[item.style]]" data-pd>
+          <span node="[[item]]"
+            data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"
+          >
             <template is="dom-if" if="[[item.children]]">
               <template is="dom-if" if="[[item.expanded]]">📖</template>
               <template is="dom-if" if="[[!item.expanded]]">📕</template>
             </template>
             <template is="dom-if" if="[[!item.children]]">📝</template>
           </span>
-          <p-u on="click" if="span" to="/myTree{toggledNode:target.node}"></p-u>
-          <xtal-split node="[[item]]" search="[[search]]" text-content="[[item.name]]"></xtal-split>
-          <p-u on="click" if="xtal-split" to="/myTree{toggledNode:target.node}"></p-u>
+          <xtal-split node="[[item]]" search="[[search]]" text-content="[[item.name]]"
+            data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"
+          ></xtal-split>
+          
         </div>
       </template>
     </iron-list>
+    <xtal-state-commit level="local" rewrite href="/scroll" with-path="firstVisibleIndex"></xtal-state-commit>
+    <!-- Polyfill for retro browsers -->
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <!-- Polyfill for retro browsers -->
 
+    <!-- Polymer Elements -->
+    <script type="module" src="https://unpkg.com/@polymer/polymer@3.0.5/lib/elements/dom-if.js?module"></script>
+    <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
+    <!-- End Polymer Elements -->
+
+    <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
+    <script src="https://unpkg.com/xtal-fetch@0.0.40/xtal-fetch.js"></script>
+    <script src="https://unpkg.com/xtal-decorator@0.0.27/xtal-decorator.iife.js"></script>
+    <script type="module" src="https://unpkg.com/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
+    <script type="module" src="https://unpkg.com/pass-down@0.0.10/pass-down.iife.js"></script>
+    <script type="module" src="https://unpkg.com/xtal-state@0.0.20/xtal-state.js"></script>
   </div>
   </template>
 </custom-element-demo>

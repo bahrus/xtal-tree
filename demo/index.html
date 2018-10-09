@@ -26,14 +26,15 @@
       data-on="click: pass-to:xtal-tree{expandCmd:target.dataset.expandCmd}{1} skip-init"
     >Collapse All</button>
     <button disabled data-dir="asc"
-      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}"
+      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}{1} skip-init"
     >Sort Asc</button>
     <button disabled data-dir="desc"
-      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}"
+      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}{1} skip-init"
     >Sort Desc</button>
-    <input type="text" placeholder="Search">
-    <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
-    <p-d on="input" to="#myTree{searchString}" m="1"></p-d>
+    <input disabled type="text" placeholder="Search"
+      data-on="input: pass-to:xtal-split{search:target.value} and-pass-to:xtal-tree{searchString:target.value}{1} recursive"
+    >
+    
 
     <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch>
@@ -105,9 +106,9 @@
       }
     </style>
     
-    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="#searchProp">
+    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data data-pd>
       <template>
-        <div class="node" style$="[[item.style]]" p-d-if="#searchProp">
+        <div class="node" style$="[[item.style]]" p-d-if="#searchProp" data-pd>
           <span node="[[item]]">
             <template is="dom-if" if="[[item.children]]">
               <template is="dom-if" if="[[item.expanded]]">📖</template>

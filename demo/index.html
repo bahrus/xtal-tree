@@ -91,10 +91,9 @@
         })
       </script>
     </xtal-deco>
-    <xtal-tree id="myTree"></xtal-tree>
-    <p-d on="viewable-nodes-changed" to="iron-list{items}"></p-d>
-    <!-- <p-u on="viewable-nodes-changed" to="/outlineButtons{viewableNodes}"></p-u> -->
-    <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
+    <xtal-tree id="myTree"
+      data-on="viewable-nodes-changed: pass-to:iron-list{items:target.viewableNodes}{1}"
+    ></xtal-tree>
 
     <!-- ==============  Styling of iron-list ================== -->
     <style>
@@ -110,15 +109,16 @@
     
     <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data data-pd>
       <template>
-        <div class="node" style$="[[item.style]]" p-d-if="#searchProp" data-pd>
-          <span node="[[item]]">
+        <div class="node" style$="[[item.style]]" data-pd>
+          <span node="[[item]]"
+            data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"
+          >
             <template is="dom-if" if="[[item.children]]">
               <template is="dom-if" if="[[item.expanded]]">📖</template>
               <template is="dom-if" if="[[!item.expanded]]">📕</template>
             </template>
             <template is="dom-if" if="[[!item.children]]">📝</template>
           </span>
-          <p-u on="click" if="span" to="/myTree{toggledNode:target.node}"></p-u>
           <xtal-split node="[[item]]" search="[[search]]" text-content="[[item.name]]"></xtal-split>
           <p-u on="click" if="xtal-split" to="/myTree{toggledNode:target.node}"></p-u>
         </div>

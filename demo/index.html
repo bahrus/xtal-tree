@@ -4,7 +4,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-
   <title>xtal-tree demo</title>
 
 
@@ -12,33 +11,21 @@
 
 <body>
 
-  <div>
-    <!-- Polyfill for re(dge)tro browsers -->
-    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <!-- Polyfill for re(dge)tro browsers -->
-
-    <!-- Polymer Elements -->
-    <script type="module" src="https://unpkg.com/@polymer/polymer@3.0.5/lib/elements/dom-if.js?module"></script>
-    <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
-    <!-- End Polymer Elements -->
-
-    <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
-    <script src="https://unpkg.com/p-d.p-u@0.0.67/p-d.p-d-x.p-u.js"></script>
-    <script src="https://unpkg.com/xtal-fetch@0.0.40/xtal-fetch.js"></script>
-    <script src="https://unpkg.com/xtal-decorator@0.0.20/xtal-decorator.iife.js"></script>
-    <script type="module" src="https://unpkg.com/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
+  <div data-pd>
+    <pass-down></pass-down>
     <h3>Basic xtal-tree demo</h3>
     <script>
       var firstVisibleIndex = -1; 
     </script>
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     
-    <span id="outlineButtons">
-        <button data-nodes="allExpandedNodes" >Expand All</button>
-        <button data-nodes="allCollapsedNodes">Collapse All</button>
-    </span>
-    <p-d on="click" if="button[data-nodes='allExpandedNodes']" to="#myTree{allExpandedNodes:target.parentElement.viewableNodes}" m="1"></p-d>
-    <p-d on="click" if="button[data-nodes='allCollapsedNodes']" to="#myTree{allCollapsedNodes:target.parentElement.viewableNodes}" m="1"></p-d>
+    <button disabled data-expand-cmd="allExpandedNodes"
+      data-on="click: pass-to:#myTree{expandCmd:target.dataset.expandCmd}{1} skip-init"
+    >Expand All</button>
+    <button disabled data-expand-cmd="allCollapsedNodes"
+      data-on="click: pass-to:#myTree{expandCmd:target.dataset.expandCmd}{1} skip-init"
+    >Collapse All</button>
+    
     <span>
       <button data-dir="asc">Sort Asc</button>
       <button data-dir="desc">Sort Desc</button>
@@ -46,7 +33,7 @@
     <p-d on="click" if="button" to="#myTree{sorted:target.dataset.dir}"></p-d>
     <input type="text" placeholder="Search">
     <p-d id="searchProp" on="input" to="xtal-split{search}"></p-d>
-    <p-d on="input" to="#myTree{searchString}"></p-d>
+    <p-d on="input" to="#myTree{searchString}" m="1"></p-d>
 
     <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
     <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch>
@@ -86,13 +73,24 @@
             'toggled-node-changed': function(e){
               firstVisibleIndex = nodeList.firstVisibleIndex;
             }
-          }
+          },
+          props:{
+              expandCmd: ''
+            },
+            onPropsChange(name, newVal){
+              switch(name){
+                case 'expandCmd':
+                  this[this.expandCmd] = this.viewableNodes;
+                  break;
+                  
+              }
+            }
         })
       </script>
     </xtal-deco>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="iron-list{items}"></p-d>
-    <p-u on="viewable-nodes-changed" to="/outlineButtons{viewableNodes}"></p-u>
+    <!-- <p-u on="viewable-nodes-changed" to="/outlineButtons{viewableNodes}"></p-u> -->
     <p-d on="toggled-node-changed" to="#toggledNodeChangeHandler{input}"></p-d>
 
     <!-- ==============  Styling of iron-list ================== -->
@@ -123,7 +121,21 @@
         </div>
       </template>
     </iron-list>
+    <!-- Polyfill for retro browsers -->
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <!-- Polyfill for retro browsers -->
 
+    <!-- Polymer Elements -->
+    <script type="module" src="https://unpkg.com/@polymer/polymer@3.0.5/lib/elements/dom-if.js?module"></script>
+    <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
+    <!-- End Polymer Elements -->
+
+    <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
+    <script src="https://unpkg.com/p-d.p-u@0.0.67/p-d.p-d-x.p-u.js"></script>
+    <script src="https://unpkg.com/xtal-fetch@0.0.40/xtal-fetch.js"></script>
+    <script src="https://unpkg.com/xtal-decorator@0.0.27/xtal-decorator.iife.js"></script>
+    <script type="module" src="https://unpkg.com/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
+    <script type="module" src="https://unpkg.com/pass-down@0.0.10/pass-down.iife.js"></script>
   </div>
 </body>
 

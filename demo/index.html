@@ -37,8 +37,10 @@
     
 
     <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
-    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch>
-    <p-d on="result-changed" to="#myTree{nodes}" m="1"></p-d>
+    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"
+      data-on="fetch-complete: pass-to:xtal-tree{nodes:target.value}{1}"
+    ></xtal-fetch>
+    
 
     <!-- ================= Train xtal-tree how to expand / collapse nodes ========================= -->
     <xtal-deco>

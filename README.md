@@ -13,13 +13,20 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
 <custom-element-demo>
   <template>
   <div data-pd>
-    <pass-down></pass-down>
-    <xtal-state-watch watch level="local" 
+    <xtal-state-parse level="global" parse="location.href" with-url-pattern="id=(?<storeId>[a-z0-9-]*)" 
+      data-on="no-match: pass-to:purr-sist{create:target.dataset.noMatch}"
+    ></xtal-state-parse>
+    <xtal-state-watch level="global" watch data-on="history-changed: pass-to:purr-sist{storeId:target.history.storeId}"></xtal-state-watch>
+    <purr-sist persist data-on="value-changed: pass-to-next:{input:target.value}
+            store-id-changed: pass-to:xtal-state-commit{url:target.storeId;history:target.storeId}
+    "></purr-sist>    
+    <xtal-state-watch watch level="global" 
       data-on="history-changed: 
                 pass-to:xtal-tree{firstVisibleIndex:target.history.firstVisibleIndex}
               "
     ></xtal-state-watch>
     <h3>Basic xtal-tree demo</h3>
+   
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     
     <button disabled data-expand-cmd="allExpandedNodes"
@@ -88,6 +95,7 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
     <xtal-tree id="myTree"
       data-on="viewable-nodes-changed: pass-to:iron-list{items:target.viewableNodes;newFirstVisibleIndex:target.firstVisibleIndex}{1}"
     ></xtal-tree>
+    
 
     <!-- ==============  Styling of iron-list ================== -->
     <style>
@@ -98,6 +106,18 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
       span.match {
         font-weight: bold;
         background-color: yellowgreen;
+      }
+
+      span[data-has-children="1"][data-is-expanded="1"]::after{
+        content: "📖";
+      }
+
+      span[data-has-children="1"][data-is-expanded="-1"]::after{
+        content: "📕";
+      }
+
+      span[data-has-children="-1"]::after{
+        content: "📝";
       }
     </style>
     
@@ -125,11 +145,9 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
           <span node="[[item]]"
             data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"
           >
-            <template is="dom-if" if="[[item.children]]">
-              <template is="dom-if" if="[[item.expanded]]">📖</template>
-              <template is="dom-if" if="[[!item.expanded]]">📕</template>
-            </template>
-            <template is="dom-if" if="[[!item.children]]">📝</template>
+          <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
+          <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
+          <span data-has-children="-1" data-is-expanded="1" node="[[item]]"></span>
           </span>
           <xtal-split node="[[item]]" search="[[search]]" text-content="[[item.name]]"
             data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"
@@ -138,22 +156,24 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
         </div>
       </template>
     </iron-list>
-    <xtal-state-commit level="local" rewrite href="/scroll" with-path="firstVisibleIndex"></xtal-state-commit>
+    <xtal-state-commit level="global" rewrite href="/scroll" with-path="firstVisibleIndex"></xtal-state-commit>
     <!-- Polyfill for retro browsers -->
-    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <!-- Polyfill for retro browsers -->
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <!-- End Polyfill for retro browsers -->
 
     <!-- Polymer Elements -->
-    <script type="module" src="https://unpkg.com/@polymer/polymer@3.0.5/lib/elements/dom-if.js?module"></script>
-    <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.0-pre.21/iron-list.js?module"></script>
+    <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.1/iron-list.js?module"></script>
     <!-- End Polymer Elements -->
 
-    <script src="https://unpkg.com/xtal-splitting@0.0.8/xtal-splitting.js"></script>
-    <script src="https://unpkg.com/xtal-fetch@0.0.40/xtal-fetch.js"></script>
-    <script src="https://unpkg.com/xtal-decorator@0.0.27/xtal-decorator.iife.js"></script>
-    <script type="module" src="https://unpkg.com/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
-    <script type="module" src="https://unpkg.com/pass-down@0.0.10/pass-down.iife.js"></script>
-    <script type="module" src="https://unpkg.com/xtal-state@0.0.20/xtal-state.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-splitting@0.0.8/xtal-splitting.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.40/xtal-fetch.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.27/xtal-decorator.iife.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/pass-down@0.0.10/pass-down.iife.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-state@0.0.42/xtal-state.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/purr-sist@0.0.13/purr-sist.iife.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/if-diff@0.0.9/if-diff.iife.js"></script>
+    <pass-down></pass-down>
   </div>
   </template>
 </custom-element-demo>

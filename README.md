@@ -147,7 +147,7 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
           >
           <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
           <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
-          <span data-has-children="-1" data-is-expanded="1" node="[[item]]"></span>
+          <span data-has-children="-1" data-is-expanded="-1" node="[[item]]"></span>
           </span>
           <xtal-split node="[[item]]" search="[[search]]" text-content="[[item.name]]"
             data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"

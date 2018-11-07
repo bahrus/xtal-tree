@@ -13,13 +13,7 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
 <custom-element-demo>
   <template>
   <div data-pd>
-    <xtal-state-parse level="global" parse="location.href" with-url-pattern="id=(?<storeId>[a-z0-9-]*)" 
-      data-on="no-match: pass-to:purr-sist{create:target.dataset.noMatch}"
-    ></xtal-state-parse>
-    <xtal-state-watch level="global" watch data-on="history-changed: pass-to:purr-sist{storeId:target.history.storeId}"></xtal-state-watch>
-    <purr-sist persist data-on="value-changed: pass-to-next:{input:target.value}
-            store-id-changed: pass-to:xtal-state-commit{url:target.storeId;history:target.storeId}
-    "></purr-sist>    
+  
     <xtal-state-watch watch level="global" 
       data-on="history-changed: 
                 pass-to:xtal-tree{firstVisibleIndex:target.history.firstVisibleIndex}
@@ -166,13 +160,13 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
     <!-- End Polymer Elements -->
 
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-splitting@0.0.8/xtal-splitting.js"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.40/xtal-fetch.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.50/xtal-fetch.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.27/xtal-decorator.iife.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/pass-down@0.0.10/pass-down.iife.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-state@0.0.42/xtal-state.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/purr-sist@0.0.13/purr-sist.iife.js"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/if-diff@0.0.9/if-diff.iife.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/if-diff@0.0.11/if-diff.iife.js"></script>
     <pass-down></pass-down>
   </div>
   </template>

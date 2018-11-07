@@ -29,7 +29,10 @@ export class XtalTree extends XtallatX(HTMLElement) {
     }
     connectedCallback() {
         this.style.display = 'none';
-        this._upgradeProperties(['childrenFn', 'compareFn', 'isOpenFn', 'nodes', 'searchString', sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn']);
+        this._conn = true;
+        this._upgradeProperties(['childrenFn', 'compareFn', 'isOpenFn', 'nodes', 'searchString',
+            sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn']);
+        this.onPropsChange();
     }
     get childrenFn() {
         return this._childrenFn;
@@ -108,7 +111,7 @@ export class XtalTree extends XtallatX(HTMLElement) {
         });
     }
     onPropsChange() {
-        if (!this._isOpenFn || !this._childrenFn || !this._nodes)
+        if (!this._conn || !this._isOpenFn || !this._childrenFn || !this._nodes)
             return;
         if (this._levelSetterFn) {
             this._levelSetterFn(this._nodes, 0);

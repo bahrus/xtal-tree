@@ -12,39 +12,30 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
 ```
 <custom-element-demo>
   <template>
-  <div data-pd>
+  <div>
   
-    <xtal-state-watch watch level="global" 
-      data-on="history-changed: 
-                pass-to:xtal-tree{firstVisibleIndex:target.history.firstVisibleIndex}
-              "
-    ></xtal-state-watch>
+    <xtal-state-watch watch level="global"></xtal-state-watch>
+    <p-d on="history-changed" to="xtal-tree" prop="firstVisibleIndex" val="target.history.firstVisibleIndex"></p-d>
     <h3>Basic xtal-tree demo</h3>
    
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     
-    <button disabled data-expand-cmd="allExpandedNodes"
-      data-on="click: pass-to:xtal-tree{expandCmd:target.dataset.expandCmd}{1} skip-init"
-    >Expand All</button>
-    <button disabled data-expand-cmd="allCollapsedNodes"
-      data-on="click: pass-to:xtal-tree{expandCmd:target.dataset.expandCmd}{1} skip-init"
-    >Collapse All</button>
-    <button disabled data-dir="asc"
-      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}{1} skip-init"
-    >Sort Asc</button>
-    <button disabled data-dir="desc"
-      data-on="click: pass-to:xtal-tree{sorted:target.dataset.dir}{1} skip-init"
-    >Sort Desc</button>
-    <input disabled type="text" placeholder="Search"
-      data-on="input: pass-to:xtal-split{search:target.value} and-pass-to:xtal-tree{searchString:target.value}{1} recursive"
-    >
-    
+    <button disabled data-expand-cmd="allExpandedNodes">Expand All</button>
+    <p-d on="click" to="xtal-tree" prop="expandCmd" val="target.dataset.expandCmd" m="1" skip-init></p-d>
+    <button disabled data-expand-cmd="allCollapsedNodes">Collapse All</button>
+    <p-d on="click" to="xtal-tree" prop="expandCmd" val="target.dataset.expandCmd" m="1" skip-init></p-d>
+    <button disabled data-dir="asc">Sort Asc</button>
+    <p-d on="click" to="xtal-tree" prop="sorted" val="target.dataset.dir" m="1" skip-init></p-d>
+    <button disabled data-dir="desc">Sort Desc</button>
+    <p-d on="click" to="xtal-tree" prop="sorted" val="target.dataset.dir" m="1" skip-init></p-d>
+    <input disabled type="text" placeholder="Search">
+    <p-d-r on="input" to="xtal-split" prop="search" val="target.value"></p-d-r>
+    <p-d on="input" to="xtal-tree" prop="searchString" val="target.value"></p-d>
 
     <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
-    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"
-      data-on="fetch-complete: pass-to:xtal-tree{nodes:target.value}{1}"
-    ></xtal-fetch>
-    
+    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch>
+    <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
+    <p-d on="fetch-complete" to="xtal-tree" prop="nodes" val="target.value" m="1"></p-d>
 
     <!-- ================= Train xtal-tree how to expand / collapse nodes ========================= -->
     <xtal-deco>
@@ -86,11 +77,9 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
         })
       </script>
     </xtal-deco>
-    <xtal-tree id="myTree"
-      data-on="viewable-nodes-changed: pass-to:iron-list{items:target.viewableNodes;newFirstVisibleIndex:target.firstVisibleIndex}{1}"
-    ></xtal-tree>
-    
-
+    <xtal-tree id="myTree"></xtal-tree>
+    <p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1"></p-d>
+    <p-d on="viewable-nodes-changed" to="iron-list" prop="newFirstVisibleIndex" val="target.firstVisibleIndex" m="1"></p-d>
     <!-- ==============  Styling of iron-list ================== -->
     <style>
       div.node {
@@ -115,41 +104,36 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
       }
     </style>
     
-    <xtal-deco>
-        <script nomodule>
-          ({
-            props: {
-              newFirstVisibleIndex: -1,
-            },
-            onPropsChange: function (name, newVal) {
-              switch (name) {
-                case 'newFirstVisibleIndex':
-                  if(!this.items || this.newFirstVisibleIndex < 0) return;
-                  this.scrollToIndex(this.newFirstVisibleIndex);
-              }
-            }
-          })
-        </script>
-      </xtal-deco>
-    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data data-pd
-      data-on="scroll: pass-to-next:{history:target.firstVisibleIndex}"
-    >
+    <xtal-deco><script nomodule>
+      ({
+        props: {
+          newFirstVisibleIndex: -1,
+        },
+        onPropsChange: function (name, newVal) {
+          switch (name) {
+            case 'newFirstVisibleIndex':
+              if(!this.items || this.newFirstVisibleIndex < 0) return;
+              this.scrollToIndex(this.newFirstVisibleIndex);
+          }
+        }
+      })
+    </script></xtal-deco>
+    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="p-d-r">
       <template>
-        <div class="node" style$="[[item.style]]" data-pd>
-          <span node="[[item]]"
-            data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"
-          >
-          <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
-          <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
-          <span data-has-children="-1" data-is-expanded="-1" node="[[item]]"></span>
+        <div class="node" style$="[[item.style]]" p-d-if="p-d-r">
+          <span node="[[item]]" p-d-if="p-d-r">
+            <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
+            <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
+            <span data-has-children="-1" data-is-expanded="-1" node="[[item]]"></span>
           </span>
-          <xtal-split node="[[item]]" search="[[search]]" text-content="[[item.name]]"
-            data-on="click: pass-to-id:myTree{toggledNode:target.node} skip-init"
-          ></xtal-split>
+          <p-u on="click" to="myTree" prop="toggledNode" val="target.node" skip-init></p-u>
+          <xtal-split node="[[item]]" text-content="[[item.name]]"></xtal-split>
+          <p-u on="click" to="myTree" prop="toggledNode" val="target.node" skip-init></p-u>
           
         </div>
       </template>
     </iron-list>
+    <p-d on="scroll" to="xtal-state-commit" prop="history" val="target.firstVisibleIndex"></p-d>
     <xtal-state-commit level="global" rewrite href="/scroll" with-path="firstVisibleIndex"></xtal-state-commit>
     <!-- Polyfill for retro browsers -->
     <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -160,14 +144,13 @@ Provide flat, virtual snapshot of a tree.  xtal-tree.js is ~1.5kb minified / gzi
     <!-- End Polymer Elements -->
 
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-splitting@0.0.8/xtal-splitting.js"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.50/xtal-fetch.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.52/xtal-fetch.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.27/xtal-decorator.iife.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/pass-down@0.0.10/pass-down.iife.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-state@0.0.42/xtal-state.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/purr-sist@0.0.13/purr-sist.iife.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/if-diff@0.0.11/if-diff.iife.js"></script>
-    <pass-down></pass-down>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/p-d.p-u@0.0.79/dist/p-all.iife.js"></script>
   </div>
   </template>
 </custom-element-demo>

@@ -10,21 +10,19 @@
     "@polymer/iron-list": "3.0.2",
     "if-diff": "0.0.20",
     "p-d.p-u": "0.0.106",
-    "trans-render": "0.0.78",
+    "trans-render": "0.0.79",
     "xtal-decorator": "0.0.41",
-    "xtal-element": "0.0.30",
+    "xtal-element": "0.0.31",
     "xtal-fetch": "0.0.57",
     "xtal-splitting": "0.0.9",
     "event-switch": "0.0.12"
   },
   "devDependencies": {
     "@types/node": "^10.1.0",
-    "@webcomponents/webcomponentsjs": "^2.0.0",
-    "jiife": "^0.0.4",
-    "puppeteer": "1.7.0",
     "@types/puppeteer": "1.6.0",
     "@types/tape": "4.2.32",
-    "tape": "^4.9.1",
-    "serve": "10.0.0"
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "jiife": "^0.0.4",
+    "tape": "^4.9.1"
   }
 }

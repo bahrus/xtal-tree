@@ -11,11 +11,11 @@ import {createTemplate, newRenderContext} from 'xtal-element/utils.js';
 import {decorate} from 'trans-render/decorate.js';
 import {RuleMapping} from 'event-switch/event-switch.d.js';
 import {newEventContext} from 'event-switch/event-switch.js';
-const tsBug = [XtalFetchReq.is, PD.is, IfDiff.is, XtalSplit.is];
-console.log(tsBug);
+const tsBug = [PD.is, IfDiff.is, XtalSplit.is];
+//console.log(tsBug);
 const mainTemplate = createTemplate(/* html */`
 <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
-<xtal-fetch-req fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch-req>
+<xtal-fetch-req fetch as="json"></xtal-fetch-req>
 <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
 <p-d on="fetch-complete" prop="nodes" val="target.value" m="1"></p-d>
 <xtal-tree id="myTree"></xtal-tree>
@@ -25,6 +25,7 @@ const mainTemplate = createTemplate(/* html */`
     <style>
       div.node {
         cursor: pointer;
+        height: 24px;
       }
 
       span.match {
@@ -60,10 +61,34 @@ const mainTemplate = createTemplate(/* html */`
 
 `);
 const nodeClickEvent = 'nodeClickEvent';
+const href = 'href';
+const init = Symbol('init');
 export class XtalTreeBasic extends XtalElement{
     static get is(){return 'xtal-tree-basic';}
     get mainTemplate(){
         return mainTemplate;
+    }
+    static get observedAttributes(){
+      return super.observedAttributes.concat([href]);
+    }
+    attributeChangedCallback(n: string, ov: string, nv: string){
+      switch(n){
+        case href:
+          this._href = nv;
+          break;
+      }
+      super.attributeChangedCallback(n, ov, nv);
+    }
+    _href!: string;
+    get href(){
+      return this._href;
+    }
+    set href(nv){
+      this.setAttribute(href, nv);
+    }
+    setHref(){
+      if(!this.root) return;
+      (this.root.querySelector(XtalFetchReq.is) as XtalFetchReq).href = this._href;
     }
     _renderContext = newRenderContext({
         [XtalTree.is]: ({target}) => decorate<XtalTree>(target as XtalTree, {
@@ -71,7 +96,7 @@ export class XtalTreeBasic extends XtalElement{
             isOpenFn: node => (<any>node).expanded,
             levelSetterFn: function (nodes, level) {
               nodes.forEach(node => {
-                (<any>node).style = 'margin-left:' + (level * 12) + 'px';
+                (<any>node).style = 'margin-left:' + (level * 18) + 'px';
                 if ((<any>node).children) this.levelSetterFn((<any>node).children, level + 1)
               })
             },
@@ -89,34 +114,37 @@ export class XtalTreeBasic extends XtalElement{
               return 0;
             },
         } as XtalTree),
-        'iron-list': ({target}) => decorate<HTMLElement>(target as HTMLElement, {} as HTMLElement, {
-          props: {
-            newFirstVisibleIndex: -1,
-          },
-          on:{
-            click: function(e){
-              if(!(<any>e).target.node) return;
-              const firstVisible = this.firstVisibleIndex;
-              console.log('firstVisible = ' + firstVisible);
-              e.target.dispatchEvent(new CustomEvent(nodeClickEvent, {
-                bubbles: true,
-                detail: {
-                  toggledNode: (<any>e).target.node
+        'iron-list': ({target, ctx}) => {
+            decorate<HTMLElement>(target as HTMLElement, {} as HTMLElement, {
+              props: {
+                newFirstVisibleIndex: -1,
+              },
+              on:{
+                click: function(e){
+                  if(!(<any>e).target.node) return;
+                  const firstVisible = this.firstVisibleIndex;
+                  console.log('firstVisible = ' + firstVisible);
+                  e.target.dispatchEvent(new CustomEvent(nodeClickEvent, {
+                    bubbles: true,
+                    detail: {
+                      toggledNode: (<any>e).target.node
+                    }
+                  }))
+                  this.newFirstVisibleIndex = firstVisible;
                 }
-              }))
-              this.newFirstVisibleIndex = firstVisible;
-            }
-          },
-          methods:{
-            onPropsChange: function (name, newVal) {
-              switch (name) {
-                case 'newFirstVisibleIndex':
-                  if(!this.items || this.newFirstVisibleIndex < 0) return;
-                  this.scrollToIndex(this.newFirstVisibleIndex);
-              }
-            },
+              },
+              methods:{
+                onPropsChange: function (name, newVal) {
+                  switch (name) {
+                    case 'newFirstVisibleIndex':
+                      if(!this.items || this.newFirstVisibleIndex < 0) return;
+                      this.scrollToIndex(this.newFirstVisibleIndex);
+                  }
+                },
+              },
+              id: init
+            })
           }
-        })
     });
     get renderContext(){
         return this._renderContext;
@@ -138,6 +166,11 @@ export class XtalTreeBasic extends XtalElement{
     } as RuleMapping)
     get eventContext(){
         return this._eventContext;
+    }
+    onPropsChange(){
+      if(!super.onPropsChange()) return false;
+      this.setHref();
+      return true;
     }
 }
 define(XtalTreeBasic);

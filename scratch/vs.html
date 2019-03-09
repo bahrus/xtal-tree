@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <virtual-scroller id="scroller">
+            <template>
+                <div>
+                    I am here
+                </div>
+                <h1>test</h1>
+            </template>
+        </virtual-scroller>
+        <script type="module" src="https://valdrinkoshi.github.io/virtual-scroller/virtual-scroller-element.js"></script>
+        <!-- <script type="module">
+            const scroller = document.querySelector('virtual-scroller');
+            const myItems = new Array(200).fill('item');
+
+            
+            scroller.itemSource = myItems;
+        </script> -->
+        <script type="module">
+                const scroller = document.querySelector('virtual-scroller');
+                const items = [];
+                for(let i = 0; i < 1000; i++){
+                    items.push('item ' + i);
+                }
+                //const myItems = new Array(200).fill('item');
+              
+                scroller.updateElement = (child, item, index) => {
+                  child.textContent = index + ' - ' + item;
+                  //child.onclick = () => console.log(`clicked item #${index}`);
+                };
+
+                scroller.createElement = (item, itemIndex) =>{
+                    const h1 = document.createElement('h1');
+                    return h1;
+                }
+              
+                // This will automatically cause a render of the visible children
+                // (i.e., those that fit on the screen).
+                scroller.itemSource = items;
+              </script>
+    </div>
+
+</body>
+
+</html>

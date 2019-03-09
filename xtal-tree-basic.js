@@ -32,16 +32,16 @@ const mainTemplate = createTemplate(/* html */ `
       }
 
       span[data-has-children="1"][data-is-expanded="1"]::after{
-        content: "📖";
+        content: "\u25BE";
+        font-size: 1.3em;
       }
 
       span[data-has-children="1"][data-is-expanded="-1"]::after{
-        content: "📕";
+        content: "\u25B8";
+        font-size: 1.3em;
       }
 
-      span[data-has-children="-1"]::after{
-        content: "📝";
-      }
+
     </style>
     <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="p-d-r">
       <template>

@@ -30,7 +30,7 @@
     <p-d on="input" to="xtal-tree" prop="searchString" val="target.value"></p-d>
 
     <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
-    <xtal-fetch fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch>
+    <xtal-fetch-req fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch-req>
     <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
     <p-d on="fetch-complete" to="xtal-tree" prop="nodes" val="target.value" m="1"></p-d>
 
@@ -149,7 +149,7 @@
     <!-- End Polymer Elements -->
 
     <script type="module" src="https://unpkg.com/xtal-splitting@0.0.9/xtal-split.js?module"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.52/xtal-fetch.js"></script>
+    <script type="module" src="https://unpkg.com/xtal-fetch@0.0.57/xtal-fetch-req.js?module"></script>
     <script type="module" src="https://unpkg.com/xtal-decorator@0.0.41/xtal-deco.js?module"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-tree@0.0.38/xtal-tree.iife.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/xtal-state@0.0.42/xtal-state.js"></script>

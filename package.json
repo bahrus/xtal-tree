@@ -7,13 +7,15 @@
   "license": "MIT",
   "main": "xtal-tree.js",
   "dependencies": {
-    "xtal-element": "0.0.30",
     "@polymer/iron-list": "3.0.2",
-    "xtal-splitting": "0.0.9",
-    "xtal-fetch": "0.0.57",
-    "xtal-decorator": "0.0.41",
     "if-diff": "0.0.20",
-    "p-d.p-u": "0.0.106"
+    "p-d.p-u": "0.0.106",
+    "trans-render": "0.0.78",
+    "xtal-decorator": "0.0.41",
+    "xtal-element": "0.0.30",
+    "xtal-fetch": "0.0.57",
+    "xtal-splitting": "0.0.9",
+    "event-switch": "0.0.12"
   },
   "devDependencies": {
     "@types/node": "^10.1.0",

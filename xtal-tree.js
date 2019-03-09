@@ -220,4 +220,3 @@ export class XtalTree extends XtallatX(HTMLElement) {
     }
 }
 define(XtalTree);
-//# sourceMappingURL=xtal-tree.js.map

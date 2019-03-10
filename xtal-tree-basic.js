@@ -33,22 +33,22 @@ const mainTemplate = createTemplate(/* html */ `
 
   span[data-has-children="1"][data-is-expanded="1"]::after{
     content: "\u25BE";
-    font-size: 1.3em;
+    font-size: 1.6em;
   }
 
   span[data-has-children="1"][data-is-expanded="-1"]::after{
     content: "\u25B8";
-    font-size: 1.3em;
+    font-size: 1.6em;
   }
 
 
 </style>
 <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="p-d-r">
   <template>
-    <div class="node" style$="[[item.style]]" p-d-if="p-d-r">
+    <div node="[[item]]" class="node" style$="[[item.style]]" p-d-if="p-d-r">
       <span node="[[item]]" p-d-if="p-d-r">
-        <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
-        <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
+        <if-diff if="[[item.children]]" tag="hasChildren" m="1">&nbsp;</if-diff>
+        <if-diff if="[[item.expanded]]" tag="isExpanded" m="1">&nbsp;</if-diff>
         <span data-has-children="-1" data-is-expanded="-1" node="[[item]]"></span>
       </span>
       <xtal-split node="[[item]]" text-content="[[item.name]]"></xtal-split>          

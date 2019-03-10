@@ -113,7 +113,7 @@ export class XtalTreeBasic extends XtalElement{
               return 0;
             },
         } as XtalTree),
-        'iron-list': ({target, ctx}) => {
+        'iron-list': ({target}) => {
             decorate<HTMLElement>(target as HTMLElement, {} as HTMLElement, {
               props: {
                 newFirstVisibleIndex: -1,
@@ -149,7 +149,7 @@ export class XtalTreeBasic extends XtalElement{
     }
     get ready(){return true;}
     _eventContext = newEventContext({
-      nodeClickEvent:{
+      [nodeClickEvent]:{
         action: e =>{
           (this.root.querySelector(XtalTree.is) as XtalTree).toggledNode = (<any>e).detail.toggledNode;
         }

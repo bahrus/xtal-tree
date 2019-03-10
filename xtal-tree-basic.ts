@@ -2,7 +2,7 @@ import {XtalSplit} from 'xtal-splitting/xtal-split.js';
 //import {XtalDeco} from 'xtal-decorator/xtal-deco.js';
 import {IfDiff} from 'if-diff/if-diff.js';
 import '@polymer/iron-list/iron-list.js';
-import {PD} from './node_modules/p-d.p-u/p-d.js';
+import {PD} from 'p-d.p-u/p-d.js';
 import {XtalTree} from './xtal-tree.js';
 import {XtalFetchReq} from 'xtal-fetch/xtal-fetch-req.js';
 import {XtalElement} from 'xtal-element/xtal-element.js';
@@ -152,13 +152,6 @@ export class XtalTreeBasic extends XtalElement{
     get ready(){return true;}
     _eventContext = newEventContext({
       nodeClickEvent:{
-        // route:{
-        //   'iron-list':{
-        //     action: e =>{
-        //       console.log(this)
-        //     }
-        //   }
-        // },
         action: e =>{
           (this.root.querySelector(XtalTree.is) as XtalTree).toggledNode = (<any>e).detail.toggledNode;
         }

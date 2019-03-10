@@ -1,5 +1,5 @@
-import {XtallatX} from 'xtal-latx/xtal-latx.js';
-import {define} from 'xtal-latx/define.js';
+import {XtallatX} from 'xtal-element/xtal-latx.js';
+import {define} from 'xtal-element/define.js';
 
 interface INodeState {
 }

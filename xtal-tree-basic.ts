@@ -64,6 +64,7 @@ const mainTemplate = createTemplate(/* html */`
 `);
 const nodeClickEvent = 'nodeClickEvent';
 const href = 'href';
+const indendentation = 'indentation';
 const init = Symbol('init');
 export class XtalTreeBasic extends XtalElement{
     static get is(){return 'xtal-tree-basic';}
@@ -71,12 +72,15 @@ export class XtalTreeBasic extends XtalElement{
         return mainTemplate;
     }
     static get observedAttributes(){
-      return super.observedAttributes.concat([href]);
+      return super.observedAttributes.concat([href, indendentation]);
     }
     attributeChangedCallback(n: string, ov: string, nv: string){
       switch(n){
         case href:
           this._href = nv;
+          break;
+        case indendentation:
+          this._indentation = parseInt(nv);
           break;
       }
       super.attributeChangedCallback(n, ov, nv);
@@ -87,6 +91,13 @@ export class XtalTreeBasic extends XtalElement{
     }
     set href(nv){
       this.setAttribute(href, nv);
+    }
+    _indentation = 18;
+    get indentation(){
+      return this._indentation;
+    }
+    set indentation(nv){
+      this.attr(indendentation, nv.toString());
     }
     setHref(){
       if(!this.root) return;
@@ -100,7 +111,7 @@ export class XtalTreeBasic extends XtalElement{
               nodes.forEach(node => {
                 (<any>node).level = level;
                 const adjustedLevel = (<any>node).children ? level : level + 1;
-                (<any>node).style = 'margin-left:' + (adjustedLevel * 18) + 'px';
+                (<any>node).style = 'margin-left:' + (adjustedLevel * this._indentation) + 'px';
                 if ((<any>node).children) this.levelSetterFn((<any>node).children, level + 1)
               })
             },

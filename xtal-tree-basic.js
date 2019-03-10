@@ -63,10 +63,12 @@ const mainTemplate = createTemplate(/* html */ `
 `);
 const nodeClickEvent = 'nodeClickEvent';
 const href = 'href';
+const indendentation = 'indentation';
 const init = Symbol('init');
 export class XtalTreeBasic extends XtalElement {
     constructor() {
         super(...arguments);
+        this._indentation = 18;
         this._renderContext = newRenderContext({
             [XtalTree.is]: ({ target }) => decorate(target, {
                 childrenFn: node => node.children,
@@ -75,7 +77,7 @@ export class XtalTreeBasic extends XtalElement {
                     nodes.forEach(node => {
                         node.level = level;
                         const adjustedLevel = node.children ? level : level + 1;
-                        node.style = 'margin-left:' + (adjustedLevel * 18) + 'px';
+                        node.style = 'margin-left:' + (adjustedLevel * this._indentation) + 'px';
                         if (node.children)
                             this.levelSetterFn(node.children, level + 1);
                     });
@@ -144,12 +146,15 @@ export class XtalTreeBasic extends XtalElement {
         return mainTemplate;
     }
     static get observedAttributes() {
-        return super.observedAttributes.concat([href]);
+        return super.observedAttributes.concat([href, indendentation]);
     }
     attributeChangedCallback(n, ov, nv) {
         switch (n) {
             case href:
                 this._href = nv;
+                break;
+            case indendentation:
+                this._indentation = parseInt(nv);
                 break;
         }
         super.attributeChangedCallback(n, ov, nv);
@@ -159,6 +164,12 @@ export class XtalTreeBasic extends XtalElement {
     }
     set href(nv) {
         this.setAttribute(href, nv);
+    }
+    get indentation() {
+        return this._indentation;
+    }
+    set indentation(nv) {
+        this.attr(indendentation, nv.toString());
     }
     setHref() {
         if (!this.root)

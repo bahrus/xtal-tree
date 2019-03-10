@@ -98,7 +98,9 @@ export class XtalTreeBasic extends XtalElement{
             isOpenFn: node => (<any>node).expanded,
             levelSetterFn: function (nodes, level) {
               nodes.forEach(node => {
-                (<any>node).style = 'margin-left:' + (level * 18) + 'px';
+                (<any>node).level = level;
+                const adjustedLevel = (<any>node).children ? level : level + 1;
+                (<any>node).style = 'margin-left:' + (adjustedLevel * 18) + 'px';
                 if ((<any>node).children) this.levelSetterFn((<any>node).children, level + 1)
               })
             },

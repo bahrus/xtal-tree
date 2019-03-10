@@ -24,6 +24,9 @@ const mainTemplate = createTemplate(/* html */ `
   div.node {
     cursor: pointer;
     height: 24px;
+    display:flex;
+    flex-direction:row;
+    align-items: center;
   }
 
   span.match {
@@ -109,7 +112,7 @@ export class XtalTreeBasic extends XtalElement {
                                     toggledNode: e.target.node
                                 }
                             }));
-                            this.newFirstVisibleIndex = firstVisible + 1;
+                            this.newFirstVisibleIndex = firstVisible;
                         }
                     },
                     methods: {

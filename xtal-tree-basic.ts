@@ -8,7 +8,7 @@ import {XtalFetchReq} from 'xtal-fetch/xtal-fetch-req.js';
 import {XtalElement} from 'xtal-element/xtal-element.js';
 import {define} from 'xtal-element/define.js';
 import {createTemplate, newRenderContext} from 'xtal-element/utils.js';
-import {decorate} from 'trans-render/decorate.js';
+import {decorate, attribs} from 'trans-render/decorate.js';
 import {RuleMapping} from 'event-switch/event-switch.d.js';
 import {newEventContext} from 'event-switch/event-switch.js';
 const tsBug = [PD.is, IfDiff.is, XtalSplit.is];
@@ -80,7 +80,7 @@ export class XtalTreeBasic extends XtalElement{
           this._href = nv;
           break;
         case indendentation:
-          this._indentation = parseInt(nv);
+          this._indentation = parseFloat(nv);
           break;
       }
       super.attributeChangedCallback(n, ov, nv);
@@ -104,31 +104,37 @@ export class XtalTreeBasic extends XtalElement{
       (this.root.querySelector(XtalFetchReq.is) as XtalFetchReq).href = this._href;
     }
     _renderContext = newRenderContext({
-        [XtalTree.is]: ({target}) => decorate<XtalTree>(target as XtalTree, {
-            childrenFn: node => (<any>node).children,
-            isOpenFn: node => (<any>node).expanded,
-            levelSetterFn: function (nodes, level) {
-              nodes.forEach(node => {
-                (<any>node).level = level;
-                const adjustedLevel = (<any>node).children ? level : level + 1;
-                (<any>node).style = 'margin-left:' + (adjustedLevel * this._indentation) + 'px';
-                if ((<any>node).children) this.levelSetterFn((<any>node).children, level + 1)
-              })
-            },
-            toggleNodeFn: node => {
-                (<any>node).expanded = !(<any>node).expanded;
-            },
-            testNodeFn: (node, search) => {
-              if (!search) return true;
-              if (!(<any>node).nameLC) (<any>node).nameLC = (<any>node).name.toLowerCase();
-              return (<any>node).nameLC.indexOf(search.toLowerCase()) > -1;
-            },
-            compareFn: (lhs, rhs) => {
-              if ((<any>lhs).name < (<any>rhs).name) return -1;
-              if ((<any>lhs).name > (<any>rhs).name) return 1;
-              return 0;
-            },
-        } as XtalTree),
+        [XtalTree.is]: ({target}) => {
+            const indent = this._indentation;
+            decorate<XtalTree>(target as XtalTree, {
+              [attribs]:{
+                [indendentation]: this._indentation,
+              },
+              childrenFn: node => (<any>node).children,
+              isOpenFn: node => (<any>node).expanded,
+              levelSetterFn: function (nodes, level) {
+                nodes.forEach(node => {
+                  (<any>node).level = level;
+                  const adjustedLevel = (<any>node).children ? level : level + 1;
+                  (<any>node).style = 'margin-left:' + (adjustedLevel * indent) + 'px';
+                  if ((<any>node).children) this.levelSetterFn((<any>node).children, level + 1)
+                })
+              },
+              toggleNodeFn: node => {
+                  (<any>node).expanded = !(<any>node).expanded;
+              },
+              testNodeFn: (node, search) => {
+                if (!search) return true;
+                if (!(<any>node).nameLC) (<any>node).nameLC = (<any>node).name.toLowerCase();
+                return (<any>node).nameLC.indexOf(search.toLowerCase()) > -1;
+              },
+              compareFn: (lhs, rhs) => {
+                if ((<any>lhs).name < (<any>rhs).name) return -1;
+                if ((<any>lhs).name > (<any>rhs).name) return 1;
+                return 0;
+              },
+            } as any);
+        },
         'iron-list': ({target}) => {
             decorate<HTMLElement>(target as HTMLElement, {} as HTMLElement, {
               props: {

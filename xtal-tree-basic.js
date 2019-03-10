@@ -8,7 +8,7 @@ import { XtalFetchReq } from 'xtal-fetch/xtal-fetch-req.js';
 import { XtalElement } from 'xtal-element/xtal-element.js';
 import { define } from 'xtal-element/define.js';
 import { createTemplate, newRenderContext } from 'xtal-element/utils.js';
-import { decorate } from 'trans-render/decorate.js';
+import { decorate, attribs } from 'trans-render/decorate.js';
 import { newEventContext } from 'event-switch/event-switch.js';
 const tsBug = [PD.is, IfDiff.is, XtalSplit.is];
 //console.log(tsBug);
@@ -70,36 +70,42 @@ export class XtalTreeBasic extends XtalElement {
         super(...arguments);
         this._indentation = 18;
         this._renderContext = newRenderContext({
-            [XtalTree.is]: ({ target }) => decorate(target, {
-                childrenFn: node => node.children,
-                isOpenFn: node => node.expanded,
-                levelSetterFn: function (nodes, level) {
-                    nodes.forEach(node => {
-                        node.level = level;
-                        const adjustedLevel = node.children ? level : level + 1;
-                        node.style = 'margin-left:' + (adjustedLevel * this._indentation) + 'px';
-                        if (node.children)
-                            this.levelSetterFn(node.children, level + 1);
-                    });
-                },
-                toggleNodeFn: node => {
-                    node.expanded = !node.expanded;
-                },
-                testNodeFn: (node, search) => {
-                    if (!search)
-                        return true;
-                    if (!node.nameLC)
-                        node.nameLC = node.name.toLowerCase();
-                    return node.nameLC.indexOf(search.toLowerCase()) > -1;
-                },
-                compareFn: (lhs, rhs) => {
-                    if (lhs.name < rhs.name)
-                        return -1;
-                    if (lhs.name > rhs.name)
-                        return 1;
-                    return 0;
-                },
-            }),
+            [XtalTree.is]: ({ target }) => {
+                const indent = this._indentation;
+                decorate(target, {
+                    [attribs]: {
+                        [indendentation]: this._indentation,
+                    },
+                    childrenFn: node => node.children,
+                    isOpenFn: node => node.expanded,
+                    levelSetterFn: function (nodes, level) {
+                        nodes.forEach(node => {
+                            node.level = level;
+                            const adjustedLevel = node.children ? level : level + 1;
+                            node.style = 'margin-left:' + (adjustedLevel * indent) + 'px';
+                            if (node.children)
+                                this.levelSetterFn(node.children, level + 1);
+                        });
+                    },
+                    toggleNodeFn: node => {
+                        node.expanded = !node.expanded;
+                    },
+                    testNodeFn: (node, search) => {
+                        if (!search)
+                            return true;
+                        if (!node.nameLC)
+                            node.nameLC = node.name.toLowerCase();
+                        return node.nameLC.indexOf(search.toLowerCase()) > -1;
+                    },
+                    compareFn: (lhs, rhs) => {
+                        if (lhs.name < rhs.name)
+                            return -1;
+                        if (lhs.name > rhs.name)
+                            return 1;
+                        return 0;
+                    },
+                });
+            },
             'iron-list': ({ target }) => {
                 decorate(target, {}, {
                     props: {
@@ -154,7 +160,7 @@ export class XtalTreeBasic extends XtalElement {
                 this._href = nv;
                 break;
             case indendentation:
-                this._indentation = parseInt(nv);
+                this._indentation = parseFloat(nv);
                 break;
         }
         super.attributeChangedCallback(n, ov, nv);

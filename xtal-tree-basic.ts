@@ -20,43 +20,42 @@ const mainTemplate = createTemplate(/* html */`
 <p-d on="fetch-complete" prop="nodes" val="target.value" m="1"></p-d>
 <xtal-tree id="myTree"></xtal-tree>
 <p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1"></p-d>
-    <p-d on="viewable-nodes-changed" to="iron-list" prop="newFirstVisibleIndex" val="target.firstVisibleIndex" m="1"></p-d>
-    <!-- ==============  Styling of iron-list ================== -->
-    <style>
-      div.node {
-        cursor: pointer;
-        height: 24px;
-      }
+<!-- ==============  Styling of iron-list ================== -->
+<style>
+  div.node {
+    cursor: pointer;
+    height: 24px;
+  }
 
-      span.match {
-        font-weight: bold;
-        background-color: yellowgreen;
-      }
+  span.match {
+    font-weight: bold;
+    background-color: yellowgreen;
+  }
 
-      span[data-has-children="1"][data-is-expanded="1"]::after{
-        content: "\u25BE";
-        font-size: 1.3em;
-      }
+  span[data-has-children="1"][data-is-expanded="1"]::after{
+    content: "\u25BE";
+    font-size: 1.3em;
+  }
 
-      span[data-has-children="1"][data-is-expanded="-1"]::after{
-        content: "\u25B8";
-        font-size: 1.3em;
-      }
+  span[data-has-children="1"][data-is-expanded="-1"]::after{
+    content: "\u25B8";
+    font-size: 1.3em;
+  }
 
 
-    </style>
-    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="p-d-r">
-      <template>
-        <div class="node" style$="[[item.style]]" p-d-if="p-d-r">
-          <span node="[[item]]" p-d-if="p-d-r">
-            <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
-            <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
-            <span data-has-children="-1" data-is-expanded="-1" node="[[item]]"></span>
-          </span>
-          <xtal-split node="[[item]]" text-content="[[item.name]]"></xtal-split>          
-        </div>
-      </template>
-    </iron-list>   
+</style>
+<iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="p-d-r">
+  <template>
+    <div class="node" style$="[[item.style]]" p-d-if="p-d-r">
+      <span node="[[item]]" p-d-if="p-d-r">
+        <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
+        <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
+        <span data-has-children="-1" data-is-expanded="-1" node="[[item]]"></span>
+      </span>
+      <xtal-split node="[[item]]" text-content="[[item.name]]"></xtal-split>          
+    </div>
+  </template>
+</iron-list>   
 
 
 `);
@@ -123,14 +122,13 @@ export class XtalTreeBasic extends XtalElement{
                 click: function(e){
                   if(!(<any>e).target.node) return;
                   const firstVisible = this.firstVisibleIndex;
-                  console.log('firstVisible = ' + firstVisible);
                   e.target.dispatchEvent(new CustomEvent(nodeClickEvent, {
                     bubbles: true,
                     detail: {
                       toggledNode: (<any>e).target.node
                     }
                   }))
-                  this.newFirstVisibleIndex = firstVisible;
+                  this.newFirstVisibleIndex = firstVisible + 1;
                 }
               },
               methods:{

@@ -78,7 +78,6 @@
     })</script></xtal-deco>
     <xtal-tree id="myTree"></xtal-tree>
     <p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1"></p-d>
-    <p-d on="viewable-nodes-changed" to="iron-list" prop="newFirstVisibleIndex" val="target.firstVisibleIndex" m="1"></p-d>
     <!-- ==============  Styling of iron-list ================== -->
     <style>
       div.node {
@@ -114,7 +113,7 @@
             const firstVisible = this.firstVisibleIndex;
             console.log('firstVisible = ' + firstVisible);
             myTree.toggledNode = e.target.node;
-            this.newFirstVisibleIndex = firstVisible;
+            this.newFirstVisibleIndex = firstVisible  + 1;
           }
         },
         methods:{
@@ -122,6 +121,7 @@
             switch (name) {
               case 'newFirstVisibleIndex':
                 if(!this.items || this.newFirstVisibleIndex < 0) return;
+                console.log('scrolling to' + this.newFirstVisibleIndex);
                 this.scrollToIndex(this.newFirstVisibleIndex);
             }
           },

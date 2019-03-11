@@ -2,7 +2,7 @@ import { XtalSplit } from 'xtal-splitting/xtal-split.js';
 //import {XtalDeco} from 'xtal-decorator/xtal-deco.js';
 import { IfDiff } from 'if-diff/if-diff.js';
 import '@polymer/iron-list/iron-list.js';
-import { PD } from 'p-d.p-u/p-d.js';
+import 'p-d.p-u/p-d.js';
 import { XtalTree } from './xtal-tree.js';
 import { XtalFetchReq } from 'xtal-fetch/xtal-fetch-req.js';
 import { XtalElement } from 'xtal-element/xtal-element.js';
@@ -10,7 +10,7 @@ import { define } from 'xtal-element/define.js';
 import { createTemplate, newRenderContext } from 'xtal-element/utils.js';
 import { decorate, attribs } from 'trans-render/decorate.js';
 import { newEventContext } from 'event-switch/event-switch.js';
-const tsBug = [PD.is, IfDiff.is, XtalSplit.is];
+const tsBug = ['p-d', IfDiff.is, XtalSplit.is];
 //console.log(tsBug);
 const mainTemplate = createTemplate(/* html */ `
 <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
@@ -39,9 +39,18 @@ const mainTemplate = createTemplate(/* html */ `
     font-size: 1.6em;
   }
 
+  span[data-has-children="-1"],span[data-no-children="-1"]{
+    display:none;
+  }
+
   span[data-has-children="1"][data-is-expanded="-1"]::after{
     content: "\u25B8";
     font-size: 1.6em;
+  }
+
+  span[data-has-children="1"],span[data-no-children="1"]{
+    width: 26px;
+    display:inline-block;
   }
 
 
@@ -50,9 +59,11 @@ const mainTemplate = createTemplate(/* html */ `
   <template>
     <div node="[[item]]" class="node" style$="[[item.style]]" p-d-if="p-d-r">
       <span node="[[item]]" p-d-if="p-d-r">
-        <if-diff if="[[item.children]]" tag="hasChildren" m="1">&nbsp;</if-diff>
-        <if-diff if="[[item.expanded]]" tag="isExpanded" m="1">&nbsp;</if-diff>
-        <span data-has-children="-1" data-is-expanded="-1" node="[[item]]"></span>
+        <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
+        <if-diff if="[[!item.children]]" tag="noChildren" m="1"></if-diff>
+        <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
+        <span data-has-children="-1" data-is-expanded="-1" node="[[item]]">&nbsp;</span>
+        <span data-no-children="1">&nbsp;</span>
       </span>
       <xtal-split node="[[item]]" text-content="[[item.name]]"></xtal-split>          
     </div>
@@ -81,8 +92,8 @@ export class XtalTreeBasic extends XtalElement {
                     levelSetterFn: function (nodes, level) {
                         nodes.forEach(node => {
                             node.level = level;
-                            const adjustedLevel = node.children ? level : level + 1;
-                            node.style = 'margin-left:' + (adjustedLevel * indent) + 'px';
+                            //const adjustedLevel = (<any>node).children ? level : level + 1;
+                            node.style = 'margin-left:' + (level * indent) + 'px';
                             if (node.children)
                                 this.levelSetterFn(node.children, level + 1);
                         });

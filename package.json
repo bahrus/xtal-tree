@@ -9,7 +9,7 @@
   "dependencies": {
     "@polymer/iron-list": "3.0.2",
     "if-diff": "0.0.20",
-    "p-d.p-u": "0.0.107",
+    "p-d.p-u": "0.0.108",
     "trans-render": "0.0.82",
     "xtal-decorator": "0.0.41",
     "xtal-element": "0.0.34",

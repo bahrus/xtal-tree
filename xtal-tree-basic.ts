@@ -79,7 +79,7 @@ const mainTemplate = createTemplate(/* html */`
 <p-u on="selectedNode-changed" to="./myTree" prop="toggledNode" val="target.selectedNode" skip-init>
 
 `);
-const nodeClickEvent = 'nodeClickEvent';
+//const nodeClickEvent = 'nodeClickEvent';
 const href = 'href';
 const indendentation = 'indentation';
 const init = Symbol('init');
@@ -180,10 +180,6 @@ export class XtalTreeBasic extends XtalElement{
               methods:{
                 onPropsChange: function (name, newVal) {
                   switch (name) {
-                    // case customSymbols.lastFirstVisibleIndex:
-                    //   if(!this.items || this[customSymbols.lastFirstVisibleIndex] < 0) return;
-                    //   this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
-                    //   break;
                     case customSymbols.recalculatedNodes:
                       if(newVal === false) return;
                       //this[customSymbols.lastFirstVisibleIndex] = this[customSymbols.lastFirstVisibleIndex];
@@ -200,15 +196,18 @@ export class XtalTreeBasic extends XtalElement{
         return this._renderContext;
     }
     get ready(){return true;}
-    _eventContext = newEventContext({
-      [nodeClickEvent]:{
-        action: e =>{
-          (this.root.querySelector(XtalTree.is) as XtalTree).toggledNode = (<any>e).detail.toggledNode;
-        }
-      }
-    } as RuleMapping)
+    // _eventContext = newEventContext({
+    //   [nodeClickEvent]:{
+    //     action: e =>{
+    //       (this.root.querySelector(XtalTree.is) as XtalTree).toggledNode = (<any>e).detail.toggledNode;
+    //     }
+    //   }
+    // } as RuleMapping)
+    // get eventContext(){
+    //     return this._eventContext;
+    // }
     get eventContext(){
-        return this._eventContext;
+      return {};
     }
     onPropsChange(){
       if(!super.onPropsChange()) return false;

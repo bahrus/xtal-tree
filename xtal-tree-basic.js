@@ -10,7 +10,6 @@ import { XtalElement } from 'xtal-element/xtal-element.js';
 import { define } from 'xtal-element/define.js';
 import { createTemplate, newRenderContext } from 'xtal-element/utils.js';
 import { decorate, attribs } from 'trans-render/decorate.js';
-import { newEventContext } from 'event-switch/event-switch.js';
 //const tsBug = [ XtalSplit.is];
 const customSymbols = {
     lastFirstVisibleIndex: Symbol('lastFirstVisibleIndex'),
@@ -78,7 +77,7 @@ const mainTemplate = createTemplate(/* html */ `
 <p-u on="selectedNode-changed" to="./myTree" prop="toggledNode" val="target.selectedNode" skip-init>
 
 `);
-const nodeClickEvent = 'nodeClickEvent';
+//const nodeClickEvent = 'nodeClickEvent';
 const href = 'href';
 const indendentation = 'indentation';
 const init = Symbol('init');
@@ -150,10 +149,6 @@ export class XtalTreeBasic extends XtalElement {
                     methods: {
                         onPropsChange: function (name, newVal) {
                             switch (name) {
-                                // case customSymbols.lastFirstVisibleIndex:
-                                //   if(!this.items || this[customSymbols.lastFirstVisibleIndex] < 0) return;
-                                //   this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
-                                //   break;
                                 case customSymbols.recalculatedNodes:
                                     if (newVal === false)
                                         return;
@@ -165,13 +160,6 @@ export class XtalTreeBasic extends XtalElement {
                     },
                     id: init
                 });
-            }
-        });
-        this._eventContext = newEventContext({
-            [nodeClickEvent]: {
-                action: e => {
-                    this.root.querySelector(XtalTree.is).toggledNode = e.detail.toggledNode;
-                }
             }
         });
     }
@@ -214,8 +202,18 @@ export class XtalTreeBasic extends XtalElement {
         return this._renderContext;
     }
     get ready() { return true; }
+    // _eventContext = newEventContext({
+    //   [nodeClickEvent]:{
+    //     action: e =>{
+    //       (this.root.querySelector(XtalTree.is) as XtalTree).toggledNode = (<any>e).detail.toggledNode;
+    //     }
+    //   }
+    // } as RuleMapping)
+    // get eventContext(){
+    //     return this._eventContext;
+    // }
     get eventContext() {
-        return this._eventContext;
+        return {};
     }
     onPropsChange() {
         if (!super.onPropsChange())

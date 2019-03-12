@@ -12,8 +12,8 @@ import { createTemplate, newRenderContext } from 'xtal-element/utils.js';
 import { decorate, attribs } from 'trans-render/decorate.js';
 import { newEventContext } from 'event-switch/event-switch.js';
 //const tsBug = [ XtalSplit.is];
-const newFirstVisibleIndex = Symbol('newFirstVisibleIndex');
-const restoreLastVisibleIndex = Symbol('restoreLastVisibleIndex');
+const lastFirstVisibleIndex = Symbol('newFirstVisibleIndex');
+const recalculatedNodes = Symbol('restoreLastVisibleIndex');
 const mainTemplate = createTemplate(/* html */ `
 <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
 <xtal-fetch-req fetch as="json"></xtal-fetch-req>
@@ -21,6 +21,7 @@ const mainTemplate = createTemplate(/* html */ `
 <p-d on="fetch-complete" prop="nodes" val="target.value" m="1"></p-d>
 <xtal-tree id="myTree"></xtal-tree>
 <p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1"></p-d>
+<!-- <p-d on="viewable-nodes-changed" to="iron-list" prop-sym= -->
 <!-- ==============  Styling of iron-list ================== -->
 <style>
   div.node {
@@ -122,32 +123,36 @@ export class XtalTreeBasic extends XtalElement {
             'iron-list': ({ target }) => {
                 decorate(target, {}, {
                     props: {
-                        [newFirstVisibleIndex]: -1,
-                        [restoreLastVisibleIndex]: false,
+                        [lastFirstVisibleIndex]: -1,
+                        [recalculatedNodes]: false,
                     },
                     on: {
                         click: function (e) {
                             if (!e.target.node)
                                 return;
-                            const firstVisible = this.firstVisibleIndex;
+                            this[lastFirstVisibleIndex] = this.firstVisibleIndex;
                             e.target.dispatchEvent(new CustomEvent(nodeClickEvent, {
                                 bubbles: true,
                                 detail: {
                                     toggledNode: e.target.node
                                 }
                             }));
-                            this[newFirstVisibleIndex] = firstVisible;
+                            this[recalculatedNodes] = true;
                         }
                     },
                     methods: {
                         onPropsChange: function (name, newVal) {
                             switch (name) {
-                                case newFirstVisibleIndex:
-                                    if (!this.items || this[newFirstVisibleIndex] < 0)
+                                case lastFirstVisibleIndex:
+                                    if (!this.items || this[lastFirstVisibleIndex] < 0)
                                         return;
-                                    this.scrollToIndex(this[newFirstVisibleIndex]);
+                                    this.scrollToIndex(this[lastFirstVisibleIndex]);
                                     break;
-                                //case ''
+                                case recalculatedNodes:
+                                    if (newVal === false)
+                                        return;
+                                    this[lastFirstVisibleIndex] = this[lastFirstVisibleIndex];
+                                    break;
                             }
                         },
                     },
@@ -205,9 +210,6 @@ export class XtalTreeBasic extends XtalElement {
     get eventContext() {
         return this._eventContext;
     }
-    // get eventContext(){
-    //   return {};
-    // }
     onPropsChange() {
         if (!super.onPropsChange())
             return false;

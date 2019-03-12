@@ -10,12 +10,11 @@ import {XtalElement} from 'xtal-element/xtal-element.js';
 import {define} from 'xtal-element/define.js';
 import {createTemplate, newRenderContext} from 'xtal-element/utils.js';
 import {decorate, attribs} from 'trans-render/decorate.js';
-import {RuleMapping} from 'event-switch/event-switch.d.js';
-import {newEventContext} from 'event-switch/event-switch.js';
 //const tsBug = [ XtalSplit.is];
 const customSymbols = {
   lastFirstVisibleIndex: Symbol('lastFirstVisibleIndex'),
-  recalculatedNodes: Symbol('restoreLastVisibleIndex')
+  recalculatedNodes: Symbol('restoreLastVisibleIndex'),
+  selectedNode: Symbol('selectedNode'),
 }
 //const recalculatedNodes = Symbol('restoreLastVisibleIndex');
 const mainTemplate = createTemplate(/* html */`
@@ -24,8 +23,8 @@ const mainTemplate = createTemplate(/* html */`
 <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
 <p-d on="fetch-complete" prop="nodes" val="target.value" m="1"></p-d>
 <xtal-tree id="myTree"></xtal-tree>
-<p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1"></p-d>
-<p-d on="viewable-nodes-changed" to="iron-list" prop-sym="recalculatedNodes" val="target.viewableNodes" m="1"></p-d> 
+<p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1" skip-init></p-d>
+<p-d on="viewable-nodes-changed" to="iron-list" prop-sym="recalculatedNodes" m="1" skip-init val="target.viewableNodes"></p-d> 
 <!-- ==============  Styling of iron-list ================== -->
 <style>
   div.node {
@@ -76,7 +75,7 @@ const mainTemplate = createTemplate(/* html */`
     </div>
   </template>
 </iron-list>   
-<p-u on="selectedNode-changed" to="./myTree" prop="toggledNode" val="target.selectedNode" skip-init>
+<p-u on="Symbol-selectedNode-changed" to="./myTree" prop="toggledNode" skip-init>
 
 `);
 //const nodeClickEvent = 'nodeClickEvent';
@@ -161,20 +160,15 @@ export class XtalTreeBasic extends XtalElement{
               props: {
                 // [customSymbols.lastFirstVisibleIndex]: -1,
                 [customSymbols.recalculatedNodes]: false,
-                selectedNode: null
+                [customSymbols.selectedNode]: null
               },
               on:{
                 click: function(e){
                   if(!(<any>e).target.node) return;
                   this[customSymbols.lastFirstVisibleIndex] = this.firstVisibleIndex;
-                  this.selectedNode = (<any>e).target.node;
+                  this[customSymbols.selectedNode] = (<any>e).target.node;
                   
-                  // e.target.dispatchEvent(new CustomEvent(nodeClickEvent, {
-                  //   bubbles: true,
-                  //   detail: {
-                  //     toggledNode: (<any>e).target.node
-                  //   }
-                  // }))
+
                 }
               },
               methods:{
@@ -196,16 +190,7 @@ export class XtalTreeBasic extends XtalElement{
         return this._renderContext;
     }
     get ready(){return true;}
-    // _eventContext = newEventContext({
-    //   [nodeClickEvent]:{
-    //     action: e =>{
-    //       (this.root.querySelector(XtalTree.is) as XtalTree).toggledNode = (<any>e).detail.toggledNode;
-    //     }
-    //   }
-    // } as RuleMapping)
-    // get eventContext(){
-    //     return this._eventContext;
-    // }
+
     get eventContext(){
       return {};
     }

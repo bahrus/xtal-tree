@@ -25,7 +25,7 @@ const mainTemplate = createTemplate(/* html */`
 <p-d on="fetch-complete" prop="nodes" val="target.value" m="1"></p-d>
 <xtal-tree id="myTree"></xtal-tree>
 <p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1"></p-d>
-<!-- <p-d on="viewable-nodes-changed" to="iron-list" prop-sym=""> -->
+<p-d on="viewable-nodes-changed" to="iron-list" prop-sym="recalculatedNodes" val="target.viewableNodes" m="1"></p-d> 
 <!-- ==============  Styling of iron-list ================== -->
 <style>
   div.node {
@@ -152,6 +152,9 @@ export class XtalTreeBasic extends XtalElement{
               },
             } as any);
         },
+        'p-d[prop-sym]': ({target}) =>{
+          (<any>target).prop = customSymbols[target.getAttribute('prop-sym')];
+        },
         'iron-list': ({target}) => {
             
             decorate<HTMLElement>(target as HTMLElement, {} as HTMLElement, {
@@ -169,7 +172,7 @@ export class XtalTreeBasic extends XtalElement{
                       toggledNode: (<any>e).target.node
                     }
                   }))
-                  this[customSymbols.recalculatedNodes] = true;
+                  //this[customSymbols.recalculatedNodes] = true;
                 }
               },
               methods:{

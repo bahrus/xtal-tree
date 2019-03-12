@@ -12,8 +12,11 @@ import { createTemplate, newRenderContext } from 'xtal-element/utils.js';
 import { decorate, attribs } from 'trans-render/decorate.js';
 import { newEventContext } from 'event-switch/event-switch.js';
 //const tsBug = [ XtalSplit.is];
-const lastFirstVisibleIndex = Symbol('newFirstVisibleIndex');
-const recalculatedNodes = Symbol('restoreLastVisibleIndex');
+const customSymbols = {
+    lastFirstVisibleIndex: Symbol('newFirstVisibleIndex'),
+    recalculatedNodes: Symbol('restoreLastVisibleIndex')
+};
+//const recalculatedNodes = Symbol('restoreLastVisibleIndex');
 const mainTemplate = createTemplate(/* html */ `
 <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
 <xtal-fetch-req fetch as="json"></xtal-fetch-req>
@@ -21,7 +24,7 @@ const mainTemplate = createTemplate(/* html */ `
 <p-d on="fetch-complete" prop="nodes" val="target.value" m="1"></p-d>
 <xtal-tree id="myTree"></xtal-tree>
 <p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1"></p-d>
-<!-- <p-d on="viewable-nodes-changed" to="iron-list" prop-sym= -->
+<!-- <p-d on="viewable-nodes-changed" to="iron-list" prop-sym=""> -->
 <!-- ==============  Styling of iron-list ================== -->
 <style>
   div.node {
@@ -123,35 +126,35 @@ export class XtalTreeBasic extends XtalElement {
             'iron-list': ({ target }) => {
                 decorate(target, {}, {
                     props: {
-                        [lastFirstVisibleIndex]: -1,
-                        [recalculatedNodes]: false,
+                        [customSymbols.lastFirstVisibleIndex]: -1,
+                        [customSymbols.recalculatedNodes]: false,
                     },
                     on: {
                         click: function (e) {
                             if (!e.target.node)
                                 return;
-                            this[lastFirstVisibleIndex] = this.firstVisibleIndex;
+                            this[customSymbols.lastFirstVisibleIndex] = this.firstVisibleIndex;
                             e.target.dispatchEvent(new CustomEvent(nodeClickEvent, {
                                 bubbles: true,
                                 detail: {
                                     toggledNode: e.target.node
                                 }
                             }));
-                            this[recalculatedNodes] = true;
+                            this[customSymbols.recalculatedNodes] = true;
                         }
                     },
                     methods: {
                         onPropsChange: function (name, newVal) {
                             switch (name) {
-                                case lastFirstVisibleIndex:
-                                    if (!this.items || this[lastFirstVisibleIndex] < 0)
+                                case customSymbols.lastFirstVisibleIndex:
+                                    if (!this.items || this[customSymbols.lastFirstVisibleIndex] < 0)
                                         return;
-                                    this.scrollToIndex(this[lastFirstVisibleIndex]);
+                                    this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
                                     break;
-                                case recalculatedNodes:
+                                case customSymbols.recalculatedNodes:
                                     if (newVal === false)
                                         return;
-                                    this[lastFirstVisibleIndex] = this[lastFirstVisibleIndex];
+                                    this[customSymbols.lastFirstVisibleIndex] = this[customSymbols.lastFirstVisibleIndex];
                                     break;
                             }
                         },

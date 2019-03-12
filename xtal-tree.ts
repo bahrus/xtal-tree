@@ -195,6 +195,7 @@ export class XtalTree extends  XtallatX(HTMLElement) {
         this.notifyViewNodesChanged();
     }
     set toggledNode(node: ITreeNode) {
+        if(node === null) return;
         this.de('toggled-node', {
             value: node
         })

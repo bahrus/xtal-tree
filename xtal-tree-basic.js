@@ -13,7 +13,7 @@ import { decorate, attribs } from 'trans-render/decorate.js';
 import { newEventContext } from 'event-switch/event-switch.js';
 //const tsBug = [ XtalSplit.is];
 const customSymbols = {
-    lastFirstVisibleIndex: Symbol('newFirstVisibleIndex'),
+    lastFirstVisibleIndex: Symbol('lastFirstVisibleIndex'),
     recalculatedNodes: Symbol('restoreLastVisibleIndex')
 };
 //const recalculatedNodes = Symbol('restoreLastVisibleIndex');
@@ -61,7 +61,7 @@ const mainTemplate = createTemplate(/* html */ `
 
 
 </style>
-<iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="p-d-r">
+<iron-list selection-enabled style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="p-d-r">
   <template>
     <div node="[[item]]" class="node" style$="[[item.style]]" p-d-if="p-d-r">
       <span node="[[item]]" p-d-if="p-d-r">
@@ -71,11 +71,11 @@ const mainTemplate = createTemplate(/* html */ `
         <span data-has-children="-1" data-is-expanded="-1" node="[[item]]">&nbsp;</span>
         <span data-no-children="1">&nbsp;</span>
       </span>
-      <xtal-split node="[[item]]" text-content="[[item.name]]"></xtal-split>          
+      <xtal-split  node="[[item]]" text-content="[[item.name]]"></xtal-split>          
     </div>
   </template>
 </iron-list>   
-
+<p-u on="selectedNode-changed" to="./myTree" prop="toggledNode" val="target.selectedNode" skip-init>
 
 `);
 const nodeClickEvent = 'nodeClickEvent';
@@ -129,35 +129,36 @@ export class XtalTreeBasic extends XtalElement {
             'iron-list': ({ target }) => {
                 decorate(target, {}, {
                     props: {
-                        [customSymbols.lastFirstVisibleIndex]: -1,
+                        // [customSymbols.lastFirstVisibleIndex]: -1,
                         [customSymbols.recalculatedNodes]: false,
+                        selectedNode: null
                     },
                     on: {
                         click: function (e) {
                             if (!e.target.node)
                                 return;
                             this[customSymbols.lastFirstVisibleIndex] = this.firstVisibleIndex;
-                            e.target.dispatchEvent(new CustomEvent(nodeClickEvent, {
-                                bubbles: true,
-                                detail: {
-                                    toggledNode: e.target.node
-                                }
-                            }));
-                            //this[customSymbols.recalculatedNodes] = true;
+                            this.selectedNode = e.target.node;
+                            // e.target.dispatchEvent(new CustomEvent(nodeClickEvent, {
+                            //   bubbles: true,
+                            //   detail: {
+                            //     toggledNode: (<any>e).target.node
+                            //   }
+                            // }))
                         }
                     },
                     methods: {
                         onPropsChange: function (name, newVal) {
                             switch (name) {
-                                case customSymbols.lastFirstVisibleIndex:
-                                    if (!this.items || this[customSymbols.lastFirstVisibleIndex] < 0)
-                                        return;
-                                    this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
-                                    break;
+                                // case customSymbols.lastFirstVisibleIndex:
+                                //   if(!this.items || this[customSymbols.lastFirstVisibleIndex] < 0) return;
+                                //   this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
+                                //   break;
                                 case customSymbols.recalculatedNodes:
                                     if (newVal === false)
                                         return;
-                                    this[customSymbols.lastFirstVisibleIndex] = this[customSymbols.lastFirstVisibleIndex];
+                                    //this[customSymbols.lastFirstVisibleIndex] = this[customSymbols.lastFirstVisibleIndex];
+                                    this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
                                     break;
                             }
                         },

@@ -1,8 +1,9 @@
-import {XtalSplit} from 'xtal-splitting/xtal-split.js';
+import 'xtal-splitting/xtal-split.js';
 //import {XtalDeco} from 'xtal-decorator/xtal-deco.js';
-import {IfDiff} from 'if-diff/if-diff.js';
+import 'if-diff/if-diff.js';
 import '@polymer/iron-list/iron-list.js';
-import  'p-d.p-u/p-d.js';
+import 'p-d.p-u/p-d.js';
+import 'p-d.p-u/p-u.js';
 import {XtalTree} from './xtal-tree.js';
 import {XtalFetchReq} from 'xtal-fetch/xtal-fetch-req.js';
 import {XtalElement} from 'xtal-element/xtal-element.js';
@@ -11,8 +12,9 @@ import {createTemplate, newRenderContext} from 'xtal-element/utils.js';
 import {decorate, attribs} from 'trans-render/decorate.js';
 import {RuleMapping} from 'event-switch/event-switch.d.js';
 import {newEventContext} from 'event-switch/event-switch.js';
-const tsBug = ['p-d', IfDiff.is, XtalSplit.is];
-//console.log(tsBug);
+//const tsBug = [ XtalSplit.is];
+const newFirstVisibleIndex = Symbol('newFirstVisibleIndex');
+const restoreLastVisibleIndex = Symbol('restoreLastVisibleIndex');
 const mainTemplate = createTemplate(/* html */`
 <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
 <xtal-fetch-req fetch as="json"></xtal-fetch-req>
@@ -147,9 +149,11 @@ export class XtalTreeBasic extends XtalElement{
             } as any);
         },
         'iron-list': ({target}) => {
+            
             decorate<HTMLElement>(target as HTMLElement, {} as HTMLElement, {
               props: {
-                newFirstVisibleIndex: -1,
+                [newFirstVisibleIndex]: -1,
+                [restoreLastVisibleIndex]: false,
               },
               on:{
                 click: function(e){
@@ -161,15 +165,17 @@ export class XtalTreeBasic extends XtalElement{
                       toggledNode: (<any>e).target.node
                     }
                   }))
-                  this.newFirstVisibleIndex = firstVisible;
+                  this[newFirstVisibleIndex] = firstVisible;
                 }
               },
               methods:{
                 onPropsChange: function (name, newVal) {
                   switch (name) {
-                    case 'newFirstVisibleIndex':
-                      if(!this.items || this.newFirstVisibleIndex < 0) return;
-                      this.scrollToIndex(this.newFirstVisibleIndex);
+                    case newFirstVisibleIndex:
+                      if(!this.items || this[newFirstVisibleIndex] < 0) return;
+                      this.scrollToIndex(this[newFirstVisibleIndex]);
+                      break;
+                    //case ''
                   }
                 },
               },
@@ -191,6 +197,9 @@ export class XtalTreeBasic extends XtalElement{
     get eventContext(){
         return this._eventContext;
     }
+    // get eventContext(){
+    //   return {};
+    // }
     onPropsChange(){
       if(!super.onPropsChange()) return false;
       this.setHref();

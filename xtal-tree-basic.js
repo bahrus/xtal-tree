@@ -10,6 +10,7 @@ import { XtalElement } from 'xtal-element/xtal-element.js';
 import { define } from 'xtal-element/define.js';
 import { createTemplate, newRenderContext } from 'xtal-element/utils.js';
 import { decorate, attribs } from 'trans-render/decorate.js';
+import { update } from 'trans-render/update.js';
 //const tsBug = [ XtalSplit.is];
 const customSymbols = {
     lastFirstVisibleIndex: Symbol('lastFirstVisibleIndex'),
@@ -86,7 +87,11 @@ export class XtalTreeBasic extends XtalElement {
     constructor() {
         super(...arguments);
         this._indentation = 18;
-        this._renderContext = newRenderContext({
+        // setHref(){
+        //   if(!this.root) return;
+        //   (this.root.querySelector(XtalFetchReq.is) as XtalFetchReq).href = this._href;
+        // }
+        this._initContext = newRenderContext({
             [XtalTree.is]: ({ target }) => {
                 const indent = this._indentation;
                 decorate(target, {
@@ -137,6 +142,7 @@ export class XtalTreeBasic extends XtalElement {
                         click: function (e) {
                             if (!e.target.node)
                                 return;
+                            console.log('remembering ' + this.firstVisibleIndex);
                             this[customSymbols.lastFirstVisibleIndex] = this.firstVisibleIndex;
                             this[customSymbols.selectedNode] = e.target.node;
                         }
@@ -148,7 +154,11 @@ export class XtalTreeBasic extends XtalElement {
                                     if (newVal === false)
                                         return;
                                     //this[customSymbols.lastFirstVisibleIndex] = this[customSymbols.lastFirstVisibleIndex];
-                                    this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
+                                    setTimeout(() => {
+                                        console.log('scrolling to ' + this[customSymbols.lastFirstVisibleIndex]);
+                                        this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
+                                        console.log(this.firstVisibleIndex);
+                                    }, 10);
                                     break;
                             }
                         },
@@ -156,6 +166,11 @@ export class XtalTreeBasic extends XtalElement {
                     id: init
                 });
             }
+        });
+        this._updateContext = newRenderContext({
+            [XtalFetchReq.is]: ({ target }) => decorate(target, {
+                href: this._href,
+            })
         });
     }
     static get is() { return 'xtal-tree-basic'; }
@@ -188,13 +203,12 @@ export class XtalTreeBasic extends XtalElement {
     set indentation(nv) {
         this.attr(indendentation, nv.toString());
     }
-    setHref() {
-        if (!this.root)
-            return;
-        this.root.querySelector(XtalFetchReq.is).href = this._href;
+    get initContext() {
+        return this._initContext;
     }
-    get renderContext() {
-        return this._renderContext;
+    get updateContext() {
+        this._updateContext.update = update;
+        return this._updateContext;
     }
     get ready() { return true; }
     get eventContext() {
@@ -203,7 +217,7 @@ export class XtalTreeBasic extends XtalElement {
     onPropsChange() {
         if (!super.onPropsChange())
             return false;
-        this.setHref();
+        //this.setHref();
         return true;
     }
 }

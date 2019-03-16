@@ -10,9 +10,9 @@
     "@polymer/iron-list": "3.0.2",
     "if-diff": "0.0.20",
     "p-d.p-u": "0.0.110",
-    "trans-render": "0.0.83",
+    "trans-render": "0.0.84",
     "xtal-decorator": "0.0.41",
-    "xtal-element": "0.0.39",
+    "xtal-element": "0.0.41",
     "xtal-fetch": "0.0.57",
     "xtal-splitting": "0.0.9",
     "event-switch": "0.0.12"

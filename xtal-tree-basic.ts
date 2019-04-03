@@ -9,7 +9,7 @@ import {XtalFetchReq} from 'xtal-fetch/xtal-fetch-req.js';
 import {XtalElement} from 'xtal-element/xtal-element.js';
 import {define} from 'xtal-element/define.js';
 import {createTemplate, newRenderContext} from 'xtal-element/utils.js';
-import {decorate, attribs} from 'trans-render/decorate.js';
+import {decorate} from 'trans-render/decorate.js';
 import {update} from 'trans-render/update.js';
 //const tsBug = [ XtalSplit.is];
 const customSymbols = {
@@ -123,33 +123,36 @@ export class XtalTreeBasic extends XtalElement{
     _initContext = newRenderContext({
         [XtalTree.is]: ({target}) => {
             const indent = this._indentation;
-            decorate<XtalTree>(target as XtalTree, {
-              [attribs]:{
+            decorate(target as HTMLElement, {
+              attribs:{
                 [indendentation]: this._indentation,
               },
-              childrenFn: node => (<any>node).children,
-              isOpenFn: node => (<any>node).expanded,
-              levelSetterFn: function (nodes, level) {
-                nodes.forEach(node => {
-                  (<any>node).level = level;
-                  //const adjustedLevel = (<any>node).children ? level : level + 1;
-                  (<any>node).style = 'margin-left:' + (level * indent) + 'px';
-                  if ((<any>node).children) this.levelSetterFn((<any>node).children, level + 1)
-                })
-              },
-              toggleNodeFn: node => {
-                  (<any>node).expanded = !(<any>node).expanded;
-              },
-              testNodeFn: (node, search) => {
-                if (!search) return true;
-                if (!(<any>node).nameLC) (<any>node).nameLC = (<any>node).name.toLowerCase();
-                return (<any>node).nameLC.indexOf(search.toLowerCase()) > -1;
-              },
-              compareFn: (lhs, rhs) => {
-                if ((<any>lhs).name < (<any>rhs).name) return -1;
-                if ((<any>lhs).name > (<any>rhs).name) return 1;
-                return 0;
-              },
+              propVals:{
+                childrenFn: node => (<any>node).children,
+                isOpenFn: node => (<any>node).expanded,
+                levelSetterFn: function (nodes, level) {
+                  nodes.forEach(node => {
+                    (<any>node).level = level;
+                    //const adjustedLevel = (<any>node).children ? level : level + 1;
+                    (<any>node).style = 'margin-left:' + (level * indent) + 'px';
+                    if ((<any>node).children) this.levelSetterFn((<any>node).children, level + 1)
+                  })
+                },
+                toggleNodeFn: node => {
+                    (<any>node).expanded = !(<any>node).expanded;
+                },
+                testNodeFn: (node, search) => {
+                  if (!search) return true;
+                  if (!(<any>node).nameLC) (<any>node).nameLC = (<any>node).name.toLowerCase();
+                  return (<any>node).nameLC.indexOf(search.toLowerCase()) > -1;
+                },
+                compareFn: (lhs, rhs) => {
+                  if ((<any>lhs).name < (<any>rhs).name) return -1;
+                  if ((<any>lhs).name > (<any>rhs).name) return 1;
+                  return 0;
+                },
+              }
+
             } as any);
         },
         'p-d[prop-sym]': ({target}) =>{
@@ -157,8 +160,8 @@ export class XtalTreeBasic extends XtalElement{
         },
         'iron-list': ({target}) => {
             
-            decorate<HTMLElement>(target as HTMLElement, {} as HTMLElement, {
-              props: {
+            decorate(target as HTMLElement, {
+              propDefs: {
                 // [customSymbols.lastFirstVisibleIndex]: -1,
                 [customSymbols.recalculatedNodes]: false,
                 [customSymbols.selectedNode]: null
@@ -190,7 +193,6 @@ export class XtalTreeBasic extends XtalElement{
                   }
                 },
               },
-              id: init
             })
           }
     });
@@ -198,9 +200,11 @@ export class XtalTreeBasic extends XtalElement{
         return this._initContext;
     }
     _updateContext = newRenderContext({
-      [XtalFetchReq.is]: ({target}) => decorate<XtalFetchReq>(target as XtalFetchReq, {
-        href: this._href,
-      } as XtalFetchReq)
+      [XtalFetchReq.is]: ({target}) => decorate(target as HTMLElement, {
+        propVals:{
+          href: this._href,
+        }
+      })
     })
     get updateContext(){
       this._updateContext.update = update;

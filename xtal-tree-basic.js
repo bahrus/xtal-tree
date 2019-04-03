@@ -9,7 +9,7 @@ import { XtalFetchReq } from 'xtal-fetch/xtal-fetch-req.js';
 import { XtalElement } from 'xtal-element/xtal-element.js';
 import { define } from 'xtal-element/define.js';
 import { createTemplate, newRenderContext } from 'xtal-element/utils.js';
-import { decorate, attribs } from 'trans-render/decorate.js';
+import { decorate } from 'trans-render/decorate.js';
 import { update } from 'trans-render/update.js';
 //const tsBug = [ XtalSplit.is];
 const customSymbols = {
@@ -95,45 +95,47 @@ export class XtalTreeBasic extends XtalElement {
             [XtalTree.is]: ({ target }) => {
                 const indent = this._indentation;
                 decorate(target, {
-                    [attribs]: {
+                    attribs: {
                         [indendentation]: this._indentation,
                     },
-                    childrenFn: node => node.children,
-                    isOpenFn: node => node.expanded,
-                    levelSetterFn: function (nodes, level) {
-                        nodes.forEach(node => {
-                            node.level = level;
-                            //const adjustedLevel = (<any>node).children ? level : level + 1;
-                            node.style = 'margin-left:' + (level * indent) + 'px';
-                            if (node.children)
-                                this.levelSetterFn(node.children, level + 1);
-                        });
-                    },
-                    toggleNodeFn: node => {
-                        node.expanded = !node.expanded;
-                    },
-                    testNodeFn: (node, search) => {
-                        if (!search)
-                            return true;
-                        if (!node.nameLC)
-                            node.nameLC = node.name.toLowerCase();
-                        return node.nameLC.indexOf(search.toLowerCase()) > -1;
-                    },
-                    compareFn: (lhs, rhs) => {
-                        if (lhs.name < rhs.name)
-                            return -1;
-                        if (lhs.name > rhs.name)
-                            return 1;
-                        return 0;
-                    },
+                    propVals: {
+                        childrenFn: node => node.children,
+                        isOpenFn: node => node.expanded,
+                        levelSetterFn: function (nodes, level) {
+                            nodes.forEach(node => {
+                                node.level = level;
+                                //const adjustedLevel = (<any>node).children ? level : level + 1;
+                                node.style = 'margin-left:' + (level * indent) + 'px';
+                                if (node.children)
+                                    this.levelSetterFn(node.children, level + 1);
+                            });
+                        },
+                        toggleNodeFn: node => {
+                            node.expanded = !node.expanded;
+                        },
+                        testNodeFn: (node, search) => {
+                            if (!search)
+                                return true;
+                            if (!node.nameLC)
+                                node.nameLC = node.name.toLowerCase();
+                            return node.nameLC.indexOf(search.toLowerCase()) > -1;
+                        },
+                        compareFn: (lhs, rhs) => {
+                            if (lhs.name < rhs.name)
+                                return -1;
+                            if (lhs.name > rhs.name)
+                                return 1;
+                            return 0;
+                        },
+                    }
                 });
             },
             'p-d[prop-sym]': ({ target }) => {
                 target.prop = customSymbols[target.getAttribute('prop-sym')];
             },
             'iron-list': ({ target }) => {
-                decorate(target, {}, {
-                    props: {
+                decorate(target, {
+                    propDefs: {
                         // [customSymbols.lastFirstVisibleIndex]: -1,
                         [customSymbols.recalculatedNodes]: false,
                         [customSymbols.selectedNode]: null
@@ -163,13 +165,14 @@ export class XtalTreeBasic extends XtalElement {
                             }
                         },
                     },
-                    id: init
                 });
             }
         });
         this._updateContext = newRenderContext({
             [XtalFetchReq.is]: ({ target }) => decorate(target, {
-                href: this._href,
+                propVals: {
+                    href: this._href,
+                }
             })
         });
     }

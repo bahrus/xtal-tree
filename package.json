@@ -8,13 +8,13 @@
   "main": "xtal-tree.js",
   "dependencies": {
     "@polymer/iron-list": "3.0.2",
-    "if-diff": "0.0.20",
-    "p-d.p-u": "0.0.110",
-    "trans-render": "0.0.94",
-    "xtal-decorator": "0.0.42",
-    "xtal-element": "0.0.43",
-    "xtal-fetch": "0.0.57",
-    "xtal-splitting": "0.0.9",
+    "if-diff": "0.0.27",
+    "p-et-alia": "0.0.3",
+    "trans-render": "0.0.111",
+    "xtal-decorator": "0.0.45",
+    "xtal-element": "0.0.59",
+    "xtal-fetch": "0.0.58",
+    "xtal-splitting": "0.0.11",
     "event-switch": "0.0.12"
   },
   "devDependencies": {
@@ -23,6 +23,10 @@
     "@types/tape": "4.2.33",
     "@webcomponents/webcomponentsjs": "2.2.7",
     "jiife": "0.0.12",
-    "tape": "4.10.1"
+    "tape": "4.10.1",
+    "xtal-test": "0.0.18"
+  },
+  "scripts": {
+    "serve": "node node_modules/xtal-test/serve.js"
   }
 }

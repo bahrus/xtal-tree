@@ -5,6 +5,7 @@ export function XtalTreeDeco(root, recursive) {
         propDefs: {
             allExpanded: false,
             allCollapsed: false,
+            searchString: null,
         },
         methods: {
             onPropsChange(name, newVal) {
@@ -25,6 +26,24 @@ export function XtalTreeDeco(root, recursive) {
                         if (this.allExpanded)
                             this.allExpanded = false;
                         break;
+                    case 'searchString':
+                        if (newVal === null || newVal === '')
+                            return;
+                        const newValLC = newVal.toLowerCase();
+                        const summary = this.querySelector('summary');
+                        if (summary.textContent.toLowerCase().indexOf(newValLC) > -1) {
+                            summary.classList.add('match');
+                            this.allCollapsed = true;
+                        }
+                        else {
+                            summary.classList.remove('match');
+                            this.querySelectorAll('details').forEach(details => {
+                                details.searchString = newValLC;
+                            });
+                            if (this.querySelector('.match')) {
+                                this.setAttribute('open', '');
+                            }
+                        }
                 }
             }
         }

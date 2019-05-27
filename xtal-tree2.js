@@ -30,6 +30,14 @@ export function XtalTreeDeco(root, recursive) {
                         if (newVal === null || newVal === '')
                             return;
                         const newValLC = newVal.toLowerCase();
+                        this.querySelectorAll('section>div').forEach(div => {
+                            if (div.textContent.toLowerCase().indexOf(newValLC) > -1) {
+                                div.classList.add('match');
+                            }
+                            else {
+                                div.classList.remove('match');
+                            }
+                        });
                         const summary = this.querySelector('summary');
                         if (summary.textContent.toLowerCase().indexOf(newValLC) > -1) {
                             summary.classList.add('match');

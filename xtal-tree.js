@@ -1,5 +1,6 @@
 import { XtallatX } from 'xtal-element/xtal-latx.js';
-import { define } from 'xtal-element/define.js';
+import { define } from 'trans-render/define.js';
+import { hydrate } from 'trans-render/hydrate.js';
 const search_string = 'search-string';
 const sorted = 'sorted';
 /**
@@ -10,7 +11,7 @@ const sorted = 'sorted';
  * @polymer
  * @demo demo/index.html
  */
-export class XtalTree extends XtallatX(HTMLElement) {
+export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
     static get is() { return 'xtal-tree'; }
     static get observedAttributes() {
         return [search_string, sorted];
@@ -30,7 +31,7 @@ export class XtalTree extends XtallatX(HTMLElement) {
     connectedCallback() {
         this.style.display = 'none';
         this._conn = true;
-        this._upgradeProperties(['childrenFn', 'compareFn', 'isOpenFn', 'nodes', 'searchString',
+        this.propUp(['childrenFn', 'compareFn', 'isOpenFn', 'nodes', 'searchString',
             sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn']);
         this.onPropsChange();
     }
@@ -106,6 +107,7 @@ export class XtalTree extends XtallatX(HTMLElement) {
         });
     }
     notifyViewNodesChanged() {
+        debugger;
         this.de('viewable-nodes', {
             value: this.viewableNodes
         });

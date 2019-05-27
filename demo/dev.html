@@ -43,45 +43,48 @@
     <xtal-deco>
       <script nomodule>
         ({
-          childrenFn: node => node.children,
-          isOpenFn: node => node.expanded,
-          levelSetterFn: function (nodes, level) {
-            nodes.forEach(node => {
-              node.style = 'margin-left:' + (level * 12) + 'px';
-              if (node.children) this.levelSetterFn(node.children, level + 1)
-            })
-          },
-          toggleNodeFn: node => {
-            node.expanded = !node.expanded;
-          },
-          testNodeFn: (node, search) => {
-            if (!search) return true;
-            if (!node.nameLC) node.nameLC = node.name.toLowerCase();
-            return node.nameLC.indexOf(search.toLowerCase()) > -1;
-          },
-          compareFn: (lhs, rhs) => {
-            if (lhs.name < rhs.name) return -1;
-            if (lhs.name > rhs.name) return 1;
-            return 0;
-          },
-          props: {
+          vals: {
             expandCmd: '',
-            fistVisibleIndex: -1
+            fistVisibleIndex: -1,
+            childrenFn: node => node.children,
+            isOpenFn: node => node.expanded,
+            levelSetterFn: function (nodes, level) {
+              nodes.forEach(node => {
+                node.style = 'margin-left:' + (level * 12) + 'px';
+                if (node.children) this.levelSetterFn(node.children, level + 1)
+              })
+            },
+            toggleNodeFn: node => {
+              node.expanded = !node.expanded;
+            },
+            testNodeFn: (node, search) => {
+              if (!search) return true;
+              if (!node.nameLC) node.nameLC = node.name.toLowerCase();
+              return node.nameLC.indexOf(search.toLowerCase()) > -1;
+            },
+            compareFn: (lhs, rhs) => {
+              if (lhs.name < rhs.name) return -1;
+              if (lhs.name > rhs.name) return 1;
+              return 0;
+            },
           },
-          onPropsChange(name, newVal) {
-            switch (name) {
-              case 'expandCmd':
-                this[this.expandCmd] = this.viewableNodes;
-                break;
+          methods:{
+            onPropsChange(name, newVal) {
+              switch (name) {
+                case 'expandCmd':
+                  this[this.expandCmd] = this.viewableNodes;
+                  break;
 
+              }
             }
           }
+
         })
       </script>
     </xtal-deco>
     <xtal-tree disabled=2 id=myTree></xtal-tree>
-    <p-d on=viewable-nodes-changed to=iron-list prop=items val=target.viewableNodes m=1></p-d>
-    <p-d on=viewable-nodes-changed to=iron-list prop=newFirstVisibleIndex val=target.firstVisibleIndex m=1></p-d>
+    <p-d on=viewable-nodes-changed to=iron-list prop=items val=target.viewableNodes m=1 debug></p-d>
+    <!-- <p-d on=viewable-nodes-changed to=iron-list prop=newFirstVisibleIndex val=target.firstVisibleIndex m=1></p-d> -->
 
     <!-- ==============  Styling of iron-list ================== -->
     <style>
@@ -126,7 +129,7 @@
           })
       </script>
     </xtal-deco>
-    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data data-pd
+    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if=p-d-r
       data-on="scroll: pass-to-next:{history:target.firstVisibleIndex}">
       <template>
         <div class="node" style$="[[item.style]]" data-pd>
@@ -142,11 +145,10 @@
       </template>
     </iron-list>
     <xtal-state-commit level="global" rewrite href="/scroll" with-path="firstVisibleIndex"></xtal-state-commit>
-    <!-- Polyfill for retro browsers -->
-    <!-- End Polyfill for retro browsers -->
+
 
     <!-- Polymer Elements -->
-    <!-- <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.1/iron-list.js?module"></script> -->
+    <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.1/iron-list.js?module"></script>
     <!-- End Polymer Elements -->
 
 

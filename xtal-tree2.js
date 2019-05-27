@@ -37,11 +37,16 @@ export function XtalTreeDeco(root, recursive) {
                         }
                         else {
                             summary.classList.remove('match');
-                            this.querySelectorAll('details').forEach(details => {
-                                details.searchString = newValLC;
-                            });
-                            if (this.querySelector('.match')) {
-                                this.setAttribute('open', '');
+                            if (recursive) {
+                                this.querySelectorAll('details').forEach(details => {
+                                    details.searchString = newValLC;
+                                });
+                                if (this.querySelector('.match')) {
+                                    this.setAttribute('open', '');
+                                }
+                                else {
+                                    this.removeAttribute('open');
+                                }
                             }
                         }
                 }

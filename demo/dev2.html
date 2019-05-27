@@ -37,7 +37,9 @@
             import 'xtal-sip';
             import {XtalTreeDeco} from '../xtal-tree2.js';
             directory.addEventListener('fetch-complete', e =>{
-                XtalTreeDeco(directory.querySelector('details'));
+                console.log('start');
+                XtalTreeDeco(directory.querySelector('details'), true);
+                console.log('end');
             })
         </script>
         <!-- <script>

@@ -10,9 +10,9 @@ function generateNode(node){
         if(child.children){
             returnStr += /* html */`<details>
     <summary>${child.name}</summary>
-    <div style="margin-left:20px">
+    <section>
         ${generateNode(child.children)}
-    </div>
+    </section>
 </details>
 `;
         }else{

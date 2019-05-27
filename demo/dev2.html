@@ -8,9 +8,14 @@
 </head>
 <body>
     <div>
+        <style>
+            #directory details>section{
+                margin-left:20px;
+            }
+        </style>
         <xtal-sip><script nomodule>["xtal-fetch-req"]</script></xtal-sip>
-        <button onclick="expandAll()">Expand All</button>
-        <xtal-fetch-req fetch href="directory.html" as="text" insert-results></xtal-fetch-req>
+        <button >Expand All</button>
+        <xtal-fetch-req id="directory" fetch href="directory.html" as="text" insert-results></xtal-fetch-req>
         <script defer src="https://cdn.jsdelivr.net/npm/es-module-shims@0.2.7/dist/es-module-shims.js"></script>
         <script type="importmap-shim">
         {
@@ -27,6 +32,10 @@
         </script>
         <script type="module-shim">
             import 'xtal-sip';
+            import {XtalTreeDeco} from '../xtal-tree2.js';
+            directory.addEventListener('fetch-complete', e =>{
+                XtalTreeDeco(directory.querySelector('details'));
+            })
         </script>
         <script>
             function expandAll(){

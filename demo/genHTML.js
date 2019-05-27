@@ -7,13 +7,18 @@ function generateNode(node){
     let returnStr = '';
     if(!node) return returnStr;
     node.forEach(child =>{
-        returnStr += /* html */`<details>
+        if(child.children){
+            returnStr += /* html */`<details>
     <summary>${child.name}</summary>
     <div style="margin-left:20px">
         ${generateNode(child.children)}
     </div>
 </details>
 `;
+        }else{
+            returnStr += /* html */`<div>${child.name}</div>`
+        }
+
         
     })
     return returnStr;

@@ -50,18 +50,14 @@
         </script>
         <script type="module-shim">
             import 'xtal-sip';
-            import {XtalTreeDeco} from '../xtal-tree2.js';
+            import {XtalTreeDeco} from '../XtalTreeDeco.js';
             directory.addEventListener('fetch-complete', e =>{
                 console.log('start');
                 XtalTreeDeco(directory.querySelector('details'), true);
                 console.log('end');
             })
         </script>
-        <!-- <script>
-            function expandAll(){
-                document.querySelectorAll('details').forEach(detail => detail.setAttribute('open', ''));
-            }
-        </script> -->
+
     </div>
 </body>
 </html>

@@ -1,5 +1,13 @@
 import {decorate} from 'trans-render/decorate.js';
 
+function getStrVal(el: HTMLElement){
+    switch(el.localName){
+        case 'div':
+            return el.textContent;
+        case 'details':
+            return el.querySelector('summary').textContent;
+    }
+}
 export function XtalTreeDeco(root: HTMLDetailsElement, recursive?: boolean){
     //console.log('decorating');
     decorate(root, {
@@ -7,6 +15,7 @@ export function XtalTreeDeco(root: HTMLDetailsElement, recursive?: boolean){
             allExpanded: false,
             allCollapsed: false,
             searchString: null,
+            sortDir: null,
         },
         methods:{
             onPropsChange(name, newVal){
@@ -52,7 +61,30 @@ export function XtalTreeDeco(root: HTMLDetailsElement, recursive?: boolean){
                                 }
                             }
                         }
-
+                        break;
+                    case 'sortDir':
+                        if(newVal === null) return;
+                        const section = this.querySelector('section');
+                        const sectionChildren = Array.from(section.children);
+                        const one = newVal === 'asc' ? 1 : -1;
+                        const min = newVal === 'asc' ? -1 : 1;
+                        sectionChildren.sort((a: HTMLElement, b: HTMLElement) =>{
+                            const lhs = getStrVal(a);
+                            const rhs = getStrVal(b);
+                            if(lhs < rhs) return min;
+                            if(lhs > rhs) return one;
+                            return 0
+                        });
+                        let count = 1;
+                        sectionChildren.forEach(child => {
+                            (child as HTMLElement).style.order = count.toString();
+                            count++;
+                        });
+                        if(recursive){
+                            this.querySelectorAll('details').forEach(details => {
+                                details.sortDir = newVal;
+                            });
+                        }
                 }
 
             }

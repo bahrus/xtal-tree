@@ -34,7 +34,7 @@
         <p-d-r on=click to=details prop=sortDir val=target.dataset.dir skip-init></p-d-r>
         <button data-dir=desc>Sort Descending</button>
         <p-d-r on=click to=details prop=sortDir val=target.dataset.dir skip-init></p-d-r>
-        <xtal-fetch-req p-d-if="p-d-r" id="directory" fetch href="directory.html" as="text" insert-results></xtal-fetch-req>
+        <xtal-fetch-req p-d-if="p-d-r" id="directory" fetch href="https://unpkg.com/xtal-tree@0.0.64/demo/directory.html" as="text" insert-results></xtal-fetch-req>
         <script defer src="https://cdn.jsdelivr.net/npm/es-module-shims@0.2.7/dist/es-module-shims.js"></script>
         <script type="importmap-shim">
         {
@@ -51,11 +51,9 @@
         </script>
         <script type="module-shim">
             import 'xtal-sip';
-            import {XtalTreeDeco} from '../XtalTreeDeco.js';
+            import {XtalTreeDeco} from 'https://cdn.jsdelivr.net/npm/xtal-tree@0.0.64/XtalTreeDeco.js';
             directory.addEventListener('fetch-complete', e =>{
-                console.log('start');
                 XtalTreeDeco(directory.querySelector('details'), true);
-                console.log('end');
             })
         </script>
 

@@ -6,176 +6,73 @@
 
 # \<xtal-tree\>
 
-Provide flat, virtual snapshot of a tree. 
 
 <!--
 ```
 <custom-element-demo>
   <template>
-  <div>
-  
-    <h3>Basic xtal-tree demo</h3>
-   
-    <!--   Expand All / Collapse All / Sort  / Search Buttons -->
-    
-    <button disabled data-expand-cmd="allExpandedNodes">Expand All</button>
-    <p-d on="click" to="xtal-tree" prop="expandCmd" val="target.dataset.expandCmd" m="1" skip-init></p-d>
-    <button disabled data-expand-cmd="allCollapsedNodes">Collapse All</button>
-    <p-d on="click" to="xtal-tree" prop="expandCmd" val="target.dataset.expandCmd" m="1" skip-init></p-d>
-    <button disabled data-dir="asc">Sort Asc</button>
-    <p-d on="click" to="xtal-tree" prop="sorted" val="target.dataset.dir" m="1" skip-init></p-d>
-    <button disabled data-dir="desc">Sort Desc</button>
-    <p-d on="click" to="xtal-tree" prop="sorted" val="target.dataset.dir" m="1" skip-init></p-d>
-    <input disabled type="text" placeholder="Search">
-    <p-d-r on="input" to="xtal-split" prop="search" val="target.value"></p-d-r>
-    <p-d on="input" to="xtal-tree" prop="searchString" val="target.value"></p-d>
+    <div>
+        <style>
+            #directory details>section{
+                margin-left:20px;
+                display:flex;
+                flex-direction:column;
+            }
 
-    <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
-    <xtal-fetch-req fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as="json"></xtal-fetch-req>
-    <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
-    <p-d on="fetch-complete" to="xtal-tree" prop="nodes" val="target.value" m="1"></p-d>
+            #directory .match{
+                font-weight: 800;
+            }
 
-    <!-- ================= Train xtal-tree how to expand / collapse nodes ========================= -->
-    <xtal-deco><script nomodule>({
-        vals:{
-          childrenFn: node => node.children,
-          isOpenFn: node => node.expanded,
-          levelSetterFn: function (nodes, level) {
-            nodes.forEach(node => {
-              node.style = 'margin-left:' + (level * 12) + 'px';
-              if (node.children) this.levelSetterFn(node.children, level + 1)
+            
+        </style>
+        <xtal-sip><script nomodule>["xtal-fetch-req", "p-d-r"]</script></xtal-sip>
+        <button>Expand All</button>
+        <p-d-r on=click to=details prop=allExpanded val=target skip-init></p-d-r>
+        <button>Collapse All</button>
+        <p-d-r on=click to=details prop=allCollapsed val=target skip-init></p-d-r>
+        <label for=search>Search</label>
+        <input disabled autocomplete=off id=search>
+        <p-d-r on=input to=details prop=searchString val=target.value skip-init></p-d-r>
+        <br>
+        <button data-dir=asc>Sort Ascending</button>
+        <p-d-r on=click to=details prop=sortDir val=target.dataset.dir skip-init></p-d-r>
+        <button data-dir=desc>Sort Descending</button>
+        <p-d-r on=click to=details prop=sortDir val=target.dataset.dir skip-init></p-d-r>
+        <xtal-fetch-req p-d-if="p-d-r" id="directory" fetch href="https://unpkg.com/xtal-tree@0.0.64/demo/directory.html" as="text" insert-results></xtal-fetch-req>
+        <script defer src="https://cdn.jsdelivr.net/npm/es-module-shims@0.2.7/dist/es-module-shims.js"></script>
+        <script type="importmap-shim">
+        {
+            "imports": {
+                "xtal-element/": "../node_modules/xtal-element/",
+                "trans-render/": "../node_modules/trans-render/",
+                "xtal-sip": "https://cdn.jsdelivr.net/npm/xtal-sip@0.0.87/xtal-sip.js",
+                "xtal-fetch-req": "https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.58/xtal-fetch-req.js",
+                "p-d": "https://cdn.jsdelivr.net/npm/p-et-alia@0.0.4/p-d.js",
+                "p-d-r": "https://cdn.jsdelivr.net/npm/p-et-alia@0.0.4/p-d-r.js",
+                "xtal-deco": "https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.46/xtal-deco.js"
+            }
+        }
+        </script>
+        <script type="module-shim">
+            import 'xtal-sip';
+            import {XtalTreeDeco} from 'https://cdn.jsdelivr.net/npm/xtal-tree@0.0.64/XtalTreeDeco.js';
+            directory.addEventListener('fetch-complete', e =>{
+                XtalTreeDeco(directory.querySelector('details'), true);
             })
-          },
-          toggleNodeFn: node => {
-            node.expanded = !node.expanded;
-          },
-          testNodeFn: (node, search) => {
-            if (!search) return true;
-            if (!node.nameLC) node.nameLC = node.name.toLowerCase();
-            return node.nameLC.indexOf(search.toLowerCase()) > -1;
-          },
-          compareFn: (lhs, rhs) => {
-            if (lhs.name < rhs.name) return -1;
-            if (lhs.name > rhs.name) return 1;
-            return 0;
-          },
-        },
+        </script>
 
-        props:{
-          expandCmd: '',
-          fistVisibleIndex: -1
-        },
-        methods:{
-          onPropsChange(name, newVal){
-            switch(name){
-              case 'expandCmd':
-                this[this.expandCmd] = this.viewableNodes;
-                break;
-                
-            }
-          }
-        }
-
-    })</script></xtal-deco>
-    <xtal-tree id="myTree"></xtal-tree>
-    <p-d on="viewable-nodes-changed" to="iron-list" prop="items" val="target.viewableNodes" m="1"></p-d>
-    <p-d on="viewable-nodes-changed" to="iron-list" prop="newFirstVisibleIndex" val="target.firstVisibleIndex" m="1"></p-d>
-    <!-- ==============  Styling of iron-list ================== -->
-    <style>
-      div.node {
-        cursor: pointer;
-      }
-
-      span.match {
-        font-weight: bold;
-        background-color: yellowgreen;
-      }
-
-      span[data-has-children="1"][data-is-expanded="1"]::after{
-        content: "📖";
-      }
-
-      span[data-has-children="1"][data-is-expanded="-1"]::after{
-        content: "📕";
-      }
-
-      span[data-has-children="-1"]::after{
-        content: "📝";
-      }
-    </style>
-    
-    <xtal-deco><script nomodule>
-      ({
-        props: {
-          newFirstVisibleIndex: -1,
-        },
-        on:{
-          click: function(e){
-            if(!e.target.node) return;
-            const firstVisible = this.firstVisibleIndex;
-            console.log('firstVisible = ' + firstVisible);
-            myTree.toggledNode = e.target.node;
-            this.newFirstVisibleIndex = firstVisible;
-          }
-        },
-        methods:{
-          onPropsChange: function (name, newVal) {
-            switch (name) {
-              case 'newFirstVisibleIndex':
-                if(!this.items || this.newFirstVisibleIndex < 0) return;
-                this.scrollToIndex(this.newFirstVisibleIndex);
-            }
-          },
-        }
-      })
-    </script></xtal-deco>
-    <iron-list style="height:400px;overflow-x:hidden" id="nodeList" mutable-data p-d-if="p-d-r">
-      <template>
-        <div class="node" style$="[[item.style]]" p-d-if="p-d-r">
-          <span node="[[item]]" p-d-if="p-d-r">
-            <if-diff if="[[item.children]]" tag="hasChildren" m="1"></if-diff>
-            <if-diff if="[[item.expanded]]" tag="isExpanded" m="1"></if-diff>
-            <span data-has-children="-1" data-is-expanded="-1" node="[[item]]"></span>
-          </span>
-          <xtal-split node="[[item]]" text-content="[[item.name]]"></xtal-split>          
-        </div>
-      </template>
-    </iron-list>
-    <!-- Polyfill for retro browsers -->
-    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <!-- End Polyfill for retro browsers -->
-
-    <!-- Polymer Elements -->
-    <script type="module" src="https://unpkg.com/@polymer/iron-list@3.0.1/iron-list.js?module"></script>
-    <!-- End Polymer Elements -->
-
-    <script type="module" src="https://unpkg.com/xtal-splitting@0.0.9/xtal-split.js?module"></script>
-    <script type="module" src="https://unpkg.com/xtal-fetch@0.0.57/xtal-fetch-req.js?module"></script>
-    <script type="module" src="https://unpkg.com/xtal-decorator@0.0.41/xtal-deco.js?module"></script>
-    <script type="module" src="https://unpkg.com/xtal-tree@0.0.46/xtal-tree.js?module"></script>
-    <script type="module" src="https://unpkg.com/if-diff@0.0.20/if-diff.js?module"></script>
-    <script type="module" src="https://unpkg.com/p-d.p-u@0.0.106/p-d.js?module"></script>
-    <script type="module" src="https://unpkg.com/p-d.p-u@0.0.106/p-d-r.js?module"></script>
+    </div>
   </div>
   </template>
 </custom-element-demo>
 ```
 -->
 
-Often we want to take advantage of a nice flat list generator component, like dom-repeat, or iron-list, but we want to use it to display and manipulate tree data.
+The details element provides a way to create tree structures with pure HTML. Performance is surprisingly good, and may not require any virtual scrollers, even for fairly large tree structures.
 
-This scenario seems to come up so frequently with various components, that this component strives to genericize that requirement.
+However, such trees lack some capabilities expected from a tree component, such as search, sort and expandAll/Collapse All.  This library contains a helper "decorator" function, XtalTreeDeco, which adds such capabilities.
 
-xtal-tree takes a "watcha-got?" approach to the data -- it allows the specific structure of the tree data to be pretty much anything, and passes no judgment on it.   It doesn't accidentally overwrite anything it shouldn't, without specific permission from the developer. The user of xtal-tree, i.e. the developer, then needs to train xtal-tree how to interpret the data -- how to get the children, how to represent an open node vs a closed node, etc.
-
-xtal-tree also takes a "whatcha-want?" approach to what is displayed.  You can display the data as a classic tree, or as a treegrid, or as any other way you want.  The only assumption xtal-tree makes is that you want to build the display from a flat list generator, like dom-repeat, iron-list, or a flat grid.  
-
-Think of xtal-tree as a reusable "View Model" component.
-
-
-## Install the Polymer-CLI
-
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) and npm (packaged with [Node.js](https://nodejs.org)) installed. Run `npm install` to install your element's dependencies, then run `polymer serve` to serve your element locally.
+This package also contains a custom element, xtal-tree (xtal-tree.js) which takes JavaScript tree structure, and provides the same capabilities.
 
 ## Viewing Your Element
 

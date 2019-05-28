@@ -5,7 +5,8 @@
   "repository": "https://github.com/bahrus/xtal-tree",
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
-  "main": "xtal-tree.js",
+  "main": "XtalTreeDeco.js",
+  "module": "XtalTreeDeco.js",
   "dependencies": {
     "@polymer/iron-list": "3.0.2",
     "if-diff": "0.0.27",

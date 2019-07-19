@@ -1,9 +1,10 @@
-import "xtal-split/xtal-split.js";
+import { XtalSplit } from "xtal-split/xtal-split.js";
 //import {XtalDeco} from 'xtal-decorator/xtal-deco.js';
 import "if-diff/if-diff.js";
 //import '@polymer/iron-list/iron-list.js';
 import "p-et-alia/p-d.js";
 import "p-et-alia/p-u.js";
+import "p-et-alia/p-d-r.js";
 import { XtalTree } from "./xtal-tree.js";
 import { XtalFetchReq } from "xtal-fetch/xtal-fetch-req.js";
 import { XtalElement } from "xtal-element/xtal-element.js";
@@ -38,7 +39,7 @@ const mainTemplate = createTemplate(/* html */ `
 <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
 <xtal-tree -expandCmd -sorted id=myTree></xtal-tree>
 <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
-<xtal-tree-basic-vlist -items></xtal-tree-basic-vlist>
+<xtal-tree-basic-vlist -items p-d-if=p-d-r></xtal-tree-basic-vlist>
 <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
 <!-- ==============  Styling of iron-list ================== -->
 <style>
@@ -109,7 +110,6 @@ const mainTemplate = createTemplate(/* html */ `
 `);
 const href = "href";
 const indendentation = "indentation";
-//const init = Symbol("init");
 export class XtalTreeBasic extends XtalElement {
     constructor() {
         super(...arguments);
@@ -230,8 +230,9 @@ export class XtalTreeBasic extends XtalElement {
 }
 define(XtalTreeBasic);
 const testTemplate = createTemplate(/* html */ `
-<div class="node">
-  <span data-is-expanded="-1"></span><label></label>
+<div class="node" p-d-if=p-d-r>
+  <span data-is-expanded="-1"></span>
+  <xtal-split></xtal-split>
 </div>
 `);
 class XtalTreeBasicVList extends XtalVListBase {
@@ -266,7 +267,7 @@ class XtalTreeBasicVList extends XtalVListBase {
                                 }
                             }
                         }),
-                        label: rowNode.name
+                        [XtalSplit.is]: rowNode.name
                     };
                 }
             }

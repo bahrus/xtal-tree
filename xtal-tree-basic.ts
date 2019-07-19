@@ -24,13 +24,13 @@ const mainTemplate = createTemplate(/* html */ `
 <!--   Expand All / Collapse All / Sort  / Search Buttons -->
 <button disabled data-expand-cmd=allExpandedNodes>Expand All</button>
 <!--Expand All-->
-<p-d on=click to=xtal-tree prop=expandCmd val=target.dataset.expandCmd m=1 skip-init></p-d>
+<p-d on=click to=xtal-tree[-expandCmd]  val=target.dataset.expandCmd m=1 skip-init></p-d>
 <button disabled data-expand-cmd=allCollapsedNodes>Collapse All</button>
-<p-d on=click to=xtal-tree prop=expandCmd val=target.dataset.expandCmd m=1 skip-init></p-d>
+<p-d on=click to=xtal-tree[-expandCmd]  val=target.dataset.expandCmd m=1 skip-init></p-d>
 <button disabled data-dir="asc">Sort Asc</button>
-<p-d on=click to=xtal-tree prop=sorted val=target.dataset.dir m=1 skip-init></p-d>
+<p-d on=click to=xtal-tree[-sorted] val=target.dataset.dir m=1 skip-init></p-d>
 <button disabled data-dir="desc">Sort Desc</button>
-<p-d on=click to=xtal-tree prop=sorted val=target.dataset.dir></p-d>
+<p-d on=click to=xtal-tree[-sorted] val=target.dataset.dir></p-d>
 <input disabled=2 type=text placeholder=Search>
 <p-d-r on=input to=xtal-split prop=search val=target.value></p-d-r>
 <p-d on=input to=xtal-tree prop=searchString val=target.value></p-d>
@@ -38,7 +38,7 @@ const mainTemplate = createTemplate(/* html */ `
 <xtal-fetch-req fetch as=json></xtal-fetch-req>
 <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
 <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
-<xtal-tree id=myTree></xtal-tree>
+<xtal-tree -expandCmd -sorted id=myTree></xtal-tree>
 <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
 <xtal-tree-basic-vlist -items></xtal-tree-basic-vlist>
 <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>

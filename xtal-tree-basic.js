@@ -18,8 +18,20 @@ const customSymbols = {
     recalculatedNodes: Symbol("restoreLastVisibleIndex"),
     selectedNode: Symbol("selectedNode")
 };
-//const recalculatedNodes = Symbol('restoreLastVisibleIndex');
 const mainTemplate = createTemplate(/* html */ `
+<!--   Expand All / Collapse All / Sort  / Search Buttons -->
+<button disabled data-expand-cmd=allExpandedNodes>Expand All</button>
+<!--Expand All-->
+<p-d on=click to=xtal-tree prop=expandCmd val=target.dataset.expandCmd m=1 skip-init></p-d>
+<button disabled data-expand-cmd=allCollapsedNodes>Collapse All</button>
+<p-d on=click to=xtal-tree prop=expandCmd val=target.dataset.expandCmd m=1 skip-init></p-d>
+<button disabled data-dir="asc">Sort Asc</button>
+<p-d on=click to=xtal-tree prop=sorted val=target.dataset.dir m=1 skip-init></p-d>
+<button disabled data-dir="desc">Sort Desc</button>
+<p-d on=click to=xtal-tree prop=sorted val=target.dataset.dir></p-d>
+<input disabled=2 type=text placeholder=Search>
+<p-d-r on=input to=xtal-split prop=search val=target.value></p-d-r>
+<p-d on=input to=xtal-tree prop=searchString val=target.value></p-d>
 <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
 <xtal-fetch-req fetch as=json></xtal-fetch-req>
 <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
@@ -150,6 +162,9 @@ export class XtalTreeBasic extends XtalElement {
                     attribs: {
                         [indendentation]: this._indentation
                     },
+                    propDefs: {
+                        expandCmd: '',
+                    },
                     propVals: {
                         childrenFn: node => node.children,
                         isOpenFn: node => node.expanded,
@@ -178,6 +193,15 @@ export class XtalTreeBasic extends XtalElement {
                             if (lhs.name > rhs.name)
                                 return 1;
                             return 0;
+                        }
+                    },
+                    methods: {
+                        onPropsChange(name, newVal) {
+                            switch (name) {
+                                case 'expandCmd':
+                                    this[this.expandCmd] = this.viewableNodes;
+                                    break;
+                            }
                         }
                     }
                 });

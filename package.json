@@ -9,23 +9,25 @@
   "module": "XtalTreeDeco.js",
   "dependencies": {
     "@polymer/iron-list": "3.0.2",
-    "if-diff": "0.0.27",
-    "p-et-alia": "0.0.3",
-    "trans-render": "0.0.111",
-    "xtal-decorator": "0.0.45",
-    "xtal-element": "0.0.59",
-    "xtal-fetch": "0.0.58",
-    "xtal-splitting": "0.0.11",
-    "event-switch": "0.0.12"
+    "if-diff": "0.0.34",
+    "p-et-alia": "0.0.11",
+    "trans-render": "0.0.127",
+    "xtal-decorator": "0.0.46",
+    "xtal-element": "0.0.78",
+    "xtal-fetch": "0.0.65",
+    "xtal-split": "0.0.1",
+    "event-switch": "0.0.12",
+    "xtal-vlist": "0.0.2"
   },
   "devDependencies": {
-    "@types/node": "11.13.0",
-    "@types/puppeteer": "1.12.3",
+    "@types/node": "12.0.10",
+    "@types/puppeteer": "1.12.4",
     "@types/tape": "4.2.33",
-    "@webcomponents/webcomponentsjs": "2.2.7",
+    "@webcomponents/webcomponentsjs": "2.2.10",
+    "es-module-shims": "0.2.13",
     "jiife": "0.0.12",
-    "tape": "4.10.1",
-    "xtal-test": "0.0.18"
+    "tape": "4.11.0",
+    "xtal-test": "0.0.19"
   },
   "scripts": {
     "serve": "node node_modules/xtal-test/serve.js"

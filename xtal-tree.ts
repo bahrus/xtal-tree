@@ -149,7 +149,6 @@ export class XtalTree extends  XtallatX(hydrate(HTMLElement)) {
     }
 
     notifyViewNodesChanged() {
-        debugger;
         this.de('viewable-nodes',{
             value: this.viewableNodes
         })

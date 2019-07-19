@@ -249,7 +249,11 @@ class XtalVListCustomized extends XtalVListBase {
     static get is() {
         return "xtal-vlist-customized";
     }
+    get items() {
+        return this._items;
+    }
     set items(nv) {
+        this._items = nv;
         this.totalRows = nv.length;
     }
     generate(row) {
@@ -259,7 +263,7 @@ class XtalVListCustomized extends XtalVListBase {
         const ctx = {
             Transform: {
                 div: {
-                    label: "row" + row
+                    label: this._items[row].name
                 }
             }
         };

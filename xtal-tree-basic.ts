@@ -213,7 +213,7 @@ define(XtalTreeBasic);
 
 const testTemplate = createTemplate(/* html */ `
 <div class="node">
-    <label></label>
+  <span data-is-expanded="-1"></span><label></label>
 </div>
 `);
 class XtalVListCustomized extends XtalVListBase {
@@ -252,6 +252,14 @@ class XtalVListCustomized extends XtalVListBase {
             }
           })
           return {
+            span: ({target}) => decorate(target, {
+              propVals:{
+                dataset:{
+                  hasChildren: rowNode.children ? 1 : -1,
+                  isExpanded: rowNode.expanded ? 1 : -1,
+                }
+              }
+            }),
             label: rowNode.name
           }
           

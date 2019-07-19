@@ -220,17 +220,7 @@ class XtalTreeBasicVList extends XtalVListBase {
     return "xtal-tree-basic-vlist";
   }
 
-  _items: any[];
-  get items(){
-    return this._items;
-  }
-  set items(nv: any[]) {
-    this._items = nv;
-    this.totalRows = nv.length;
-    if(this._lastScrollPos !== undefined){
-      this._list.scrollToPosition(this._lastScrollPos);
-    }
-  }
+
   generate(row: number) {
     const el = document.createElement("div");
     const rowNode = this._items[row];

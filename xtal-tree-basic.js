@@ -28,6 +28,7 @@ const mainTemplate = createTemplate(/* html */ `
 <p-d on=viewable-nodes-changed to=xtal-vlist-customized[-items]  val=target.viewableNodes m=1 skip-init></p-d>
 <!-- <p-d on="viewable-nodes-changed" to="iron-list" prop-sym="recalculatedNodes" m="1" skip-init val="target.viewableNodes"></p-d>  -->
 <xtal-vlist-customized -items></xtal-vlist-customized>
+<p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
 <!-- ==============  Styling of iron-list ================== -->
 <style>
   div.node {
@@ -184,41 +185,6 @@ export class XtalTreeBasic extends XtalElement {
             },
             "p-d[prop-sym]": ({ target }) => {
                 target.prop = customSymbols[target.getAttribute("prop-sym")];
-            },
-            "iron-list": ({ target }) => {
-                decorate(target, {
-                    propDefs: {
-                        // [customSymbols.lastFirstVisibleIndex]: -1,
-                        [customSymbols.recalculatedNodes]: false,
-                        [customSymbols.selectedNode]: null
-                    },
-                    on: {
-                        click: function (e) {
-                            if (!e.target.node)
-                                return;
-                            console.log("remembering " + this.firstVisibleIndex);
-                            this[customSymbols.lastFirstVisibleIndex] = this.firstVisibleIndex;
-                            this[customSymbols.selectedNode] = e.target.node;
-                        }
-                    },
-                    methods: {
-                        onPropsChange: function (name, newVal) {
-                            switch (name) {
-                                case customSymbols.recalculatedNodes:
-                                    if (newVal === false)
-                                        return;
-                                    //this[customSymbols.lastFirstVisibleIndex] = this[customSymbols.lastFirstVisibleIndex];
-                                    setTimeout(() => {
-                                        console.log("scrolling to " +
-                                            this[customSymbols.lastFirstVisibleIndex]);
-                                        this.scrollToIndex(this[customSymbols.lastFirstVisibleIndex]);
-                                        console.log(this.firstVisibleIndex);
-                                    }, 10);
-                                    break;
-                            }
-                        }
-                    }
-                });
             }
         });
     }
@@ -241,7 +207,7 @@ export class XtalTreeBasic extends XtalElement {
 }
 define(XtalTreeBasic);
 const testTemplate = createTemplate(/* html */ `
-<div>
+<div class="node">
     <label></label>
 </div>
 `);
@@ -260,10 +226,26 @@ class XtalVListCustomized extends XtalVListBase {
         const el = document.createElement("div");
         // el.innerHTML = "<p>ITEM " + row + "</p>";
         // return el;
+        const rowNode = this._items[row];
         const ctx = {
             Transform: {
-                div: {
-                    label: this._items[row].name
+                div: ({ target }) => {
+                    decorate(target, {
+                        attribs: {
+                            style: rowNode.style
+                        },
+                        on: {
+                            click: function (e) {
+                                this.selectedNode = rowNode;
+                            }
+                        },
+                        propDefs: {
+                            selectedNode: undefined
+                        }
+                    });
+                    return {
+                        label: rowNode.name
+                    };
                 }
             }
         };

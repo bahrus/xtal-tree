@@ -228,11 +228,12 @@ class XtalVListCustomized extends XtalVListBase {
   set items(nv: any[]) {
     this._items = nv;
     this.totalRows = nv.length;
+    if(this._lastScrollPos !== undefined){
+      this._list.scrollToPosition(this._lastScrollPos);
+    }
   }
   generate(row: number) {
     const el = document.createElement("div");
-    // el.innerHTML = "<p>ITEM " + row + "</p>";
-    // return el;
     const rowNode = this._items[row];
     const ctx: RenderContext = {
       Transform: {

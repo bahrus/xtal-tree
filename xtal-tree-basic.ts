@@ -27,9 +27,8 @@ const mainTemplate = createTemplate(/* html */ `
 <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
 <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
 <xtal-tree id=myTree></xtal-tree>
-<p-d on=viewable-nodes-changed to=xtal-vlist-customized[-items]  val=target.viewableNodes m=1 skip-init></p-d>
-<!-- <p-d on="viewable-nodes-changed" to="iron-list" prop-sym="recalculatedNodes" m="1" skip-init val="target.viewableNodes"></p-d>  -->
-<xtal-vlist-customized -items></xtal-vlist-customized>
+<p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
+<xtal-tree-basic-vlist -items></xtal-tree-basic-vlist>
 <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
 <!-- ==============  Styling of iron-list ================== -->
 <style>
@@ -216,9 +215,9 @@ const testTemplate = createTemplate(/* html */ `
   <span data-is-expanded="-1"></span><label></label>
 </div>
 `);
-class XtalVListCustomized extends XtalVListBase {
+class XtalTreeBasicVList extends XtalVListBase {
   static get is() {
-    return "xtal-vlist-customized";
+    return "xtal-tree-basic-vlist";
   }
 
   _items: any[];
@@ -271,4 +270,4 @@ class XtalVListCustomized extends XtalVListBase {
   }
 }
 
-define(XtalVListCustomized);
+define(XtalTreeBasicVList);

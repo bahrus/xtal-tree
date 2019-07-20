@@ -17,7 +17,7 @@
     "xtal-fetch": "0.0.65",
     "xtal-split": "0.0.1",
     "event-switch": "0.0.12",
-    "xtal-vlist": "0.0.11"
+    "xtal-vlist": "0.0.12"
   },
   "devDependencies": {
     "@types/node": "12.0.10",

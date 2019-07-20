@@ -121,9 +121,10 @@ However, such trees lack some capabilities expected from a tree component, such 
 
 This package also contains a custom element, xtal-tree (xtal-tree.js) which takes JavaScript tree structure, and provides the same capabilities.
 
-## Viewing Your Element
+## Viewing This Element Locally
 
 ```
-$ polymer serve
+$ npm install
+$ npm run serve
 ```
 

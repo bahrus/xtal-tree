@@ -10,7 +10,7 @@ Often we want to take advantage of a nice flat list generator component, like do
 
 This scenario seems to come up so frequently with various components, that this component strives to genericize that requirement.
 
-**NB** An alternative way of generating a tree via JS / JSON, is to use server side HTML rendering with the  details / summary element.  Some experiments with this approach have been done [here](https://github.com/bahrus/xtal-tree-deco), where similar support for expand all / search / sort is supported. This will tend to have smaller first paint / time to interactive times, if the tree starts out in collapsed mode.  However,as the amount of data increases, if you want to support expand all and global search capabilities, it may be better to use a virtual list combined with this JS-based component.
+**NB** This component takes a JS / JSON - centric approach.  An alternative way of generating an expandable tree is to use server side HTML rendering, tapping into the power of the  details / summary element.  Some experiments with this approach have been done [here](https://github.com/bahrus/xtal-tree-deco), where similar support for expand all / search / sort is supported. This will tend to have smaller first paint / time to interactive times, if the tree starts out in collapsed mode.  However,as the amount of data increases, if you want to support expand all and global search capabilities, it may be better to use a virtual list combined with this JS-based component.
 
 xtal-tree takes a "watcha-got?" approach to the data -- it allows the specific structure of the tree data to be pretty much anything, and passes no judgment on it.   It doesn't accidentally overwrite anything it shouldn't, without specific permission from the developer. The user of xtal-tree, i.e. the developer, then needs to train xtal-tree how to interpret the data -- how to get the children, how to represent an open node vs a closed node, etc.
 
@@ -163,12 +163,6 @@ In the demo below, we use our own [light-weight virtual list web component wrapp
 </custom-element-demo>
 ```
 -->
-
-The details element provides a way to create tree structures with pure HTML. Performance is surprisingly good, and may not require any virtual scrollers, even for fairly large tree structures.
-
-However, such trees lack some capabilities expected from a tree component, such as search, sort and expandAll/Collapse All.  This library contains a helper "decorator" function, XtalTreeDeco, which adds such capabilities.
-
-This package also contains a custom element, xtal-tree (xtal-tree.js) which takes JavaScript tree structure, and provides the same capabilities.
 
 ## Viewing This Element Locally
 

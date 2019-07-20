@@ -13,11 +13,11 @@ import { decorate } from "trans-render/decorate.js";
 import { update } from "trans-render/update.js";
 import { XtalVListBase } from "xtal-vlist/xtal-vlist-base.js";
 import { init } from "trans-render/init.js";
-const customSymbols = {
-    lastFirstVisibleIndex: Symbol("lastFirstVisibleIndex"),
-    recalculatedNodes: Symbol("restoreLastVisibleIndex"),
-    selectedNode: Symbol("selectedNode")
-};
+// const customSymbols = {
+//   lastFirstVisibleIndex: Symbol("lastFirstVisibleIndex"),
+//   recalculatedNodes: Symbol("restoreLastVisibleIndex"),
+//   selectedNode: Symbol("selectedNode")
+// };
 const mainTemplate = createTemplate(/* html */ `
 <!--   Expand All / Collapse All / Sort  / Search Buttons -->
 <button disabled data-expand-cmd=allExpandedNodes>Expand All</button>
@@ -207,9 +207,6 @@ export class XtalTreeBasic extends XtalElement {
                     }
                 });
             },
-            "p-d[prop-sym]": ({ target }) => {
-                target.prop = customSymbols[target.getAttribute("prop-sym")];
-            }
         });
     }
     get updateRenderContext() {

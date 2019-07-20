@@ -15,11 +15,11 @@ import { XtalVListBase } from "xtal-vlist/xtal-vlist-base.js";
 import { init } from "trans-render/init.js";
 import { RenderContext, DecorateArgs } from "trans-render/init.d.js";
 
-const customSymbols = {
-  lastFirstVisibleIndex: Symbol("lastFirstVisibleIndex"),
-  recalculatedNodes: Symbol("restoreLastVisibleIndex"),
-  selectedNode: Symbol("selectedNode")
-};
+// const customSymbols = {
+//   lastFirstVisibleIndex: Symbol("lastFirstVisibleIndex"),
+//   recalculatedNodes: Symbol("restoreLastVisibleIndex"),
+//   selectedNode: Symbol("selectedNode")
+// };
 const mainTemplate = createTemplate(/* html */ `
 <!--   Expand All / Collapse All / Sort  / Search Buttons -->
 <button disabled data-expand-cmd=allExpandedNodes>Expand All</button>
@@ -203,9 +203,9 @@ export class XtalTreeBasic extends XtalElement {
           } as DecorateArgs
         );
       },
-      "p-d[prop-sym]": ({ target }) => {
-        (<any>target).prop = customSymbols[target.getAttribute("prop-sym")];
-      }
+      // "p-d[prop-sym]": ({ target }) => {
+      //   (<any>target).prop = customSymbols[target.getAttribute("prop-sym")];
+      // }
 
     });
   }

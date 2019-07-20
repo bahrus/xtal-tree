@@ -1,4 +1,4 @@
-import {XtalSplit} from "xtal-split/xtal-split.js";
+//import {XtalSplit} from "xtal-split/xtal-split.js";
 //import {XtalDeco} from 'xtal-decorator/xtal-deco.js';
 import "if-diff/if-diff.js";
 //import '@polymer/iron-list/iron-list.js';
@@ -33,15 +33,15 @@ const mainTemplate = createTemplate(/* html */ `
 <button disabled data-dir="desc">Sort Desc</button>
 <p-d on=click to=xtal-tree[-sorted] val=target.dataset.dir></p-d>
 <input disabled=2 type=text placeholder=Search>
-<p-d-r on=input to=xtal-split prop=search val=target.value></p-d-r>
-<p-d on=input to=xtal-tree prop=searchString val=target.value></p-d>
+<p-d on=input to=xtal-tree-basic-vlist[-search] val=target.value></p-d>
+<p-d on=input to=xtal-tree[-searchString] val=target.value></p-d>
 <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
 <xtal-fetch-req fetch as=json></xtal-fetch-req>
 <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
 <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
-<xtal-tree -expandCmd -sorted id=myTree></xtal-tree>
+<xtal-tree -expandCmd -sorted -searchString id=myTree></xtal-tree>
 <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
-<xtal-tree-basic-vlist -items p-d-if=p-d-r></xtal-tree-basic-vlist>
+<xtal-tree-basic-vlist -items -search p-d-if=p-d-r></xtal-tree-basic-vlist>
 <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
 <!-- ==============  Styling of iron-list ================== -->
 <style>
@@ -238,7 +238,7 @@ define(XtalTreeBasic);
 const testTemplate = createTemplate(/* html */ `
 <div class="node" p-d-if=p-d-r>
   <span data-is-expanded="-1"></span>
-  <xtal-split></xtal-split>
+  <label></label>
 </div>
 `);
 class XtalTreeBasicVList extends XtalVListBase {
@@ -246,6 +246,18 @@ class XtalTreeBasicVList extends XtalVListBase {
     return "xtal-tree-basic-vlist";
   }
 
+  _search : string | undefined;
+  get search(){
+    return this._search;
+  }
+  set search(nv){
+    this._search = nv;
+  }
+
+  connectedCallback(){
+    this.propUp(['search']);
+    super.connectedCallback();
+  }
 
   generate(row: number) {
     const el = document.createElement("div");
@@ -275,7 +287,30 @@ class XtalTreeBasicVList extends XtalVListBase {
                 }
               }
             }),
-            [XtalSplit.is]: rowNode.name
+            label: ({target}) => {
+              const nme = rowNode.name;
+              if(this._search){
+                const split = nme.split(new RegExp(this._search, 'i'));
+                const tcL = nme.length; //token content length;
+                const tc = split.length;
+                const len = this._search.length;
+                let iP = 0;
+                let text = '';
+                split.forEach((t, i) => {
+    
+                    iP += t.length;
+                    text += t;
+                    if (i < tc && iP < tcL) text += "<span class='match'>" + nme.substr(iP, len) + "</span>";
+                    iP += len;
+                })
+                target.innerHTML = text;
+                
+              }else{
+                target.textContent = nme;
+              }
+              
+            }
+            //[XtalSplit.is]: rowNode.name
           }
           
         }
@@ -284,6 +319,13 @@ class XtalTreeBasicVList extends XtalVListBase {
     init(testTemplate, ctx, el);
     return el;
   }
+
+  // rowXFormFn(el: HTMLElement){
+  //   el.setAttribute('p-d-if', 'p-d-r');
+  // }
+  // containerXFormFn(el: HTMLElement){
+  //   el.setAttribute('p-d-if', 'p-d-r');
+  // }
 }
 
 define(XtalTreeBasicVList);

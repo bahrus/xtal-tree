@@ -10,6 +10,8 @@ Often we want to take advantage of a nice flat list generator component, like do
 
 This scenario seems to come up so frequently with various components, that this component strives to genericize that requirement.
 
+**NB** An alternative way of generating a tree via JS / JSON, is to use server side HTML rendering with the  details / summary element.  Some experiments with this approach have been done [here](https://github.com/bahrus/xtal-tree-deco), where similar support for expand all / search / sort is supported. This will tend to have smaller first paint / time to interactive times, if the tree starts out in collapsed mode.  However,as the amount of data increases, if you want to support expand all and global search capabilities, it may be better to use a virtual list combined with this JS-based component.
+
 xtal-tree takes a "watcha-got?" approach to the data -- it allows the specific structure of the tree data to be pretty much anything, and passes no judgment on it.   It doesn't accidentally overwrite anything it shouldn't, without specific permission from the developer. The user of xtal-tree, i.e. the developer, then needs to train xtal-tree how to interpret the data -- how to get the children, how to represent an open node vs a closed node, etc.
 
 xtal-tree also takes a "whatcha-want?" approach to what is displayed.  You can display the data as a classic tree, or as a treegrid, or as any other way you want.  The only assumption xtal-tree makes is that you want to build the display from a flat list generator, like dom-repeat, iron-list, or a flat grid.  
@@ -54,7 +56,7 @@ export class XtalTreeSampleStruct extends XtalTree{
 
 In the demo below, we use our own [light-weight virtual list web component wrapper](https://github.com/bahrus/xtal-vlist) around [this js-fiddle](https://jsfiddle.net/jpeter06/ao464o8g/)
 
-Demo
+[Demo](https://jsfiddle.net/bahrus/y8moqgrb/)
 
 <!--
 ```

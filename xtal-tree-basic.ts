@@ -1,9 +1,7 @@
-//import {XtalSplit} from "xtal-split/xtal-split.js";
-//import {XtalDeco} from 'xtal-decorator/xtal-deco.js';
 import "if-diff/if-diff.js";
-//import '@polymer/iron-list/iron-list.js';
 import "p-et-alia/p-d.js";
 import "p-et-alia/p-u.js";
+import "./xtal-tree-basic-vlist.js";
 import { XtalTree } from "./xtal-tree.js";
 import { XtalFetchReq } from "xtal-fetch/xtal-fetch-req.js";
 import { XtalElement } from "xtal-element/xtal-element.js";
@@ -11,9 +9,7 @@ import { define } from "trans-render/define.js";
 import { createTemplate, newRenderContext } from "xtal-element/utils.js";
 import { decorate } from "trans-render/decorate.js";
 import { update } from "trans-render/update.js";
-import { XtalVListBase } from "xtal-vlist/xtal-vlist-base.js";
-import { init } from "trans-render/init.js";
-import { RenderContext, DecorateArgs } from "trans-render/init.d.js";
+import { DecorateArgs } from "trans-render/init.d.js";
 
 // const customSymbols = {
 //   lastFirstVisibleIndex: Symbol("lastFirstVisibleIndex"),
@@ -203,9 +199,6 @@ export class XtalTreeBasic extends XtalElement {
           } as DecorateArgs
         );
       },
-      // "p-d[prop-sym]": ({ target }) => {
-      //   (<any>target).prop = customSymbols[target.getAttribute("prop-sym")];
-      // }
 
     });
   }
@@ -236,92 +229,4 @@ export class XtalTreeBasic extends XtalElement {
 }
 define(XtalTreeBasic);
 
-const testTemplate = createTemplate(/* html */ `
-<div class="node">
-  <span data-is-expanded="-1"></span>
-  <label></label>
-</div>
-`);
-class XtalTreeBasicVList extends XtalVListBase {
-  static get is() {
-    return "xtal-tree-basic-vlist";
-  }
 
-  _search : string | undefined;
-  get search(){
-    return this._search;
-  }
-  set search(nv){
-    this._search = nv;
-  }
-
-  connectedCallback(){
-    this.propUp(['search']);
-    super.connectedCallback();
-  }
-
-  generate(row: number) {
-    const el = document.createElement("div");
-    const rowNode = this._items[row];
-    const ctx: RenderContext = {
-      Transform: {
-        div: ({target}) => {
-          decorate(target, {
-            attribs:{
-              style: rowNode.style
-            },
-            on:{
-              click: function(e){
-                this.selectedNode = rowNode;
-              }
-            },
-            propDefs:{
-              selectedNode: undefined
-            }
-          })
-          return {
-            span: ({target}) => decorate(target, {
-              propVals:{
-                dataset:{
-                  hasChildren: rowNode.children ? 1 : -1,
-                  isExpanded: rowNode.expanded ? 1 : -1,
-                }
-              }
-            }),
-            label: ({target}) => {
-              const nme = rowNode.name;
-              if(this._search){
-                const split = nme.split(new RegExp(this._search, 'i'));
-                const tcL = nme.length; //token content length;
-                const tc = split.length;
-                const len = this._search.length;
-                let iP = 0;
-                let text = '';
-                split.forEach((t, i) => {
-    
-                    iP += t.length;
-                    text += t;
-                    if (i < tc && iP < tcL) text += "<span class='match'>" + nme.substr(iP, len) + "</span>";
-                    iP += len;
-                })
-                target.innerHTML = text;
-                
-              }else{
-                target.textContent = nme;
-              }
-              
-            }
-            //[XtalSplit.is]: rowNode.name
-          }
-          
-        }
-      }
-    };
-    init(testTemplate, ctx, el);
-    return el;
-  }
-
-
-}
-
-define(XtalTreeBasicVList);

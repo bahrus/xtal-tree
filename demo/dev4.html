@@ -14,25 +14,27 @@
   <div>
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     <button disabled data-expand-cmd=allExpandedNodes>Expand All</button>
+    <!-- pass down (p-d) expand/collapse command to xtal-tree-sample-struct -->
     <p-d on=click to=xtal-tree-sample-struct[-expandCmd]  val=target.dataset.expandCmd m=1 skip-init></p-d>
     <button disabled data-expand-cmd=allCollapsedNodes>Collapse All</button>
     <p-d on=click to=xtal-tree-sample-struct[-expandCmd]  val=target.dataset.expandCmd m=1 skip-init></p-d>
     <button disabled data-dir="asc">Sort Asc</button>
     <p-d on=click to=xtal-tree-sample-struct[-sorted] val=target.dataset.dir m=1 skip-init></p-d>
     <button disabled data-dir="desc">Sort Desc</button>
-    <p-d on=click to=xtal-tree-sample-struct[-sorted] val=target.dataset.dir></p-d>
+    <p-d on=click to=xtal-tree-sample-struct[-sorted] val=target.dataset.dir m=1 skip-init></p-d>
     <input disabled=2 type=text placeholder=Search>
-    <p-d on=input to=xtal-tree-basic-vlist[-search] val=target.value></p-d>
+    <p-d on=input to=[-search] val=target.value m=1 skip-init></p-d>
     <p-d on=input to=xtal-tree-sample-struct[-searchString] val=target.value></p-d>
-    <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree -->
+    <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree-sample-structure -->
     <xtal-fetch-req fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as=json></xtal-fetch-req>
     <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
     <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
     <xtal-tree-sample-struct -expandCmd -sorted -searchString id=myTree></xtal-tree-sample-struct>
     <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
-    <xtal-tree-basic-vlist -items -search></xtal-tree-basic-vlist>
+    <xtal-tree-sample-struct-vlist -items -search></xtal-tree-sample-struct-vlist>
+    <!-- pass up (p-u) to tree view model when node is toggled -->
     <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
-    <!-- ==============  Styling of iron-list ================== -->
+    <!-- ==============  Styling of virtual list ================== -->
     <style>
       div.node {
         cursor: pointer;
@@ -116,7 +118,7 @@
     <script type="module-shim">
       import '../xtal-tree.js';
       import '../xtal-tree-sample-struct.js';
-      import '../xtal-tree-basic-vlist.js';
+      import '../xtal-tree-sample-struct-vlist.js';
       import 'if-diff/if-diff.js';
       import 'p-et-alia/p-d.js';
       import 'p-et-alia/p-u.js';

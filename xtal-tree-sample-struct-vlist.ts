@@ -5,15 +5,15 @@ import { RenderContext } from "trans-render/init.d.js";
 import { decorate } from "trans-render/decorate.js";
 import { init } from "trans-render/init.js";
 
-const testTemplate = createTemplate(/* html */ `
+const itemTemplate = createTemplate(/* html */ `
 <div class="node">
   <span data-is-expanded="-1"></span>
   <label></label>
 </div>
 `);
-class XtalTreeBasicVList extends XtalVListBase {
+class XtalTreeSampleStructVList extends XtalVListBase {
   static get is() {
-    return "xtal-tree-basic-vlist";
+    return "xtal-tree-sample-struct-vlist";
   }
 
   _search : string | undefined;
@@ -85,11 +85,11 @@ class XtalTreeBasicVList extends XtalVListBase {
         }
       }
     };
-    init(testTemplate, ctx, el);
+    init(itemTemplate, ctx, el);
     return el;
   }
 
 
 }
 
-define(XtalTreeBasicVList);
+define(XtalTreeSampleStructVList);

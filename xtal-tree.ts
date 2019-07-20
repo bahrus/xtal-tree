@@ -53,7 +53,7 @@ export class XtalTree extends  XtallatX(hydrate(HTMLElement)) {
         this.style.display = 'none';
         this._conn = true;
         this.propUp(['childrenFn', 'compareFn', 'isOpenFn', 'nodes', 'searchString', 
-            sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn']);
+            sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn', 'expandCmd']);
         this.onPropsChange();
     }
 
@@ -64,6 +64,15 @@ export class XtalTree extends  XtallatX(hydrate(HTMLElement)) {
     set childrenFn(nodeFn) {
         this._childrenFn = nodeFn;
         this.onPropsChange();
+    }
+
+    _expandCmd;
+    get expandCmd(){
+        return this._expandCmd;
+    }
+    set expandCmd(nv){
+        this._expandCmd = nv;
+        this[nv] = this.viewableNodes;
     }
 
 

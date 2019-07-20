@@ -52,63 +52,110 @@ export class XtalTreeSampleStruct extends XtalTree{
 }
 ```
 
-In the demo below, we use our own [light-weight virtual list web component wrapper](https://github.com/bahrus/xtal-vlist) around [this code-pen](https://jsfiddle.net/jpeter06/ao464o8g/)
+In the demo below, we use our own [light-weight virtual list web component wrapper](https://github.com/bahrus/xtal-vlist) around [this js-fiddle](https://jsfiddle.net/jpeter06/ao464o8g/)
+
+Demo
 
 <!--
 ```
 <custom-element-demo>
   <template>
-    <div>
-        <style>
-            #directory details>section{
-                margin-left:20px;
-                display:flex;
-                flex-direction:column;
-            }
+  <div>
+    <!--   Expand All / Collapse All / Sort  / Search Buttons -->
+    <button disabled data-expand-cmd=allExpandedNodes>Expand All</button>
+    <!-- pass down (p-d) expand/collapse command to xtal-tree-sample-struct -->
+    <p-d on=click to=[-expandCmd]  val=target.dataset.expandCmd m=1 skip-init></p-d>
+    <button disabled data-expand-cmd=allCollapsedNodes>Collapse All</button>
+    <p-d on=click to=[-expandCmd]  val=target.dataset.expandCmd m=1 skip-init></p-d>
+    <button disabled data-dir="asc">Sort Asc</button>
+    <p-d on=click to=[-sorted] val=target.dataset.dir m=1 skip-init></p-d>
+    <button disabled data-dir="desc">Sort Desc</button>
+    <p-d on=click to=[-sorted] val=target.dataset.dir m=1 skip-init></p-d>
+    <input disabled=2 type=text placeholder=Search>
+    <p-d on=input to=[-search] val=target.value m=1 skip-init></p-d>
+    <p-d on=input to=[-searchString] val=target.value m=1 skip-init></p-d>
+    <!-- ================= Get Sample JSON with Tree Structure (File Directory), Pass to xtal-tree-sample-structure -->
+    <xtal-fetch-req fetch href="https://unpkg.com/xtal-tree@0.0.34/demo/directory.json" as=json></xtal-fetch-req>
+    <!-- =================  Pass JSON object to xtal-tree for processing ========================= -->
+    <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
+    <xtal-tree-sample-struct -expandCmd -sorted -searchString id=myTree></xtal-tree-sample-struct>
+    <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
+    <xtal-tree-sample-struct-vlist -items -search></xtal-tree-sample-struct-vlist>
+    <!-- pass up (p-u) to tree view model when node is toggled -->
+    <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
+    <!-- ==============  Styling of virtual list ================== -->
+    <style>
+      div.node {
+        cursor: pointer;
+        height: 24px;
+        display:flex;
+        flex-direction:row;
+        align-items: center;
+      }
 
-            #directory .match{
-                font-weight: 800;
-            }
+      span.match {
+        font-weight: bold;
+        background-color: yellowgreen;
+      }
 
-            
-        </style>
-        <xtal-sip><script nomodule>["xtal-fetch-req", "p-d-r"]</script></xtal-sip>
-        <button>Expand All</button>
-        <p-d-r on=click to=details prop=allExpanded val=target skip-init></p-d-r>
-        <button>Collapse All</button>
-        <p-d-r on=click to=details prop=allCollapsed val=target skip-init></p-d-r>
-        <label for=search>Search</label>
-        <input disabled autocomplete=off id=search>
-        <p-d-r on=input to=details prop=searchString val=target.value skip-init></p-d-r>
-        <br>
-        <button data-dir=asc>Sort Ascending</button>
-        <p-d-r on=click to=details prop=sortDir val=target.dataset.dir skip-init></p-d-r>
-        <button data-dir=desc>Sort Descending</button>
-        <p-d-r on=click to=details prop=sortDir val=target.dataset.dir skip-init></p-d-r>
-        <xtal-fetch-req p-d-if="p-d-r" id="directory" fetch href="https://unpkg.com/xtal-tree@0.0.64/demo/directory.html" as="text" insert-results></xtal-fetch-req>
-        <script defer src="https://cdn.jsdelivr.net/npm/es-module-shims@0.2.7/dist/es-module-shims.js"></script>
-        <script type="importmap-shim">
-        {
-            "imports": {
-                "xtal-element/": "https://cdn.jsdelivr.net/npm/xtal-element@0.0.59/",
-                "trans-render/": "https://cdn.jsdelivr.net/npm/trans-render@0.0.111/",
-                "xtal-sip": "https://cdn.jsdelivr.net/npm/xtal-sip@0.0.87/xtal-sip.js",
-                "xtal-fetch-req": "https://cdn.jsdelivr.net/npm/xtal-fetch@0.0.58/xtal-fetch-req.js",
-                "p-d": "https://cdn.jsdelivr.net/npm/p-et-alia@0.0.4/p-d.js",
-                "p-d-r": "https://cdn.jsdelivr.net/npm/p-et-alia@0.0.4/p-d-r.js",
-                "xtal-deco": "https://cdn.jsdelivr.net/npm/xtal-decorator@0.0.46/xtal-deco.js"
-            }
-        }
-        </script>
-        <script type="module-shim">
-            import 'xtal-sip';
-            import {XtalTreeDeco} from 'https://cdn.jsdelivr.net/npm/xtal-tree@0.0.64/XtalTreeDeco.js';
-            directory.addEventListener('fetch-complete', e =>{
-                XtalTreeDeco(directory.querySelector('details'), true);
-            })
-        </script>
+      span[data-has-children="1"][data-is-expanded="1"]::after{
+        content: '\25BE';
+        font-size: 1.6em;
+      }
 
-    </div>
+      span[data-has-children],span[data-no-children]{
+        width:26px;
+      }
+      span[data-has-children="-1"],span[data-no-children="-1"]{
+        visibility:hidden;
+      }
+
+      span[data-has-children="1"][data-is-expanded="-1"]::after{
+        content: '\25B8';
+        font-size: 1.6em;
+      }
+
+      span[data-has-children="1"],span[data-no-children="1"]{
+        display:inline-block;
+      }
+
+      @media only screen and (-webkit-min-device-pixel-ratio : 1.5),
+            only screen and (min-device-pixel-ratio : 1.5) {
+
+          /* Styles */
+          .container {
+              width: 100%;
+              height: 100%;
+              min-height: 100%;
+          }
+      }
+
+      .vrow {
+          width: 100%;
+          height: 30px;
+          max-height: 30px;
+          /*border-bottom: solid 1px #dbd9d9;*/
+          color: #000;
+          margin: 0;
+      }
+
+      .vrow p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          border: none;
+          margin: 0;
+          color: #5b5b5b;
+          /*font-size: 1.5rem;*/
+      }
+    </style>
+    <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-d.js?module"></script>
+    <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-u.js?module"></script>
+    <script type=module src="https://unpkg.com/if-diff@0.0.35/if-diff.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-fetch@0.0.72/xtal-fetch-req.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.68/xtal-tree-sample-struct.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.68/xtal-tree-sample-struct-vlist.js?module"></script>
+
   </div>
   </template>
 </custom-element-demo>

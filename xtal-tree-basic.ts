@@ -4,7 +4,6 @@ import "if-diff/if-diff.js";
 //import '@polymer/iron-list/iron-list.js';
 import "p-et-alia/p-d.js";
 import "p-et-alia/p-u.js";
-import "p-et-alia/p-d-r.js";
 import { XtalTree } from "./xtal-tree.js";
 import { XtalFetchReq } from "xtal-fetch/xtal-fetch-req.js";
 import { XtalElement } from "xtal-element/xtal-element.js";
@@ -41,7 +40,7 @@ const mainTemplate = createTemplate(/* html */ `
 <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
 <xtal-tree -expandCmd -sorted -searchString id=myTree></xtal-tree>
 <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
-<xtal-tree-basic-vlist -items -search p-d-if=p-d-r></xtal-tree-basic-vlist>
+<xtal-tree-basic-vlist -items -search></xtal-tree-basic-vlist>
 <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
 <!-- ==============  Styling of iron-list ================== -->
 <style>
@@ -63,8 +62,11 @@ const mainTemplate = createTemplate(/* html */ `
     font-size: 1.6em;
   }
 
+  span[data-has-children],span[data-no-children]{
+    width:26px;
+  }
   span[data-has-children="-1"],span[data-no-children="-1"]{
-    display:none;
+    visibility:hidden;
   }
 
   span[data-has-children="1"][data-is-expanded="-1"]::after{
@@ -73,7 +75,6 @@ const mainTemplate = createTemplate(/* html */ `
   }
 
   span[data-has-children="1"],span[data-no-children="1"]{
-    width: 26px;
     display:inline-block;
   }
 
@@ -236,7 +237,7 @@ export class XtalTreeBasic extends XtalElement {
 define(XtalTreeBasic);
 
 const testTemplate = createTemplate(/* html */ `
-<div class="node" p-d-if=p-d-r>
+<div class="node">
   <span data-is-expanded="-1"></span>
   <label></label>
 </div>
@@ -320,12 +321,7 @@ class XtalTreeBasicVList extends XtalVListBase {
     return el;
   }
 
-  // rowXFormFn(el: HTMLElement){
-  //   el.setAttribute('p-d-if', 'p-d-r');
-  // }
-  // containerXFormFn(el: HTMLElement){
-  //   el.setAttribute('p-d-if', 'p-d-r');
-  // }
+
 }
 
 define(XtalTreeBasicVList);

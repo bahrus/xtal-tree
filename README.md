@@ -10,7 +10,7 @@ Often we want to take advantage of a nice flat list generator component, like do
 
 This scenario seems to come up so frequently with various components, that this component strives to genericize that requirement.
 
-**NB** This component takes a JS / JSON - centric approach.  An alternative way of generating an expandable tree is to use server side HTML rendering, tapping into the power of the  details / summary element.  Some experiments with this approach have been done [here](https://github.com/bahrus/xtal-tree-deco), where similar support for expand all / search / sort is supported. This will tend to have smaller first paint / time to interactive times, if the tree starts out in collapsed mode.  However,as the amount of data increases, if you want to support expand all and global search capabilities, it may be better to use a virtual list combined with this JS-based component.
+**NB I** This component takes a JS / JSON - centric approach.  An alternative way of generating an expandable tree is to use [server side HTML rendering](https://bahrus.github.io/xtal-tree-deco/cdn.html), tapping into the power of the  details / summary element.  Some experiments with this approach have been done [here](https://github.com/bahrus/xtal-tree-deco), where similar support for expand all / search / sort is supported. This will tend to have smaller first paint / time to interactive times, if the tree starts out in collapsed mode.  However,as the amount of data increases, if you want to support expand all and global search capabilities, it may be better to use a virtual list combined with this JS-based component.
 
 xtal-tree takes a "watcha-got?" approach to the data -- it allows the specific structure of the tree data to be pretty much anything, and passes no judgment on it.   It doesn't accidentally overwrite anything it shouldn't, without specific permission from the developer. The user of xtal-tree, i.e. the developer, then needs to train xtal-tree how to interpret the data -- how to get the children, how to represent an open node vs a closed node, etc.
 
@@ -54,7 +54,9 @@ export class XtalTreeSampleStruct extends XtalTree{
 }
 ```
 
-In the demo below, we use our own [light-weight virtual list web component wrapper](https://github.com/bahrus/xtal-vlist) around [this js-fiddle](https://jsfiddle.net/jpeter06/ao464o8g/)
+In the demo below, we use our own [light-weight virtual list web component wrapper](https://github.com/bahrus/xtal-vlist) around [this js-fiddle](https://jsfiddle.net/jpeter06/ao464o8g/).
+
+**NB II**  This virtual list is not yet outfitted with support for tabbing, as one gets for free with details/summary.
 
 [Demo](https://jsfiddle.net/bahrus/y8moqgrb/)
 

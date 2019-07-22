@@ -49,6 +49,14 @@ class XtalTreeSampleStructVList extends XtalVListBase {
                                     hasChildren: rowNode.children ? 1 : -1,
                                 },
                                 textContent: rowNode.expanded ? '\u25BE' : '\u25B8'
+                            },
+                            on: {
+                                focus: function (e) {
+                                    e.target.parentElement.style.border = '5px solid red';
+                                },
+                                blur: function (e) {
+                                    e.target.parentElement.style.border = '';
+                                }
                             }
                         }),
                         label: ({ target }) => {

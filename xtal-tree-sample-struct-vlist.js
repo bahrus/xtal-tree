@@ -57,7 +57,8 @@ class XtalTreeSampleStructVList extends XtalVListBase {
                             on: {
                                 focus: function (e) {
                                     const buttonElement = e.target;
-                                    buttonElement.parentElement.style.border = '5px solid red';
+                                    buttonElement.classList.add('selected');
+                                    //buttonElement.parentElement.style.border = '5px solid red';
                                     _this._lastFocusID = buttonElement.getAttribute(focus_id);
                                 },
                                 blur: function (e) {

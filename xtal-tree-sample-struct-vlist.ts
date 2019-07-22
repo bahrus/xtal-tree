@@ -1,9 +1,10 @@
 import { define } from "trans-render/define.js";
 import { createTemplate } from "xtal-element/utils.js";
-import { XtalVListBase } from "xtal-vlist/xtal-vlist-base.js";
+import { XtalVListBase, focus_id} from "xtal-vlist/xtal-vlist-base.js";
 import { RenderContext } from "trans-render/init.d.js";
 import { decorate } from "trans-render/decorate.js";
 import { init } from "trans-render/init.js";
+
 
 const itemTemplate = createTemplate(/* html */ `
 <div class="node">
@@ -28,10 +29,12 @@ class XtalTreeSampleStructVList extends XtalVListBase {
     this.propUp(['search']);
     super.connectedCallback();
   }
-
+  
+  
   generate(row: number) {
     const el = document.createElement("div");
     const rowNode = this._items[row];
+    const _this = this;
     const ctx: RenderContext = {
       Transform: {
         div: ({target}) => {
@@ -50,7 +53,9 @@ class XtalTreeSampleStructVList extends XtalVListBase {
           })
           return {
             button: ({target}) => decorate(target, {
-
+              attribs:{
+                [focus_id]: rowNode.path,
+              },
               propVals:{
                 dataset:{
                   hasChildren: rowNode.children ? 1 : -1,
@@ -61,7 +66,9 @@ class XtalTreeSampleStructVList extends XtalVListBase {
               },
               on:{
                 focus: function(e){
-                  (e.target as HTMLButtonElement).parentElement.style.border = '5px solid red';
+                  const buttonElement = e.target as HTMLButtonElement;
+                  buttonElement.parentElement.style.border = '5px solid red';
+                  (<any>_this)._lastFocusID = buttonElement.getAttribute(focus_id);
                 },
                 blur: function(e){
                   (e.target as HTMLButtonElement).parentElement.style.border = '';

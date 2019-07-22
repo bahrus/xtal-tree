@@ -5,7 +5,7 @@ import { decorate } from "trans-render/decorate.js";
 import { init } from "trans-render/init.js";
 const itemTemplate = createTemplate(/* html */ `
 <div class="node">
-  <span data-is-expanded="-1"></span>
+  <button></button>
   <label></label>
 </div>
 `);
@@ -43,12 +43,12 @@ class XtalTreeSampleStructVList extends XtalVListBase {
                         }
                     });
                     return {
-                        span: ({ target }) => decorate(target, {
+                        button: ({ target }) => decorate(target, {
                             propVals: {
                                 dataset: {
                                     hasChildren: rowNode.children ? 1 : -1,
-                                    isExpanded: rowNode.expanded ? 1 : -1,
-                                }
+                                },
+                                textContent: rowNode.expanded ? '\u25BE' : '\u25B8'
                             }
                         }),
                         label: ({ target }) => {

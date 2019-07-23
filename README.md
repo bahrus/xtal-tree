@@ -56,9 +56,8 @@ export class XtalTreeSampleStruct extends XtalTree{
 
 In the demo below, we use our own [light-weight virtual list web component wrapper](https://github.com/bahrus/xtal-vlist) around [this js-fiddle](https://jsfiddle.net/jpeter06/ao464o8g/).
 
-**NB II**  This virtual list is not yet outfitted with support for tabbing, as one gets for free with details/summary.
 
-[Demo](https://jsfiddle.net/bahrus/y8moqgrb/)
+[Demo](https://jsfiddle.net/bahrus/y8moqgrb/1/)
 
 <!--
 ```

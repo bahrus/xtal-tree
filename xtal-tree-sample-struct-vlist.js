@@ -10,6 +10,10 @@ const itemTemplate = createTemplate(/* html */ `
 </div>
 `);
 class XtalTreeSampleStructVList extends XtalVListBase {
+    constructor() {
+        super();
+        this._h = 300;
+    }
     static get is() {
         return "xtal-tree-sample-struct-vlist";
     }

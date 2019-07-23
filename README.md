@@ -66,6 +66,8 @@ In the demo below, we use our own [light-weight virtual list web component wrapp
   <template>
   <div>
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
+  <div>
+    <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     <button disabled data-expand-cmd=allExpandedNodes>Expand All</button>
     <!-- pass down (p-d) expand/collapse command to xtal-tree-sample-struct -->
     <p-d on=click to=[-expandCmd]  val=target.dataset.expandCmd m=1 skip-init></p-d>
@@ -102,26 +104,34 @@ In the demo below, we use our own [light-weight virtual list web component wrapp
         background-color: yellowgreen;
       }
 
-      span[data-has-children="1"][data-is-expanded="1"]::after{
-        content: '\25BE';
-        font-size: 1.6em;
-      }
+
 
       span[data-has-children],span[data-no-children]{
         width:26px;
       }
-      span[data-has-children="-1"],span[data-no-children="-1"]{
+      button[data-has-children="-1"],span[data-no-children="-1"]{
         visibility:hidden;
       }
 
-      span[data-has-children="1"][data-is-expanded="-1"]::after{
+      button[data-has-children="1"]{
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+        font-size: 1.6em;
+      }
+
+      /* span[data-has-children="1"][data-is-expanded="-1"]::after{
         content: '\25B8';
         font-size: 1.6em;
       }
 
       span[data-has-children="1"],span[data-no-children="1"]{
         display:inline-block;
-      }
+      } */
 
       @media only screen and (-webkit-min-device-pixel-ratio : 1.5),
             only screen and (min-device-pixel-ratio : 1.5) {
@@ -132,6 +142,11 @@ In the demo below, we use our own [light-weight virtual list web component wrapp
               height: 100%;
               min-height: 100%;
           }
+      }
+
+      .selected.node{
+        outline-color:rgb(77, 144, 254);
+        border: 1px solid rgb(77, 144, 254);
       }
 
       .vrow {
@@ -157,8 +172,8 @@ In the demo below, we use our own [light-weight virtual list web component wrapp
     <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-u.js?module"></script>
     <script type=module src="https://unpkg.com/if-diff@0.0.35/if-diff.js?module"></script>
     <script type=module src="https://unpkg.com/xtal-fetch@0.0.72/xtal-fetch-req.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.68/xtal-tree-sample-struct.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.68/xtal-tree-sample-struct-vlist.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.73/xtal-tree-sample-struct.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.73/xtal-tree-sample-struct-vlist.js?module"></script>
 
   </div>
   </template>

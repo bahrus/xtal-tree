@@ -31,7 +31,7 @@
     <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
     <xtal-tree-sample-struct -expandCmd -sorted -searchString id=myTree></xtal-tree-sample-struct>
     <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
-    <xtal-tree-sample-struct-vlist -items -search></xtal-tree-sample-struct-vlist>
+    <xtal-tree-sample-struct-vlist -items -search h=300></xtal-tree-sample-struct-vlist>
     <!-- pass up (p-u) to tree view model when node is toggled -->
     <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
     <!-- ==============  Styling of virtual list ================== -->
@@ -49,7 +49,9 @@
         background-color: yellowgreen;
       }
 
-
+      label:focus {
+        outline: 0px solid transparent;
+      }
 
       span[data-has-children],span[data-no-children]{
         width:26px;

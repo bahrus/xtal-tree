@@ -11,13 +11,13 @@
     "@polymer/iron-list": "3.0.2",
     "if-diff": "0.0.34",
     "p-et-alia": "0.0.11",
-    "trans-render": "0.0.127",
+    "trans-render": "0.0.128",
     "xtal-decorator": "0.0.46",
     "xtal-element": "0.0.78",
     "xtal-fetch": "0.0.65",
     "xtal-split": "0.0.1",
     "event-switch": "0.0.12",
-    "xtal-vlist": "0.0.16"
+    "xtal-vlist": "0.0.21"
   },
   "devDependencies": {
     "@types/node": "12.0.10",

@@ -31,7 +31,7 @@
     <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
     <xtal-tree-sample-struct -expandCmd -sorted -searchString id=myTree></xtal-tree-sample-struct>
     <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
-    <xtal-tree-sample-struct-vlist -items -search></xtal-tree-sample-struct-vlist>
+    <xtal-tree-sample-struct-vlist -items -search h=300></xtal-tree-sample-struct-vlist>
     <!-- pass up (p-u) to tree view model when node is toggled -->
     <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
     <!-- ==============  Styling of virtual list ================== -->
@@ -117,8 +117,8 @@
     <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-u.js?module"></script>
     <script type=module src="https://unpkg.com/if-diff@0.0.35/if-diff.js?module"></script>
     <script type=module src="https://unpkg.com/xtal-fetch@0.0.72/xtal-fetch-req.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.73/xtal-tree-sample-struct.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.73/xtal-tree-sample-struct-vlist.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.74/xtal-tree-sample-struct.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.74/xtal-tree-sample-struct-vlist.js?module"></script>
 
   </div>
 </body>

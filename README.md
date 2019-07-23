@@ -171,8 +171,8 @@ In the demo below, we use our own [light-weight virtual list web component wrapp
     <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-u.js?module"></script>
     <script type=module src="https://unpkg.com/if-diff@0.0.35/if-diff.js?module"></script>
     <script type=module src="https://unpkg.com/xtal-fetch@0.0.72/xtal-fetch-req.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.73/xtal-tree-sample-struct.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.73/xtal-tree-sample-struct-vlist.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.74/xtal-tree-sample-struct.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.74/xtal-tree-sample-struct-vlist.js?module"></script>
 
   </div>
   </template>

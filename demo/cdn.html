@@ -49,26 +49,34 @@
         background-color: yellowgreen;
       }
 
-      span[data-has-children="1"][data-is-expanded="1"]::after{
-        content: '\25BE';
-        font-size: 1.6em;
-      }
+
 
       span[data-has-children],span[data-no-children]{
         width:26px;
       }
-      span[data-has-children="-1"],span[data-no-children="-1"]{
+      button[data-has-children="-1"],span[data-no-children="-1"]{
         visibility:hidden;
       }
 
-      span[data-has-children="1"][data-is-expanded="-1"]::after{
+      button[data-has-children="1"]{
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+        font-size: 1.6em;
+      }
+
+      /* span[data-has-children="1"][data-is-expanded="-1"]::after{
         content: '\25B8';
         font-size: 1.6em;
       }
 
       span[data-has-children="1"],span[data-no-children="1"]{
         display:inline-block;
-      }
+      } */
 
       @media only screen and (-webkit-min-device-pixel-ratio : 1.5),
             only screen and (min-device-pixel-ratio : 1.5) {
@@ -79,6 +87,10 @@
               height: 100%;
               min-height: 100%;
           }
+      }
+
+      .selected.vrow{
+        outline-color:rgb(77, 144, 254);
       }
 
       .vrow {
@@ -104,8 +116,8 @@
     <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-u.js?module"></script>
     <script type=module src="https://unpkg.com/if-diff@0.0.35/if-diff.js?module"></script>
     <script type=module src="https://unpkg.com/xtal-fetch@0.0.72/xtal-fetch-req.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.68/xtal-tree-sample-struct.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.68/xtal-tree-sample-struct-vlist.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.72/xtal-tree-sample-struct.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.72/xtal-tree-sample-struct-vlist.js?module"></script>
 
   </div>
 </body>

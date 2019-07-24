@@ -11,7 +11,7 @@
     "@polymer/iron-list": "3.0.2",
     "if-diff": "0.0.34",
     "p-et-alia": "0.0.11",
-    "trans-render": "0.0.128",
+    "trans-render": "0.0.130",
     "xtal-decorator": "0.0.46",
     "xtal-element": "0.0.78",
     "xtal-fetch": "0.0.65",

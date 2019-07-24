@@ -4,6 +4,7 @@ import { XtalVListBase, focus_id} from "xtal-vlist/xtal-vlist-base.js";
 import { RenderContext } from "trans-render/init.d.js";
 import { decorate } from "trans-render/decorate.js";
 import { init } from "trans-render/init.js";
+import {split} from "trans-render/split.js";
 
 
 const itemTemplate = createTemplate(/* html */ `
@@ -85,25 +86,7 @@ class XtalTreeSampleStructVList extends XtalVListBase {
             label: ({target}) => {
               //const lbl = target as HTMLLabelElement;
               const nme = rowNode.name;
-              if(this._search){
-                const split = nme.split(new RegExp(this._search, 'i'));
-                const tcL = nme.length; //token content length;
-                const tc = split.length;
-                const len = this._search.length;
-                let iP = 0;
-                let text = '';
-                split.forEach((t, i) => {
-    
-                    iP += t.length;
-                    text += t;
-                    if (i < tc && iP < tcL) text += "<span class='match'>" + nme.substr(iP, len) + "</span>";
-                    iP += len;
-                })
-                target.innerHTML = text;
-                
-              }else{
-                target.textContent = nme;
-              }
+              split(target, nme, this._search);
               decorate(target, {
                 propVals:{
                   tabIndex: 0

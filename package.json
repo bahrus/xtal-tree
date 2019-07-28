@@ -17,14 +17,14 @@
     "xtal-fetch": "0.0.65",
     "xtal-split": "0.0.1",
     "event-switch": "0.0.12",
-    "xtal-vlist": "0.0.21"
+    "xtal-vlist": "0.0.24"
   },
   "devDependencies": {
     "@types/node": "12.0.10",
     "@types/puppeteer": "1.12.4",
     "@types/tape": "4.2.33",
     "@webcomponents/webcomponentsjs": "2.2.10",
-    "es-module-shims": "0.2.13",
+    "es-module-shims": "0.2.14",
     "jiife": "0.0.12",
     "tape": "4.11.0",
     "xtal-test": "0.0.19"

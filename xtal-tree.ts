@@ -206,6 +206,7 @@ export class XtalTree extends  XtallatX(hydrate(HTMLElement)) {
     }
     set toggledNode(node: ITreeNode) {
         if(node === null) return;
+        if(!this._childrenFn(node)) return;
         this.de('toggled-node', {
             value: node
         })

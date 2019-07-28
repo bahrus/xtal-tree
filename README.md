@@ -54,7 +54,7 @@ export class XtalTreeSampleStruct extends XtalTree{
 }
 ```
 
-In the demo below, we use our own [light-weight virtual list web component wrapper](https://github.com/bahrus/xtal-vlist) around [this js-fiddle](https://jsfiddle.net/jpeter06/ao464o8g/).
+In the demo below, we use our own [web component base class wrapper](https://github.com/bahrus/xtal-vlist) around [this light-weight virtual list implementation](https://sergimansilla.com/blog/virtual-scrolling/).
 
 
 [Demo](https://jsfiddle.net/bahrus/y8moqgrb/1/)

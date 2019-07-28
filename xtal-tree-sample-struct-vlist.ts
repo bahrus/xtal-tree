@@ -1,6 +1,6 @@
 import { define } from "trans-render/define.js";
 import { createTemplate } from "xtal-element/utils.js";
-import { XtalVListBase, focus_id} from "xtal-vlist/xtal-vlist-base.js";
+import { XtalVList, focus_id} from "xtal-vlist/xtal-vlist.js";
 import { RenderContext } from "trans-render/init.d.js";
 import { decorate } from "trans-render/decorate.js";
 import { init } from "trans-render/init.js";
@@ -13,7 +13,7 @@ const itemTemplate = createTemplate(/* html */ `
   <label></label>
 </div>
 `);
-class XtalTreeSampleStructVList extends XtalVListBase {
+class XtalTreeSampleStructVList extends XtalVList {
   constructor(){
     super();
     //this._h = 300;

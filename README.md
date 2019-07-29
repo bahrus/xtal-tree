@@ -65,8 +65,6 @@ In the demo below, we use our own [web component base class wrapper](https://git
   <template>
   <div>
     <!--   Expand All / Collapse All / Sort  / Search Buttons -->
-  <div>
-    <!--   Expand All / Collapse All / Sort  / Search Buttons -->
     <button disabled data-expand-cmd=allExpandedNodes>Expand All</button>
     <!-- pass down (p-d) expand/collapse command to xtal-tree-sample-struct -->
     <p-d on=click to=[-expandCmd]  val=target.dataset.expandCmd m=1 skip-init></p-d>
@@ -85,7 +83,7 @@ In the demo below, we use our own [web component base class wrapper](https://git
     <p-d on=fetch-complete prop=nodes val=target.value m=1></p-d>
     <xtal-tree-sample-struct -expandCmd -sorted -searchString id=myTree></xtal-tree-sample-struct>
     <p-d on=viewable-nodes-changed to=[-items]  val=target.viewableNodes m=1 skip-init></p-d>
-    <xtal-tree-sample-struct-vlist -items -search></xtal-tree-sample-struct-vlist>
+    <xtal-tree-sample-struct-vlist -items -search h=300></xtal-tree-sample-struct-vlist>
     <!-- pass up (p-u) to tree view model when node is toggled -->
     <p-u on=selectedNode-changed to=myTree prop=toggledNode val=target.selectedNode></p-u>
     <!-- ==============  Styling of virtual list ================== -->
@@ -103,7 +101,9 @@ In the demo below, we use our own [web component base class wrapper](https://git
         background-color: yellowgreen;
       }
 
-
+      label:focus {
+        outline: 0px solid transparent;
+      }
 
       span[data-has-children],span[data-no-children]{
         width:26px;
@@ -167,13 +167,14 @@ In the demo below, we use our own [web component base class wrapper](https://git
           /*font-size: 1.5rem;*/
       }
     </style>
+
+
     <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-d.js?module"></script>
     <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-u.js?module"></script>
     <script type=module src="https://unpkg.com/if-diff@0.0.35/if-diff.js?module"></script>
     <script type=module src="https://unpkg.com/xtal-fetch@0.0.72/xtal-fetch-req.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.74/xtal-tree-sample-struct.js?module"></script>
-    <script type=module src="https://unpkg.com/xtal-tree@0.0.74/xtal-tree-sample-struct-vlist.js?module"></script>
-
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.75/xtal-tree-sample-struct.js?module"></script>
+    <script type=module src="https://unpkg.com/xtal-tree@0.0.75/xtal-tree-sample-struct-vlist.js?module"></script>
   </div>
   </template>
 </custom-element-demo>

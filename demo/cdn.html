@@ -71,6 +71,14 @@
         font-size: 1.6em;
       }
 
+      /* span[data-has-children="1"][data-is-expanded="-1"]::after{
+        content: '\25B8';
+        font-size: 1.6em;
+      }
+
+      span[data-has-children="1"],span[data-no-children="1"]{
+        display:inline-block;
+      } */
 
       @media only screen and (-webkit-min-device-pixel-ratio : 1.5),
             only screen and (min-device-pixel-ratio : 1.5) {
@@ -108,19 +116,6 @@
       }
     </style>
 
-    <script defer src="../node_modules/es-module-shims/dist/es-module-shims.js"></script>
-    <script type="importmap-shim">
-    {
-      "imports": {
-        "trans-render/": "../node_modules/trans-render/",
-        "xtal-element/": "../node_modules/xtal-element/",
-        "if-diff/": "../node_modules/if-diff/",
-        "p-et-alia/": "../node_modules/p-et-alia/",
-        "xtal-fetch/": "../node_modules/xtal-fetch/" ,
-        "xtal-vlist/": "../node_modules/xtal-vlist/"          
-      }
-    }
-    </script>
 
     <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-d.js?module"></script>
     <script type=module src="https://unpkg.com/p-et-alia@0.0.11/p-u.js?module"></script>

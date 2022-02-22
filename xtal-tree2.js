@@ -46,6 +46,11 @@ export class XtalTree extends HTMLElement {
         }
     }
 }
+const dispatch = {
+    notify: {
+        dispatch: true
+    }
+};
 const xe = new XE({
     config: {
         tagName: 'xtal-tree',
@@ -55,11 +60,8 @@ const xe = new XE({
             testNodePath: 'name',
         },
         propInfo: {
-            toggledNode: {
-                notify: {
-                    dispatch: true,
-                }
-            }
+            toggledNode: dispatch,
+            viewableNodes: dispatch,
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',

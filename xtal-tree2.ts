@@ -50,6 +50,12 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
 export interface XtalTree extends XtalTreeProps{}
 
+const dispatch = {
+    notify:{
+        dispatch: true
+    }
+};
+
 const xe = new XE<XtalTreeProps, XtalTreeActions>({
     config:{
         tagName: 'xtal-tree',
@@ -60,11 +66,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
 
         },
         propInfo: {
-            toggledNode:{
-                notify:{
-                    dispatch: true,
-                }
-            }
+            toggledNode:dispatch,
+            viewableNodes:dispatch,
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',

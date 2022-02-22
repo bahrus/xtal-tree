@@ -17,22 +17,37 @@
     >
     </form>
     <xtal-tree -nodes></xtal-tree>
+    <xtal-vlist be-observant='{
+        "list": {"observe": "xtal-tree", "vft": "viewableNodes"}
+    }' row-transform='{
+        "label": "name"
+    }'
+    >
+        <div class="node" slot="row">
+            <button></button>
+            <label></label>
+      </div>
+    </xtal-vlist>
     <script type=importmap>
         {
             "imports": {
                 "trans-render/": "../node_modules/trans-render/",
                 "xtal-element/": "../node_modules/xtal-element/",
                 "be-decorated/": "../node_modules/be-decorated/",
+                "be-deslotted/": "../node_modules/be-deslotted/",
                 "be-observant/": "../node_modules/be-observant/",
                 "be-reformable/": "../node_modules/be-reformable/",
                 "on-to-me/": "../node_modules/on-to-me/",
-                "be-hive/": "../node_modules/be-hive/"
+                "be-hive/": "../node_modules/be-hive/",
+                "xtal-vlist/": "../node_modules/xtal-vlist/"
             }
         }
     </script>
     <script type=module>
         import 'be-reformable/be-reformable.js';
         import '../xtal-tree2.js';
+        import 'xtal-vlist/xtal-vlist.js';
+        import 'be-observant/be-observant.js';
     </script>
 </body>
 </html>

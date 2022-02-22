@@ -3,8 +3,8 @@ import {XE} from 'xtal-element/src/XE.js';
 
 export class XtalTree extends HTMLElement implements XtalTreeActions{
 
-    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn}, nodes: ITreeNode[], acc: ITreeNode[]) {
-        if (!nodes) return;
+    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn}: this, nodes: ITreeNode[], acc: ITreeNode[]) {
+        if (!nodes) return acc;
         nodes.forEach(node => {
             if (this.searchString) {
                 if (!isOpenFn(node) && !testNodeFn(node, this.searchString)) return;
@@ -17,17 +17,19 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
     defineIsOpenFn({isOpenPath}: this) {
         return {
-            isOpenFn: (tn: ITreeNode) => tn[isOpenPath]
+            isOpenFn: (tn: ITreeNode) => (<any>tn)[isOpenPath]
         }
     }
 
     defineTestNodeFn({testNodePath}: this) {
         return {
-            testNodeFn: (tn: ITreeNode, searchString: string) => tn[testNodePath].toLowerCase().includes(searchString.toLowerCase())
+            testNodeFn: (tn: ITreeNode, searchString: string) => (<any>tn)[testNodePath].toLowerCase().includes(searchString.toLowerCase())
         }
     }
-    updateViewableNodes({}: this): void {
-        throw 'Not implemented';
+    updateViewableNodes({nodes}: this){
+        return {
+            viewableNodes: this.calculateViewableNodes(this, nodes, [])
+        };
     }
     toggleNode({toggledNode, childrenFn, toggleNodeFn}: this){
         if(!childrenFn(toggledNode)) return;
@@ -69,6 +71,9 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             toggleNode: {
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn']
             },
+            updateViewableNodes:{
+                ifAllOf: ['nodes']
+            }
         },
         style:{
             display: 'none',

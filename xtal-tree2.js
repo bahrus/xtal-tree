@@ -2,7 +2,7 @@ import { XE } from 'xtal-element/src/XE.js';
 export class XtalTree extends HTMLElement {
     calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn }, nodes, acc) {
         if (!nodes)
-            return;
+            return acc;
         nodes.forEach(node => {
             if (this.searchString) {
                 if (!isOpenFn(node) && !testNodeFn(node, this.searchString))
@@ -24,8 +24,10 @@ export class XtalTree extends HTMLElement {
             testNodeFn: (tn, searchString) => tn[testNodePath].toLowerCase().includes(searchString.toLowerCase())
         };
     }
-    updateViewableNodes({}) {
-        throw 'Not implemented';
+    updateViewableNodes({ nodes }) {
+        return {
+            viewableNodes: this.calculateViewableNodes(this, nodes, [])
+        };
     }
     toggleNode({ toggledNode, childrenFn, toggleNodeFn }) {
         if (!childrenFn(toggledNode))
@@ -64,6 +66,9 @@ const xe = new XE({
             toggleNode: {
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn']
             },
+            updateViewableNodes: {
+                ifAllOf: ['nodes']
+            }
         },
         style: {
             display: 'none',

@@ -40,8 +40,10 @@ export interface XtalTreeActions{
     defineTestNodeFn(self: this): {
         testNodeFn: (tn: ITreeNode, search: string) => boolean;
     }
-    calculateViewableNodes(self: this, nodes: ITreeNode, acc: ITreeNode[]): ITreeNode[];
-    updateViewableNodes(self: this): void;
+    calculateViewableNodes(self: this, nodes: ITreeNode[], acc: ITreeNode[]): ITreeNode[];
+    updateViewableNodes(self: this): {
+        viewableNodes: ITreeNode[];
+    };
     toggleNode(self: this): void;
     openNode(self: this): void;
 

@@ -20,6 +20,30 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             isOpenFn: (tn: ITreeNode) => tn[isOpenPath]
         }
     }
+
+    defineTestNodeFn({testNodePath}: this) {
+        return {
+            testNodeFn: (tn: ITreeNode, searchString: string) => tn[testNodePath].toLowerCase().includes(searchString.toLowerCase())
+        }
+    }
+    updateViewableNodes({}: this): void {
+        throw 'Not implemented';
+    }
+    toggleNode({toggledNode, childrenFn, toggleNodeFn}: this){
+        if(!childrenFn(toggledNode)) return;
+        toggleNodeFn(toggledNode);
+        this.updateViewableNodes(this);
+    }
+    openNode({openedNode, isOpenFn}: this){
+        if(!isOpenFn(openedNode)){
+            this.toggledNode = openedNode;
+        }
+    }
+    closeNode({closedNode, isOpenFn}: this){
+        if(isOpenFn(closedNode)){
+            this.toggledNode = closedNode;
+        }
+    }
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -33,11 +57,22 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             testNodePath: 'name',
 
         },
+        propInfo: {
+            toggledNode:{
+                notify:{
+                    dispatch: true,
+                }
+            }
+        },
         actions: {
             defineIsOpenFn: 'isOpenPath',
+            toggleNode: {
+                ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn']
+            },
         },
         style:{
             display: 'none',
         }
-    }
+    },
+    superclass: XtalTree,
 });

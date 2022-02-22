@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form be-reformable='{
+        "autoSubmit": true,
+        "debug": true
+    }'
+
+        target="[-nodes]"
+        action="directory.json"
+    >
+    </form>
+    <xtal-tree -nodes></xtal-tree>
+    <script type=importmap>
+        {
+            "imports": {
+                "trans-render/": "../node_modules/trans-render/",
+                "xtal-element/": "../node_modules/xtal-element/",
+                "be-decorated/": "../node_modules/be-decorated/",
+                "be-observant/": "../node_modules/be-observant/",
+                "be-reformable/": "../node_modules/be-reformable/",
+                "on-to-me/": "../node_modules/on-to-me/",
+                "be-hive/": "../node_modules/be-hive/"
+            }
+        }
+    </script>
+    <script type=module>
+        import 'be-reformable/be-reformable.js';
+        import '../xtal-tree2.js';
+    </script>
+</body>
+</html>

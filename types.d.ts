@@ -28,7 +28,8 @@ export interface XtalTreeProps{
     toggleNodeFn: (tn: ITreeNode) => void;
     toggleNodePath: string;
     toggledNode: ITreeNode;
-    
+    openedNode: ITreeNode;
+    closedNode: ITreeNode;
 }
 
 export interface XtalTreeActions{
@@ -36,7 +37,12 @@ export interface XtalTreeActions{
     defineIsOpenFn(self: this): {
         isOpenFn: (tn: ITreeNode) => boolean;
     }
+    defineTestNodeFn(self: this): {
+        testNodeFn: (tn: ITreeNode, search: string) => boolean;
+    }
     calculateViewableNodes(self: this, nodes: ITreeNode, acc: ITreeNode[]): ITreeNode[];
-    //updateViewableNodes(self: this): void;
+    updateViewableNodes(self: this): void;
+    toggleNode(self: this): void;
+    openNode(self: this): void;
 
 }

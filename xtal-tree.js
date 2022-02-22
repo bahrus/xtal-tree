@@ -28,6 +28,7 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
                 break;
         }
     }
+    _conn;
     connectedCallback() {
         this.style.display = 'none';
         this._conn = true;
@@ -35,6 +36,7 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
             sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn', 'expandCmd']);
         this.onPropsChange();
     }
+    _childrenFn;
     get childrenFn() {
         return this._childrenFn;
     }
@@ -42,6 +44,7 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
         this._childrenFn = nodeFn;
         this.onPropsChange();
     }
+    _expandCmd;
     get expandCmd() {
         return this._expandCmd;
     }
@@ -49,6 +52,7 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
         this._expandCmd = nv;
         this[nv] = this.viewableNodes;
     }
+    _isOpenFn;
     get isOpenFn() {
         return this._isOpenFn;
     }
@@ -56,6 +60,7 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
         this._isOpenFn = nodeFn;
         this.onPropsChange();
     }
+    _nodes;
     get nodes() {
         return this._nodes;
     }
@@ -64,18 +69,21 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
         this.sort(false);
         this.onPropsChange();
     }
+    _searchString;
     get searchString() {
         return this._searchString;
     }
     set searchString(val) {
         this.attr(search_string, val);
     }
+    _testNodeFn;
     get testNodeFn() {
         return this._testNodeFn;
     }
     set testNodeFn(fn) {
         this._testNodeFn = fn;
     }
+    _compareFn;
     get compareFn() {
         return this._compareFn;
     }
@@ -83,6 +91,7 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
         this._compareFn = val;
         this.sort(true);
     }
+    _sorted;
     get sorted() {
         return this._sorted;
     }
@@ -140,12 +149,14 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
         });
         return acc;
     }
+    _viewableNodes;
     get viewableNodes() {
         return this._viewableNodes;
     }
     set viewableNodes(nodes) {
         this._viewableNodes = nodes;
     }
+    _toggleNodeFn;
     get toggleNodeFn() {
         return this._toggleNodeFn;
     }
@@ -223,6 +234,7 @@ export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
                 this.collapseAll(children);
         });
     }
+    _levelSetterFn;
     set levelSetterFn(setter) {
         this._levelSetterFn = setter;
         this.onPropsChange();

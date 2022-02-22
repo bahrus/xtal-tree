@@ -5,8 +5,12 @@
 		"sourceMap": false,
 		"experimentalDecorators": true,
 		"newLine": "LF",
-		"watch": true
+		"watch": true,
+		"strict": true
 	},
+	"files": [
+		"xtal-tree2.ts"
+	],
 	"exclude":[
 		"build",
 		"bower_components",

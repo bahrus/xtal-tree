@@ -17,13 +17,20 @@
     >
     </form>
     <xtal-tree -nodes id-path="path"></xtal-tree>
-    <xtal-vlist be-observant='{
+    <xtal-vlist id="vlist" be-observant='{
         "list": {"observe": "xtal-tree", "vft": "viewableNodes"}
     }' row-transform='{
         "div": [{}, {}, {"data-path": "path"}],
         "label": "name",
         "button": "?open - : +"
     }'
+       be-noticed='{
+           "click": {
+               "toNearestUpMatch": "xtal-tree",
+               "prop": "selectedNode",
+                "vft": "shadowRoot.querySelector|[itemscope].dataset.path"
+           }
+       }'
     >
         <div class="node" slot="row">
             <div itemscope >
@@ -32,6 +39,11 @@
             </div>
       </div>
     </xtal-vlist>
+    <!-- <script>
+        vlist.addEventListener("click", function(e){
+            debugger;
+        });
+    </script> -->
     <script type=importmap>
         {
             "imports": {
@@ -39,6 +51,7 @@
                 "xtal-element/": "../node_modules/xtal-element/",
                 "be-decorated/": "../node_modules/be-decorated/",
                 "be-deslotted/": "../node_modules/be-deslotted/",
+                "be-noticed/": "../node_modules/be-noticed/",
                 "be-observant/": "../node_modules/be-observant/",
                 "be-reformable/": "../node_modules/be-reformable/",
                 "on-to-me/": "../node_modules/on-to-me/",
@@ -52,6 +65,7 @@
         import '../xtal-tree2.js';
         import 'xtal-vlist/xtal-vlist.js';
         import 'be-observant/be-observant.js';
+        import 'be-noticed/be-noticed.js';
     </script>
 </body>
 </html>

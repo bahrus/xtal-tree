@@ -15,6 +15,7 @@
     "xtal-test": "0.0.55",
     "xtal-vlist": "0.0.29",
     "be-reformable": "0.0.32",
+    "be-noticed": "0.0.55",
     "be-observant": "0.0.99" 
   },
   "scripts": {

@@ -1,13 +1,15 @@
 import { XE } from 'xtal-element/src/XE.js';
 export class XtalTree extends HTMLElement {
-    calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn }, nodes, acc) {
+    #idToNodeLookup = {};
+    calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn, idFn, searchString }, nodes, acc) {
         if (!nodes)
             return acc;
         nodes.forEach(node => {
-            if (this.searchString) {
+            if (searchString) {
                 if (!isOpenFn(node) && !testNodeFn(node, this.searchString))
                     return;
             }
+            this.#idToNodeLookup[idFn(node)] = node;
             acc.push(node);
             if (isOpenFn(node))
                 this.calculateViewableNodes(this, childrenFn(node), acc);
@@ -22,6 +24,11 @@ export class XtalTree extends HTMLElement {
     defineTestNodeFn({ testNodePath }) {
         return {
             testNodeFn: (tn, searchString) => tn[testNodePath].toLowerCase().includes(searchString.toLowerCase())
+        };
+    }
+    defineIdFn({ idPath }) {
+        return {
+            idFn: (tn) => tn[idPath],
         };
     }
     updateViewableNodes({ nodes }) {
@@ -58,6 +65,7 @@ const xe = new XE({
             childrenPath: 'children',
             isOpenPath: 'open',
             testNodePath: 'name',
+            idPath: 'id',
         },
         propInfo: {
             toggledNode: dispatch,
@@ -65,11 +73,12 @@ const xe = new XE({
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
+            defineIdFn: 'idPath',
             toggleNode: {
-                ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn']
+                ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
             },
             updateViewableNodes: {
-                ifAllOf: ['nodes']
+                ifAllOf: ['nodes', 'idFn']
             }
         },
         style: {

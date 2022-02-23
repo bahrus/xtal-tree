@@ -16,17 +16,20 @@
         action="directory.json"
     >
     </form>
-    <xtal-tree -nodes></xtal-tree>
+    <xtal-tree -nodes id-path="path"></xtal-tree>
     <xtal-vlist be-observant='{
         "list": {"observe": "xtal-tree", "vft": "viewableNodes"}
     }' row-transform='{
+        "div": [{}, {}, {"data-path": "path"}],
         "label": "name",
         "button": "?open - : +"
     }'
     >
         <div class="node" slot="row">
-            <button></button>
-            <label></label>
+            <div itemscope >
+                <button></button>
+                <label></label>
+            </div>
       </div>
     </xtal-vlist>
     <script type=importmap>

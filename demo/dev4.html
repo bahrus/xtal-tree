@@ -16,25 +16,24 @@
         action="directory.json"
     >
     </form>
-    <xtal-tree -nodes id-path="path"></xtal-tree>
+    <xtal-tree id="xtal-tree" -nodes id-path="path"></xtal-tree>
     <xtal-vlist id="vlist" be-observant='{
         "list": {"observe": "xtal-tree", "vft": "viewableNodes"}
     }' row-transform='{
         "div": [{}, {}, {"data-path": "path"}],
         "label": "name",
-        "button": "?open - : +"
+        "button": [
+            {"textContent": "?open - : +"}, 
+            {"click": 
+                {"toUpShadow": "/xtal-tree", "prop": "selectedNode", "vft": "parentElement.dataset.path"}
+            }
+        ]
     }'
-       be-noticed='{
-           "click": {
-               "toNearestUpMatch": "xtal-tree",
-               "prop": "selectedNode",
-                "vft": "shadowRoot.querySelector|[itemscope].dataset.path"
-           }
-       }'
+
     >
         <div class="node" slot="row">
             <div itemscope >
-                <button></button>
+                <button>.</button>
                 <label></label>
             </div>
       </div>

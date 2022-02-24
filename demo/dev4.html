@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
+    <button id="btn">hello</button>
     <form be-reformable='{
         "autoSubmit": true,
         "debug": true
@@ -30,19 +31,20 @@
         ]
     }'
 
-    >
-        <div class="node" slot="row">
-            <div itemscope >
-                <button>.</button>
-                <label></label>
-            </div>
-      </div>
+    >>
+        <div class=node slot=row itemscope >
+            <button>.</button>
+            <label></label>
+        </div>
     </xtal-vlist>
-    <!-- <script>
+    <script>
         vlist.addEventListener("click", function(e){
             debugger;
         });
-    </script> -->
+        btn.addEventListener("click", function(e){
+            debugger;
+        });
+    </script>
     <script type=importmap>
         {
             "imports": {

@@ -46,12 +46,20 @@ export interface XtalTreeActions{
     defineIdFn(self: this): {
         idFn: (tn: ITreeNode) => string | number;
     }
+    defineChildrenFn(self: this): {
+        childrenFn: (tn: ITreeNode) => ITreeNode[];
+    }
+    defineToggledNodeFn(self: this): {
+        toggleNodeFn: (tn: ITreeNode) => void;
+    }
     calculateViewableNodes(self: this, nodes: ITreeNode[], acc: ITreeNode[]): ITreeNode[];
     updateViewableNodes(self: this): {
         viewableNodes: ITreeNode[];
     };
     toggleNode(self: this): void;
     openNode(self: this): void;
-    onToggledNodeId(self: this): void;
+    onToggledNodeId(self: this): {
+        toggledNode: ITreeNode;
+    }
 
 }

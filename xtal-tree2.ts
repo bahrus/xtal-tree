@@ -21,7 +21,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             isOpenFn: (tn: ITreeNode) => (<any>tn)[isOpenPath]
         }
     }
-
+    defineChildrenFn({childrenPath}: this){
+        return {
+            childrenFn: (tn: ITreeNode) => (<any>tn)[childrenPath]
+        }
+    }
     defineTestNodeFn({testNodePath}: this) {
         return {
             testNodeFn: (tn: ITreeNode, searchString: string) => (<any>tn)[testNodePath].toLowerCase().includes(searchString.toLowerCase())
@@ -40,7 +44,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     toggleNode({toggledNode, childrenFn, toggleNodeFn}: this){
         if(!childrenFn(toggledNode)) return;
         toggleNodeFn(toggledNode);
-        this.updateViewableNodes(this);
+        return this.updateViewableNodes(this);
     }
     openNode({openedNode, isOpenFn}: this){
         if(!isOpenFn(openedNode)){
@@ -49,11 +53,19 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
     closeNode({closedNode, isOpenFn}: this){
         if(isOpenFn(closedNode)){
-            this.toggledNode = closedNode;
+            return {
+                toggledNode: closedNode
+            }
         }
     }
     onToggledNodeId({toggledNodeId}: this){
-        this.toggledNode = this.#idToNodeLookup[toggledNodeId];
+        const toggledNode = this.#idToNodeLookup[toggledNodeId];
+        return {toggledNode};
+    }
+    defineToggledNodeFn({toggleNodePath}: this){
+        return {
+            toggleNodeFn: (tn: ITreeNode) => (<any>tn)[toggleNodePath] = !(<any>tn)[toggleNodePath]
+        }
     }
 }
 
@@ -73,6 +85,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             isOpenPath: 'open',
             testNodePath: 'name',
             idPath: 'id',
+            toggleNodePath: 'open',
+            //toggledNodeId: '',
         },
         propInfo: {
             toggledNode:dispatch,
@@ -81,6 +95,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
         actions: {
             defineIsOpenFn: 'isOpenPath',
             defineIdFn: 'idPath',
+            defineChildrenFn: 'childrenPath',
+            defineToggledNodeFn: 'toggleNodePath',
             toggleNode: {
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
             },

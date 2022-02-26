@@ -21,6 +21,11 @@ export class XtalTree extends HTMLElement {
             isOpenFn: (tn) => tn[isOpenPath]
         };
     }
+    defineChildrenFn({ childrenPath }) {
+        return {
+            childrenFn: (tn) => tn[childrenPath]
+        };
+    }
     defineTestNodeFn({ testNodePath }) {
         return {
             testNodeFn: (tn, searchString) => tn[testNodePath].toLowerCase().includes(searchString.toLowerCase())
@@ -40,7 +45,7 @@ export class XtalTree extends HTMLElement {
         if (!childrenFn(toggledNode))
             return;
         toggleNodeFn(toggledNode);
-        this.updateViewableNodes(this);
+        return this.updateViewableNodes(this);
     }
     openNode({ openedNode, isOpenFn }) {
         if (!isOpenFn(openedNode)) {
@@ -49,8 +54,19 @@ export class XtalTree extends HTMLElement {
     }
     closeNode({ closedNode, isOpenFn }) {
         if (isOpenFn(closedNode)) {
-            this.toggledNode = closedNode;
+            return {
+                toggledNode: closedNode
+            };
         }
+    }
+    onToggledNodeId({ toggledNodeId }) {
+        const toggledNode = this.#idToNodeLookup[toggledNodeId];
+        return { toggledNode };
+    }
+    defineToggledNodeFn({ toggleNodePath }) {
+        return {
+            toggleNodeFn: (tn) => tn[toggleNodePath] = !tn[toggleNodePath]
+        };
     }
 }
 const dispatch = {
@@ -66,6 +82,8 @@ const xe = new XE({
             isOpenPath: 'open',
             testNodePath: 'name',
             idPath: 'id',
+            toggleNodePath: 'open',
+            //toggledNodeId: '',
         },
         propInfo: {
             toggledNode: dispatch,
@@ -74,12 +92,15 @@ const xe = new XE({
         actions: {
             defineIsOpenFn: 'isOpenPath',
             defineIdFn: 'idPath',
+            defineChildrenFn: 'childrenPath',
+            defineToggledNodeFn: 'toggleNodePath',
             toggleNode: {
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
             },
             updateViewableNodes: {
                 ifAllOf: ['nodes', 'idFn']
-            }
+            },
+            onToggledNodeId: 'toggledNodeId',
         },
         style: {
             display: 'none',

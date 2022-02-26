@@ -30,6 +30,7 @@ export interface XtalTreeProps{
     toggleNodeFn: (tn: ITreeNode) => void;
     toggleNodePath: string;
     toggledNode: ITreeNode;
+    toggledNodeId: string | number;
     openedNode: ITreeNode;
     closedNode: ITreeNode;
 }
@@ -51,5 +52,6 @@ export interface XtalTreeActions{
     };
     toggleNode(self: this): void;
     openNode(self: this): void;
+    onToggledNodeId(self: this): void;
 
 }

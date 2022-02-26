@@ -12,7 +12,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             this.#idToNodeLookup[idFn(node)] = node;
             acc.push(node);
             if (isOpenFn(node)) this.calculateViewableNodes(this, childrenFn(node), acc);
-        })
+        });
         return acc;
     }
 
@@ -52,6 +52,9 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             this.toggledNode = closedNode;
         }
     }
+    onToggledNodeId({toggledNodeId}: this){
+        this.toggledNode = this.#idToNodeLookup[toggledNodeId];
+    }
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -83,7 +86,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             },
             updateViewableNodes:{
                 ifAllOf: ['nodes', 'idFn']
-            }
+            },
+            onToggledNodeId: 'toggledNodeId',
         },
         style:{
             display: 'none',

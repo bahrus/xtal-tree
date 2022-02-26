@@ -23,26 +23,29 @@
     }' row-transform='{
         "div": [{}, {}, {"data-path": "path"}],
         "label": "name",
-        "button": [
-            {"textContent": "?open - : +"}, 
-            {"click": 
-                {"toUpShadow": "/xtal-tree", "prop": "selectedNode", "vft": "parentElement.dataset.path"}
-            }
-        ]
+        "expanderParts": [true, {"if": "open"}, ["-"], ["+"]]
     }'
-
+        be-channeling='{
+            "eventFilter": "click",
+            "toUpShadow": "/xtal-tree",
+            "prop": "selectedNode",
+            "vfe": "path.0.parentElement.dataset.path",
+            "composedPathMatch": "button"
+        }'
     >>
         <div class=node slot=row itemscope >
-            <button>.</button>
+            <button part=expander>.</button>
             <label></label>
         </div>
     </xtal-vlist>
     <script>
         vlist.addEventListener("click", function(e){
-            debugger;
+            console.log(e);
+            console.log(e.composedPath());
+            //debugger;
         });
         btn.addEventListener("click", function(e){
-            debugger;
+            //debugger;
         });
     </script>
     <script type=importmap>
@@ -52,7 +55,7 @@
                 "xtal-element/": "../node_modules/xtal-element/",
                 "be-decorated/": "../node_modules/be-decorated/",
                 "be-deslotted/": "../node_modules/be-deslotted/",
-                "be-noticed/": "../node_modules/be-noticed/",
+                "be-channeling/": "../node_modules/be-channeling/",
                 "be-observant/": "../node_modules/be-observant/",
                 "be-reformable/": "../node_modules/be-reformable/",
                 "on-to-me/": "../node_modules/on-to-me/",
@@ -66,7 +69,7 @@
         import '../xtal-tree2.js';
         import 'xtal-vlist/xtal-vlist.js';
         import 'be-observant/be-observant.js';
-        import 'be-noticed/be-noticed.js';
+        import 'be-channeling/be-channeling.js';
     </script>
 </body>
 </html>

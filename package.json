@@ -1,6 +1,6 @@
 {
   "name": "xtal-tree",
-  "version": "0.0.74",
+  "version": "0.0.75",
   "description": "Provide flat, virtual snapshot of a tree",
   "repository": "https://github.com/bahrus/xtal-tree",
   "author": "bahrus <anderson.bruce.b@gmail.com>",
@@ -16,7 +16,7 @@
     "xtal-vlist": "0.0.31",
     "be-reformable": "0.0.32",
     "be-channeling": "0.0.3",
-    "be-observant": "0.0.99" 
+    "be-observant": "0.0.99"
   },
   "scripts": {
     "serve": "node node_modules/xtal-test/serve.js"

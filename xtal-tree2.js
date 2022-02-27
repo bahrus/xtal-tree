@@ -1,10 +1,10 @@
 import { XE } from 'xtal-element/src/XE.js';
 export class XtalTree extends HTMLElement {
     #idToNodeLookup = {};
-    calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn, idFn, searchString }, nodes, acc) {
-        if (!nodes)
+    calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn, idFn, searchString }, nodesCopy, acc) {
+        if (!nodesCopy)
             return acc;
-        nodes.forEach(node => {
+        nodesCopy.forEach(node => {
             if (searchString) {
                 if (!isOpenFn(node) && !testNodeFn(node, this.searchString))
                     return;
@@ -36,9 +36,9 @@ export class XtalTree extends HTMLElement {
             idFn: (tn) => tn[idPath],
         };
     }
-    updateViewableNodes({ nodes }) {
+    updateViewableNodes({ nodesCopy }) {
         return {
-            viewableNodes: this.calculateViewableNodes(this, nodes, [])
+            viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
         };
     }
     toggleNode({ toggledNode, childrenFn, toggleNodeFn }) {
@@ -68,6 +68,20 @@ export class XtalTree extends HTMLElement {
             toggleNodeFn: (tn) => tn[toggleNodePath] = !tn[toggleNodePath]
         };
     }
+    setLevels({ nodesCopy, levelPath, marginStylePath, childrenFn }, passedInNodes, level) {
+        if (passedInNodes === undefined)
+            passedInNodes = nodesCopy;
+        if (level === undefined)
+            level = 0;
+        for (const node of passedInNodes) {
+            node[levelPath] = level;
+            node[marginStylePath] = "margin-left:" + level * 18 + "px";
+            const children = childrenFn(node);
+            if (children === undefined)
+                continue;
+            this.setLevels(this, children, level + 1);
+        }
+    }
 }
 const dispatch = {
     notify: {
@@ -83,11 +97,17 @@ const xe = new XE({
             testNodePath: 'name',
             idPath: 'id',
             toggleNodePath: 'open',
-            //toggledNodeId: '',
+            marginStylePath: 'marginStyle',
+            levelPath: 'level',
         },
         propInfo: {
             toggledNode: dispatch,
             viewableNodes: dispatch,
+            nodes: {
+                notify: {
+                    cloneTo: 'nodesCopy',
+                }
+            }
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
@@ -98,9 +118,12 @@ const xe = new XE({
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
             },
             updateViewableNodes: {
-                ifAllOf: ['nodes', 'idFn']
+                ifAllOf: ['nodesCopy', 'idFn']
             },
             onToggledNodeId: 'toggledNodeId',
+            setLevels: {
+                ifAllOf: ['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
+            }
         },
         style: {
             display: 'none',

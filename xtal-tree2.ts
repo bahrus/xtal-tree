@@ -3,9 +3,9 @@ import {XE} from 'xtal-element/src/XE.js';
 
 export class XtalTree extends HTMLElement implements XtalTreeActions{
     #idToNodeLookup: {[id: string | number]: ITreeNode} = {};
-    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString}: this, nodes: ITreeNode[], acc: ITreeNode[]) {
-        if (!nodes) return acc;
-        nodes.forEach(node => {
+    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
+        if (!nodesCopy) return acc;
+        nodesCopy.forEach(node => {
             if (searchString) {
                 if (!isOpenFn(node) && !testNodeFn(node, this.searchString)) return;
             }
@@ -36,9 +36,9 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             idFn: (tn: ITreeNode) => (<any>tn)[idPath],
         }
     }
-    updateViewableNodes({nodes}: this){
+    updateViewableNodes({nodesCopy}: this){
         return {
-            viewableNodes: this.calculateViewableNodes(this, nodes, [])
+            viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
         };
     }
     toggleNode({toggledNode, childrenFn, toggleNodeFn}: this){
@@ -67,6 +67,17 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             toggleNodeFn: (tn: ITreeNode) => (<any>tn)[toggleNodePath] = !(<any>tn)[toggleNodePath]
         }
     }
+    setLevels({nodesCopy, levelPath, marginStylePath, childrenFn}: this, passedInNodes?: ITreeNode[], level?: number): void {
+        if(passedInNodes === undefined) passedInNodes = nodesCopy;
+        if(level === undefined) level = 0;
+        for(const node of passedInNodes){
+            (<any>node)[levelPath] = level;
+            (<any>node)[marginStylePath] = "margin-left:" + level * 18 + "px";
+            const children = childrenFn(node);
+            if(children === undefined) continue;
+            this.setLevels(this, children, level + 1);
+        }
+    }
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -86,11 +97,17 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             testNodePath: 'name',
             idPath: 'id',
             toggleNodePath: 'open',
-            //toggledNodeId: '',
+            marginStylePath: 'marginStyle',
+            levelPath: 'level',
         },
         propInfo: {
             toggledNode:dispatch,
             viewableNodes:dispatch,
+            nodes:{
+                notify:{
+                    cloneTo: 'nodesCopy',
+                }
+            }
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
@@ -101,9 +118,12 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
             },
             updateViewableNodes:{
-                ifAllOf: ['nodes', 'idFn']
+                ifAllOf: ['nodesCopy', 'idFn']
             },
             onToggledNodeId: 'toggledNodeId',
+            setLevels:{
+                ifAllOf:['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
+            }
         },
         style:{
             display: 'none',

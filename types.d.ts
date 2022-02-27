@@ -12,6 +12,11 @@ export interface ITreeNode {
 }
 
 export interface XtalTreeProps{
+    /**
+     * Do a structural clone before doing any modifications on the data.
+     * A bit of performance penalty, but can avoid unexpected side effects
+     */
+    clone: boolean;
     childrenFn: (tn: ITreeNode) => ITreeNode[];
     childrenPath: string;
     expandAll: boolean;
@@ -33,6 +38,11 @@ export interface XtalTreeProps{
     toggledNodeId: string | number;
     openedNode: ITreeNode;
     closedNode: ITreeNode;
+    levelPath: string;
+    marginStylePath: string;
+    levelSetterFn: (nodes: ITreeNode[], level: number) => string;
+    nodesCopy: ITreeNode[];
+    
 }
 
 export interface XtalTreeActions{
@@ -61,5 +71,6 @@ export interface XtalTreeActions{
     onToggledNodeId(self: this): {
         toggledNode: ITreeNode;
     }
-
+    setLevels(self: this, nodes?: ITreeNode, level?: number): void;
+    onNodes(self: this): void;
 }

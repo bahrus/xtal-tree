@@ -21,7 +21,7 @@
     <xtal-vlist id="vlist" be-observant='{
         "list": {"observe": "xtal-tree", "vft": "viewableNodes"}
     }' row-transform='{
-        "div": [{}, {}, {"data-path": "path"}],
+        "div": [{}, {}, {"data-path": "path", "style": "marginStyle"}],
         "label": "name",
         "expanderParts": [true, {"if": "open"}, ["-"], ["+"]]
     }'
@@ -39,14 +39,14 @@
         </div>
     </xtal-vlist>
     <script>
-        vlist.addEventListener("click", function(e){
-            console.log(e);
-            console.log(e.composedPath());
-            //debugger;
-        });
-        btn.addEventListener("click", function(e){
-            //debugger;
-        });
+        // vlist.addEventListener("click", function(e){
+        //     console.log(e);
+        //     console.log(e.composedPath());
+        //     //debugger;
+        // });
+        // btn.addEventListener("click", function(e){
+        //     //debugger;
+        // });
     </script>
     <script type=importmap>
         {

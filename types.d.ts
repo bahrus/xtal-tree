@@ -72,5 +72,4 @@ export interface XtalTreeActions{
         toggledNode: ITreeNode;
     }
     setLevels(self: this, nodes?: ITreeNode, level?: number): void;
-    onNodes(self: this): void;
 }

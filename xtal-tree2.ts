@@ -113,7 +113,15 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             hasChildrenPath: 'hasChildren',
         },
         propInfo: {
-            toggledNode:dispatch,
+            toggledNode:{
+                notify:{
+                    dispatch: true
+                },
+                dry: false,
+            },
+            toggledNodeId:{
+                dry: false,
+            },
             viewableNodes:dispatch,
             nodes:{
                 notify:{

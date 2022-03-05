@@ -8,7 +8,7 @@
   "main": "XtalTreeDeco.js",
   "module": "XtalTreeDeco.js",
   "dependencies": {
-    "trans-render": "0.0.507",
+    "trans-render": "0.0.509",
     "xtal-element": "0.0.482"
   },
   "devDependencies": {
@@ -16,6 +16,7 @@
     "xtal-vlist": "0.0.33",
     "be-reformable": "0.0.32",
     "be-channeling": "0.0.3",
+    "be-noticed": "0.0.55",
     "be-observant": "0.0.99"
   },
   "scripts": {

@@ -17,7 +17,19 @@
         action="directory.json"
     >
     </form>
+    <label>
+        Search
+        <input type="search" value="polymer" be-noticed='{
+            "input": {
+                "to": "/xtal-tree",
+                "doInit": true,
+                "vft": "value",
+                "prop": "searchString"
+            }
+        }'>
+    </label>
     <xtal-tree id="xtal-tree" -nodes id-path="path"></xtal-tree>
+
     <xtal-vlist style="height:600px;width:100%;" page-size="10" id="vlist" be-observant='{
         "list": {"observe": "xtal-tree", "vft": "viewableNodes"}
     }' row-transform='{
@@ -59,6 +71,7 @@
                 "be-deslotted/": "../node_modules/be-deslotted/",
                 "be-channeling/": "../node_modules/be-channeling/",
                 "be-intersectional/": "../node_modules/be-intersectional/",
+                "be-noticed/": "../node_modules/be-noticed/",
                 "be-observant/": "../node_modules/be-observant/",
                 "be-reformable/": "../node_modules/be-reformable/",
                 "be-repeated/": "../node_modules/be-repeated/",
@@ -74,6 +87,7 @@
         import 'xtal-vlist/xtal-vlist.js';
         import 'be-observant/be-observant.js';
         import 'be-channeling/be-channeling.js';
+        import 'be-noticed/be-noticed.js';
     </script>
 </body>
 </html>

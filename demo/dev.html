@@ -23,7 +23,8 @@
     }' row-transform='{
         "div": [{}, {}, {"data-path": "path", "style": "marginStyle"}],
         "label": "name",
-        "expanderParts": [true, {"if": "open"}, ["-"], ["+"]]
+        "expanderParts": [true, {"if": "open"}, ["-"], ["+"]],
+        "button": [{}, {}, {"data-children": "hasChildren"}]
     }'
         be-channeling='{
             "eventFilter": "click",

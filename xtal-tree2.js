@@ -26,6 +26,16 @@ export class XtalTree extends HTMLElement {
             childrenFn: (tn) => tn[childrenPath]
         };
     }
+    setHasChildren({ childrenFn, hasChildrenPath }, tn, recursive) {
+        const children = childrenFn(tn);
+        const hasChildren = children !== undefined && children.length > 0;
+        tn[hasChildrenPath] = hasChildren;
+        if (recursive) {
+            for (const child of children) {
+                this.setHasChildren(this, child, true);
+            }
+        }
+    }
     defineTestNodeFn({ testNodePath }) {
         return {
             testNodeFn: (tn, searchString) => tn[testNodePath].toLowerCase().includes(searchString.toLowerCase())
@@ -74,6 +84,7 @@ export class XtalTree extends HTMLElement {
         if (level === undefined)
             level = 0;
         for (const node of passedInNodes) {
+            this.setHasChildren(this, node, false);
             node[levelPath] = level;
             node[marginStylePath] = "margin-left:" + level * 18 + "px";
             const children = childrenFn(node);
@@ -99,6 +110,7 @@ const xe = new XE({
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',
+            hasChildrenPath: 'hasChildren',
         },
         propInfo: {
             toggledNode: dispatch,

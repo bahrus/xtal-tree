@@ -26,6 +26,16 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             childrenFn: (tn: ITreeNode) => (<any>tn)[childrenPath]
         }
     }
+    setHasChildren({childrenFn, hasChildrenPath}: this, tn: ITreeNode, recursive: boolean){
+        const children = childrenFn(tn);
+        const hasChildren = children !== undefined && children.length > 0;
+        (<any>tn)[hasChildrenPath] = hasChildren;
+        if(recursive){
+            for(const child of children){
+                this.setHasChildren(this, child, true);
+            }
+        }
+    }
     defineTestNodeFn({testNodePath}: this) {
         return {
             testNodeFn: (tn: ITreeNode, searchString: string) => (<any>tn)[testNodePath].toLowerCase().includes(searchString.toLowerCase())
@@ -71,6 +81,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         if(passedInNodes === undefined) passedInNodes = nodesCopy;
         if(level === undefined) level = 0;
         for(const node of passedInNodes){
+            this.setHasChildren(this, node, false);
             (<any>node)[levelPath] = level;
             (<any>node)[marginStylePath] = "margin-left:" + level * 18 + "px";
             const children = childrenFn(node);
@@ -99,6 +110,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',
+            hasChildrenPath: 'hasChildren',
         },
         propInfo: {
             toggledNode:dispatch,

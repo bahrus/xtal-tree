@@ -19,6 +19,8 @@ export interface XtalTreeProps{
     clone: boolean;
     childrenFn: (tn: ITreeNode) => ITreeNode[];
     childrenPath: string;
+    hasChildrenFn: (tn: ITreeNode) => boolean;
+    hasChildrenPath: string;
     expandAll: boolean;
     isOpenFn: (tn: ITreeNode) => boolean;
     isOpenPath: string;
@@ -59,6 +61,7 @@ export interface XtalTreeActions{
     defineChildrenFn(self: this): {
         childrenFn: (tn: ITreeNode) => ITreeNode[];
     }
+    setHasChildren(self: this, tn: ITreeNode, recursive: boolean): void;
     defineToggledNodeFn(self: this): {
         toggleNodeFn: (tn: ITreeNode) => void;
     }

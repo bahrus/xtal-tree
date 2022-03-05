@@ -35,9 +35,19 @@
         }'
     >>
         <div class=node slot=row itemscope >
-            <button part=expander>.</button>
+            <button class="expander" part=expander>.</button>
             <label></label>
         </div>
+        <template slot="style">
+            <style>
+                button.expander{
+                    display:none;
+                }
+                button[data-children].expander{
+                    display:inline;
+                }
+            </style>
+        </template>
     </xtal-vlist>
 
     <script type=importmap>

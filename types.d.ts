@@ -1,4 +1,3 @@
-import { ITree } from "./xtal-tree";
 
 interface INodeState {
 }
@@ -44,6 +43,7 @@ export interface XtalTreeProps{
     marginStylePath: string;
     levelSetterFn: (nodes: ITreeNode[], level: number) => string;
     nodesCopy: ITreeNode[];
+    collapseAll: boolean;
     
 }
 
@@ -75,4 +75,7 @@ export interface XtalTreeActions{
         toggledNode: ITreeNode;
     }
     setLevels(self: this, nodes?: ITreeNode, level?: number): void;
+    onCollapseAll(self: this, passedInNodes?: ITreeNode[]): {
+        viewableNodes: ITreeNode[],
+    } | void;
 }

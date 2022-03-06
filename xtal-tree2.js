@@ -93,6 +93,39 @@ export class XtalTree extends HTMLElement {
             this.setLevels(this, children, level + 1);
         }
     }
+    search({ nodesCopy, testNodeFn, searchString, isOpenFn, toggleNodeFn, childrenFn }, passedInNodes, passedInParent) {
+        const nodes = passedInNodes || nodesCopy;
+        nodes.forEach(node => {
+            if (testNodeFn(node, searchString)) {
+                if (!isOpenFn(node)) {
+                    toggleNodeFn(node);
+                }
+            }
+            else {
+                const children = childrenFn(node);
+                if (children !== undefined) {
+                    this.search(this, children, node);
+                    if (passedInParent && isOpenFn(node) && !isOpenFn(passedInParent)) {
+                        toggleNodeFn(passedInParent);
+                    }
+                }
+            }
+        });
+        if (passedInNodes === undefined)
+            return this.updateViewableNodes(this);
+    }
+    onCollapseAll({ nodesCopy, isOpenFn, toggleNodeFn, childrenFn }, passedInNodes) {
+        const nodes = passedInNodes || nodesCopy;
+        nodes.forEach(node => {
+            if (isOpenFn(node))
+                toggleNodeFn(node);
+            const children = childrenFn(node);
+            if (children !== undefined)
+                this.onCollapseAll(this, children);
+        });
+        if (passedInNodes === undefined)
+            return this.updateViewableNodes(this);
+    }
 }
 const dispatch = {
     notify: {
@@ -111,6 +144,7 @@ const xe = new XE({
             marginStylePath: 'marginStyle',
             levelPath: 'level',
             hasChildrenPath: 'hasChildren',
+            collapseAll: false,
         },
         propInfo: {
             toggledNode: {
@@ -127,12 +161,16 @@ const xe = new XE({
                 notify: {
                     cloneTo: 'nodesCopy',
                 }
+            },
+            collapseAll: {
+                dry: false,
             }
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
             defineIdFn: 'idPath',
             defineChildrenFn: 'childrenPath',
+            defineTestNodeFn: 'testNodePath',
             defineToggledNodeFn: 'toggleNodePath',
             toggleNode: {
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
@@ -143,7 +181,8 @@ const xe = new XE({
             onToggledNodeId: 'toggledNodeId',
             setLevels: {
                 ifAllOf: ['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
-            }
+            },
+            onCollapseAll: 'collapseAll',
         },
         style: {
             display: 'none',

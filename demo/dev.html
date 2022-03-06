@@ -17,9 +17,16 @@
         action="directory.json"
     >
     </form>
+    <button be-noticed='{
+        "click": {
+            "to": "/xtal-tree",
+            "prop": "collapseAll",
+            "val": true
+        }
+    }'>Collapse All</button>
     <label>
         Search
-        <input type="search" value="polymer" be-noticed='{
+        <input type="search" be-noticed='{
             "input": {
                 "to": "/xtal-tree",
                 "doInit": true,

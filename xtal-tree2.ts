@@ -89,6 +89,38 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             this.setLevels(this, children, level + 1);
         }
     }
+
+    search({nodesCopy, testNodeFn, searchString, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: ITreeNode[], passedInParent?: ITreeNode){
+        const nodes = passedInNodes || nodesCopy;
+        nodes.forEach(node => {
+             
+            if(testNodeFn(node, searchString)){
+                if(!isOpenFn(node)){
+                    toggleNodeFn(node);
+                }
+            }else{
+                const children = childrenFn(node);
+                if(children !== undefined){
+                    this.search(this, children, node);
+                    if(passedInParent && isOpenFn(node) && !isOpenFn(passedInParent)){
+                        toggleNodeFn(passedInParent)
+                    }
+                }
+            }
+            
+        });
+        if(passedInNodes === undefined) return this.updateViewableNodes(this);
+    }
+
+    onCollapseAll({nodesCopy, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: ITreeNode[]){
+        const nodes = passedInNodes || nodesCopy;
+        nodes.forEach(node => {
+            if(isOpenFn(node)) toggleNodeFn(node);
+            const children = childrenFn(node);
+            if(children !== undefined) this.onCollapseAll(this, children);
+        });
+        if(passedInNodes === undefined) return this.updateViewableNodes(this);
+    }
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -111,6 +143,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             marginStylePath: 'marginStyle',
             levelPath: 'level',
             hasChildrenPath: 'hasChildren',
+            collapseAll: false,
         },
         propInfo: {
             toggledNode:{
@@ -127,12 +160,16 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                 notify:{
                     cloneTo: 'nodesCopy',
                 }
+            },
+            collapseAll:{
+                dry: false,
             }
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
             defineIdFn: 'idPath',
             defineChildrenFn: 'childrenPath',
+            defineTestNodeFn: 'testNodePath',
             defineToggledNodeFn: 'toggleNodePath',
             toggleNode: {
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
@@ -143,7 +180,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             onToggledNodeId: 'toggledNodeId',
             setLevels:{
                 ifAllOf:['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
-            }
+            },
+            onCollapseAll: 'collapseAll',
         },
         style:{
             display: 'none',

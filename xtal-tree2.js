@@ -165,9 +165,14 @@ export class XtalTree extends HTMLElement {
         if (passedInNodes === undefined)
             return this.updateViewableNodes(this);
     }
-    onSort({ nodesCopy }, passedInNodes) {
+    onSort({ nodesCopy, compareFn, childrenFn }, passedInNodes) {
         const nodes = passedInNodes || nodesCopy;
-        nodes.sort(this.sortFn);
+        nodes.sort(compareFn);
+        nodes.forEach(node => {
+            const children = childrenFn(node);
+            if (children !== undefined)
+                this.onSort(this, children);
+        });
         if (passedInNodes === undefined)
             return this.updateViewableNodes(this);
     }

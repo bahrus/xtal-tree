@@ -9,15 +9,15 @@
   "module": "XtalTreeDeco.js",
   "dependencies": {
     "trans-render": "0.0.510",
-    "xtal-element": "0.0.482"
+    "xtal-element": "0.0.483"
   },
   "devDependencies": {
     "xtal-test": "0.0.55",
-    "xtal-vlist": "0.0.45",
+    "xtal-vlist": "0.0.46",
     "be-reformable": "0.0.32",
     "be-channeling": "0.0.3",
     "be-noticed": "0.0.55",
-    "be-observant": "0.0.99"
+    "be-observant": "0.0.100"
   },
   "scripts": {
     "serve": "node node_modules/xtal-test/serve.js"

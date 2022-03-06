@@ -26,6 +26,32 @@ export class XtalTree extends HTMLElement {
             childrenFn: (tn) => tn[childrenPath]
         };
     }
+    defineCompareFn({ comparePath, sort }) {
+        let multiplier = 1;
+        switch (sort) {
+            case 'none':
+            case undefined:
+                return {
+                    compareFn: undefined,
+                };
+            case 'desc':
+                multiplier = -1;
+                break;
+        }
+        return {
+            compareFn: (lhs, rhs) => {
+                const lhsVal = lhs[comparePath];
+                const rhsVal = rhs[comparePath];
+                if (lhsVal === undefined && rhsVal === undefined)
+                    return 0;
+                if (lhsVal === undefined)
+                    return -1 * multiplier;
+                if (rhsVal === undefined)
+                    return 1 * multiplier;
+                return (lhsVal > rhsVal ? 1 : lhsVal < rhsVal ? -1 : 0) * multiplier;
+            }
+        };
+    }
     setHasChildren({ childrenFn, hasChildrenPath }, tn, recursive) {
         const children = childrenFn(tn);
         const hasChildren = children !== undefined && children.length > 0;
@@ -136,6 +162,12 @@ export class XtalTree extends HTMLElement {
             if (children !== undefined)
                 this.onExpandAll(this, children);
         });
+        if (passedInNodes === undefined)
+            return this.updateViewableNodes(this);
+    }
+    onSort({ nodesCopy }, passedInNodes) {
+        const nodes = passedInNodes || nodesCopy;
+        nodes.sort(this.sortFn);
         if (passedInNodes === undefined)
             return this.updateViewableNodes(this);
     }

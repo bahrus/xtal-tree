@@ -30,7 +30,7 @@ export interface XtalTreeProps{
     testNodePath: string;
     compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
     comparePath: string;
-    sorted: string;
+    sort: 'asc' | 'desc' | 'none' | undefined;
     viewableNodes: ITreeNode[];
     toggleNodeFn: (tn: ITreeNode) => void;
     toggleNodePath: string;
@@ -81,4 +81,7 @@ export interface XtalTreeActions{
         viewableNodes: ITreeNode[],
     } | void;
     search(self: this): void;
+    defineCompareFn(self: this): {
+        compareFn: ((lhs: ITreeNode, rhs: ITreeNode) => number) | undefined;
+    }
 }

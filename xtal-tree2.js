@@ -94,6 +94,7 @@ export class XtalTree extends HTMLElement {
         }
     }
     search({ nodesCopy, testNodeFn, searchString, isOpenFn, toggleNodeFn, childrenFn }, passedInNodes, passedInParent) {
+        //if(passedInNodes === undefined) this.onCollapseAll(this);
         const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
             if (testNodeFn(node, searchString)) {
@@ -126,6 +127,18 @@ export class XtalTree extends HTMLElement {
         if (passedInNodes === undefined)
             return this.updateViewableNodes(this);
     }
+    onExpandAll({ nodesCopy, isOpenFn, toggleNodeFn, childrenFn }, passedInNodes) {
+        const nodes = passedInNodes || nodesCopy;
+        nodes.forEach(node => {
+            if (!isOpenFn(node))
+                toggleNodeFn(node);
+            const children = childrenFn(node);
+            if (children !== undefined)
+                this.onExpandAll(this, children);
+        });
+        if (passedInNodes === undefined)
+            return this.updateViewableNodes(this);
+    }
 }
 const dispatch = {
     notify: {
@@ -145,6 +158,7 @@ const xe = new XE({
             levelPath: 'level',
             hasChildrenPath: 'hasChildren',
             collapseAll: false,
+            expandAll: false,
         },
         propInfo: {
             toggledNode: {
@@ -163,6 +177,9 @@ const xe = new XE({
                 }
             },
             collapseAll: {
+                dry: false,
+            },
+            expandAll: {
                 dry: false,
             }
         },
@@ -183,6 +200,7 @@ const xe = new XE({
                 ifAllOf: ['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
             },
             onCollapseAll: 'collapseAll',
+            onExpandAll: 'expandAll',
             search: 'searchString'
         },
         style: {

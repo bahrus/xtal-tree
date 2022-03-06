@@ -20,7 +20,6 @@ export interface XtalTreeProps{
     childrenPath: string;
     hasChildrenFn: (tn: ITreeNode) => boolean;
     hasChildrenPath: string;
-    expandAll: boolean;
     isOpenFn: (tn: ITreeNode) => boolean;
     isOpenPath: string;
     idFn: (tn: ITreeNode) => string | number;
@@ -43,8 +42,8 @@ export interface XtalTreeProps{
     marginStylePath: string;
     levelSetterFn: (nodes: ITreeNode[], level: number) => string;
     nodesCopy: ITreeNode[];
+    expandAll: boolean;
     collapseAll: boolean;
-    
 }
 
 export interface XtalTreeActions{
@@ -76,6 +75,9 @@ export interface XtalTreeActions{
     }
     setLevels(self: this, nodes?: ITreeNode, level?: number): void;
     onCollapseAll(self: this, passedInNodes?: ITreeNode[]): {
+        viewableNodes: ITreeNode[],
+    } | void;
+    onExpandAll(self: this, passedInNodes?: ITreeNode[]): {
         viewableNodes: ITreeNode[],
     } | void;
     search(self: this): void;

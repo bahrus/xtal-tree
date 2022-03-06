@@ -189,6 +189,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             hasChildrenPath: 'hasChildren',
             collapseAll: false,
             expandAll: false,
+            sort: 'none',
+            comparePath: 'name'
         },
         propInfo: {
             toggledNode:{
@@ -219,6 +221,10 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             defineChildrenFn: 'childrenPath',
             defineTestNodeFn: 'testNodePath',
             defineToggledNodeFn: 'toggleNodePath',
+            defineCompareFn:{
+                ifAllOf:['sort', 'comparePath']
+            },
+            onSort:'compareFn',
             toggleNode: {
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
             },

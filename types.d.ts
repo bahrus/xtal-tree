@@ -84,4 +84,7 @@ export interface XtalTreeActions{
     defineCompareFn(self: this): {
         compareFn: ((lhs: ITreeNode, rhs: ITreeNode) => number) | undefined;
     }
+    onSort(self: this, passedInNodes?: ITreeNode[]): {
+        viewableNodes: ITreeNode[],
+    } | void;
 }

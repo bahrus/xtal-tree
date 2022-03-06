@@ -196,6 +196,8 @@ const xe = new XE({
             hasChildrenPath: 'hasChildren',
             collapseAll: false,
             expandAll: false,
+            sort: 'none',
+            comparePath: 'name'
         },
         propInfo: {
             toggledNode: {
@@ -226,6 +228,10 @@ const xe = new XE({
             defineChildrenFn: 'childrenPath',
             defineTestNodeFn: 'testNodePath',
             defineToggledNodeFn: 'toggleNodePath',
+            defineCompareFn: {
+                ifAllOf: ['sort', 'comparePath']
+            },
+            onSort: 'compareFn',
             toggleNode: {
                 ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
             },

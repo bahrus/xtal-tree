@@ -183,6 +183,7 @@ const xe = new XE({
                 ifAllOf: ['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
             },
             onCollapseAll: 'collapseAll',
+            search: 'searchString'
         },
         style: {
             display: 'none',

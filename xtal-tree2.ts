@@ -182,6 +182,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                 ifAllOf:['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
             },
             onCollapseAll: 'collapseAll',
+            search:'searchString'
         },
         style:{
             display: 'none',

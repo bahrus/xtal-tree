@@ -78,4 +78,5 @@ export interface XtalTreeActions{
     onCollapseAll(self: this, passedInNodes?: ITreeNode[]): {
         viewableNodes: ITreeNode[],
     } | void;
+    search(self: this): void;
 }

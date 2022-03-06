@@ -9,7 +9,7 @@
 		"strict": true
 	},
 	"files": [
-		"xtal-tree2.ts"
+		"xtal-tree.ts"
 	],
 	"exclude":[
 		"build",

@@ -1,246 +1,254 @@
-import { XtallatX } from 'xtal-element/xtal-latx.js';
-import { define } from 'trans-render/define.js';
-import { hydrate } from 'trans-render/hydrate.js';
-const search_string = 'search-string';
-const sorted = 'sorted';
-/**
- * `xtal-tree`
- *  Provide flat, virtual snapshot of a tree
- *
- * @customElement
- * @polymer
- * @demo demo/index.html
- */
-export class XtalTree extends XtallatX(hydrate(HTMLElement)) {
-    static get is() { return 'xtal-tree'; }
-    static get observedAttributes() {
-        return [search_string, sorted];
-    }
-    attributeChangedCallback(name, oldValue, newValue) {
-        switch (name) {
-            case search_string:
-                this._searchString = newValue;
-                this.searchNodes();
-                break;
-            case sorted:
-                this._sorted = newValue;
-                this.sort(true);
-                break;
-        }
-    }
-    _conn;
-    connectedCallback() {
-        this.style.display = 'none';
-        this._conn = true;
-        this.propUp(['childrenFn', 'compareFn', 'isOpenFn', 'nodes', 'searchString',
-            sorted, 'testNodeFn', 'toggledNode', 'toggleNodeFn', 'levelSetterFn', 'expandCmd']);
-        this.onPropsChange();
-    }
-    _childrenFn;
-    get childrenFn() {
-        return this._childrenFn;
-    }
-    set childrenFn(nodeFn) {
-        this._childrenFn = nodeFn;
-        this.onPropsChange();
-    }
-    _expandCmd;
-    get expandCmd() {
-        return this._expandCmd;
-    }
-    set expandCmd(nv) {
-        this._expandCmd = nv;
-        this[nv] = this.viewableNodes;
-    }
-    _isOpenFn;
-    get isOpenFn() {
-        return this._isOpenFn;
-    }
-    set isOpenFn(nodeFn) {
-        this._isOpenFn = nodeFn;
-        this.onPropsChange();
-    }
-    _nodes;
-    get nodes() {
-        return this._nodes;
-    }
-    set nodes(nodes) {
-        this._nodes = nodes;
-        this.sort(false);
-        this.onPropsChange();
-    }
-    _searchString;
-    get searchString() {
-        return this._searchString;
-    }
-    set searchString(val) {
-        this.attr(search_string, val);
-    }
-    _testNodeFn;
-    get testNodeFn() {
-        return this._testNodeFn;
-    }
-    set testNodeFn(fn) {
-        this._testNodeFn = fn;
-    }
-    _compareFn;
-    get compareFn() {
-        return this._compareFn;
-    }
-    set compareFn(val) {
-        this._compareFn = val;
-        this.sort(true);
-    }
-    _sorted;
-    get sorted() {
-        return this._sorted;
-    }
-    set sorted(val) {
-        this.attr(sorted, val);
-    }
-    sort(redraw) {
-        if (!this._sorted || !this._compareFn || !this._nodes)
-            return;
-        this.sortNodes(this._nodes);
-        if (redraw) {
-            this.updateViewableNodes();
-        }
-    }
-    sortNodes(nodes, compareFn) {
-        if (!compareFn) {
-            if (this.sorted === 'desc') {
-                compareFn = (lhs, rhs) => -1 * this._compareFn(lhs, rhs);
-            }
-            else {
-                compareFn = this._compareFn;
-            }
-        }
-        nodes.sort(compareFn);
-        nodes.forEach(node => {
-            const children = this._childrenFn(node);
-            if (children)
-                this.sortNodes(children, compareFn);
-        });
-    }
-    notifyViewNodesChanged() {
-        this.de('viewable-nodes', {
-            value: this.viewableNodes
-        });
-    }
-    onPropsChange() {
-        if (!this._conn || !this._isOpenFn || !this._childrenFn || !this._nodes)
-            return;
-        if (this._levelSetterFn) {
-            this._levelSetterFn(this._nodes, 0);
-        }
-        this.updateViewableNodes();
-    }
-    _calculateViewableNodes(nodes, acc) {
-        if (!nodes)
-            return;
-        nodes.forEach(node => {
-            if (this.searchString) {
-                if (!this._isOpenFn(node) && !this._testNodeFn(node, this.searchString))
+import { XE } from 'xtal-element/src/XE.js';
+export class XtalTree extends HTMLElement {
+    #idToNodeLookup = {};
+    calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn, idFn, searchString }, nodesCopy, acc) {
+        if (!nodesCopy)
+            return acc;
+        nodesCopy.forEach(node => {
+            if (searchString) {
+                if (!isOpenFn(node) && !testNodeFn(node, this.searchString))
                     return;
             }
+            this.#idToNodeLookup[idFn(node)] = node;
             acc.push(node);
-            if (this._isOpenFn(node))
-                this._calculateViewableNodes(this._childrenFn(node), acc);
+            if (isOpenFn(node))
+                this.calculateViewableNodes(this, childrenFn(node), acc);
         });
         return acc;
     }
-    _viewableNodes;
-    get viewableNodes() {
-        return this._viewableNodes;
+    defineIsOpenFn({ isOpenPath }) {
+        return {
+            isOpenFn: (tn) => tn[isOpenPath]
+        };
     }
-    set viewableNodes(nodes) {
-        this._viewableNodes = nodes;
+    defineChildrenFn({ childrenPath }) {
+        return {
+            childrenFn: (tn) => tn[childrenPath]
+        };
     }
-    _toggleNodeFn;
-    get toggleNodeFn() {
-        return this._toggleNodeFn;
+    defineCompareFn({ comparePath, sort }) {
+        let multiplier = 1;
+        switch (sort) {
+            case 'none':
+            case undefined:
+                return {
+                    compareFn: undefined,
+                };
+            case 'desc':
+                multiplier = -1;
+                break;
+        }
+        return {
+            compareFn: (lhs, rhs) => {
+                const lhsVal = lhs[comparePath];
+                const rhsVal = rhs[comparePath];
+                if (lhsVal === undefined && rhsVal === undefined)
+                    return 0;
+                if (lhsVal === undefined)
+                    return -1 * multiplier;
+                if (rhsVal === undefined)
+                    return 1 * multiplier;
+                return (lhsVal > rhsVal ? 1 : lhsVal < rhsVal ? -1 : 0) * multiplier;
+            }
+        };
     }
-    set toggleNodeFn(nodeFn) {
-        this._toggleNodeFn = nodeFn;
+    setHasChildren({ childrenFn, hasChildrenPath }, tn, recursive) {
+        const children = childrenFn(tn);
+        const hasChildren = children !== undefined && children.length > 0;
+        tn[hasChildrenPath] = hasChildren;
+        if (recursive) {
+            for (const child of children) {
+                this.setHasChildren(this, child, true);
+            }
+        }
     }
-    updateViewableNodes() {
-        this._viewableNodes = this._calculateViewableNodes(this._nodes, []);
-        this.notifyViewNodesChanged();
+    defineTestNodeFn({ testNodePath }) {
+        return {
+            testNodeFn: (tn, searchString) => tn[testNodePath].toLowerCase().includes(searchString.toLowerCase())
+        };
     }
-    set toggledNode(node) {
-        if (node === null)
+    defineIdFn({ idPath }) {
+        return {
+            idFn: (tn) => tn[idPath],
+        };
+    }
+    updateViewableNodes({ nodesCopy }) {
+        return {
+            viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
+        };
+    }
+    toggleNode({ toggledNode, childrenFn, toggleNodeFn }) {
+        if (!childrenFn(toggledNode))
             return;
-        if (!this._childrenFn(node))
-            return;
-        this.de('toggled-node', {
-            value: node
-        });
-        this._toggleNodeFn(node);
-        this.updateViewableNodes();
+        toggleNodeFn(toggledNode);
+        return this.updateViewableNodes(this);
     }
-    set allExpandedNodes(nodes) {
-        this.expandAll(nodes);
-        this.updateViewableNodes();
+    openNode({ openedNode, isOpenFn }) {
+        if (!isOpenFn(openedNode)) {
+            this.toggledNode = openedNode;
+        }
     }
-    set allCollapsedNodes(nodes) {
-        this.collapseAll(nodes);
-        this.updateViewableNodes();
+    closeNode({ closedNode, isOpenFn }) {
+        if (isOpenFn(closedNode)) {
+            return {
+                toggledNode: closedNode
+            };
+        }
     }
-    searchNodes() {
-        if (!this._testNodeFn)
-            return;
-        this.collapseAll(this._nodes);
-        this.search(this._nodes, null);
-        this.updateViewableNodes();
+    onToggledNodeId({ toggledNodeId }) {
+        const toggledNode = this.#idToNodeLookup[toggledNodeId];
+        return { toggledNode };
     }
-    search(nodes, parent) {
+    defineToggledNodeFn({ toggleNodePath }) {
+        return {
+            toggleNodeFn: (tn) => tn[toggleNodePath] = !tn[toggleNodePath]
+        };
+    }
+    setLevels({ nodesCopy, levelPath, marginStylePath, childrenFn }, passedInNodes, level) {
+        if (passedInNodes === undefined)
+            passedInNodes = nodesCopy;
+        if (level === undefined)
+            level = 0;
+        for (const node of passedInNodes) {
+            this.setHasChildren(this, node, false);
+            node[levelPath] = level;
+            node[marginStylePath] = "margin-left:" + level * 18 + "px";
+            const children = childrenFn(node);
+            if (children === undefined)
+                continue;
+            this.setLevels(this, children, level + 1);
+        }
+    }
+    search({ nodesCopy, testNodeFn, searchString, isOpenFn, toggleNodeFn, childrenFn }, passedInNodes, passedInParent) {
+        //if(passedInNodes === undefined) this.onCollapseAll(this);
+        const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
-            if (this._testNodeFn(node, this._searchString)) {
-                if (parent)
-                    this.openNode(parent);
+            if (testNodeFn(node, searchString)) {
+                if (!isOpenFn(node)) {
+                    toggleNodeFn(node);
+                }
             }
             else {
-                const children = this._childrenFn(node);
-                if (children) {
-                    this.search(children, node);
-                    if (parent && this._isOpenFn(node)) {
-                        this.openNode(parent);
+                const children = childrenFn(node);
+                if (children !== undefined) {
+                    this.search(this, children, node);
+                    if (passedInParent && isOpenFn(node) && !isOpenFn(passedInParent)) {
+                        toggleNodeFn(passedInParent);
                     }
                 }
             }
         });
+        if (passedInNodes === undefined)
+            return this.updateViewableNodes(this);
     }
-    openNode(node) {
-        if (!this._isOpenFn(node))
-            this._toggleNodeFn(node);
-    }
-    expandAll(nodes) {
+    onCollapseAll({ nodesCopy, isOpenFn, toggleNodeFn, childrenFn }, passedInNodes) {
+        const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
-            this.openNode(node);
-            const children = this._childrenFn(node);
-            if (children)
-                this.expandAll(children);
+            if (isOpenFn(node))
+                toggleNodeFn(node);
+            const children = childrenFn(node);
+            if (children !== undefined)
+                this.onCollapseAll(this, children);
         });
+        if (passedInNodes === undefined)
+            return this.updateViewableNodes(this);
     }
-    closeNode(node) {
-        if (this._isOpenFn(node))
-            this._toggleNodeFn(node);
-    }
-    collapseAll(nodes) {
+    onExpandAll({ nodesCopy, isOpenFn, toggleNodeFn, childrenFn }, passedInNodes) {
+        const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
-            this.closeNode(node);
-            const children = this._childrenFn(node);
-            if (children)
-                this.collapseAll(children);
+            if (!isOpenFn(node))
+                toggleNodeFn(node);
+            const children = childrenFn(node);
+            if (children !== undefined)
+                this.onExpandAll(this, children);
         });
+        if (passedInNodes === undefined)
+            return this.updateViewableNodes(this);
     }
-    _levelSetterFn;
-    set levelSetterFn(setter) {
-        this._levelSetterFn = setter;
-        this.onPropsChange();
-    }
-    get levelSetterFn() {
-        return this._levelSetterFn;
+    onSort({ nodesCopy, compareFn, childrenFn }, passedInNodes) {
+        const nodes = passedInNodes || nodesCopy;
+        nodes.sort(compareFn);
+        nodes.forEach(node => {
+            const children = childrenFn(node);
+            if (children !== undefined)
+                this.onSort(this, children);
+        });
+        if (passedInNodes === undefined)
+            return this.updateViewableNodes(this);
     }
 }
-define(XtalTree);
+const dispatch = {
+    notify: {
+        dispatch: true
+    }
+};
+const xe = new XE({
+    config: {
+        tagName: 'xtal-tree',
+        propDefaults: {
+            childrenPath: 'children',
+            isOpenPath: 'open',
+            testNodePath: 'name',
+            idPath: 'id',
+            toggleNodePath: 'open',
+            marginStylePath: 'marginStyle',
+            levelPath: 'level',
+            hasChildrenPath: 'hasChildren',
+            collapseAll: false,
+            expandAll: false,
+            sort: 'none',
+            comparePath: 'name'
+        },
+        propInfo: {
+            toggledNode: {
+                notify: {
+                    dispatch: true
+                },
+                dry: false,
+            },
+            toggledNodeId: {
+                dry: false,
+            },
+            viewableNodes: dispatch,
+            nodes: {
+                notify: {
+                    cloneTo: 'nodesCopy',
+                }
+            },
+            collapseAll: {
+                dry: false,
+            },
+            expandAll: {
+                dry: false,
+            }
+        },
+        actions: {
+            defineIsOpenFn: 'isOpenPath',
+            defineIdFn: 'idPath',
+            defineChildrenFn: 'childrenPath',
+            defineTestNodeFn: 'testNodePath',
+            defineToggledNodeFn: 'toggleNodePath',
+            defineCompareFn: {
+                ifAllOf: ['sort', 'comparePath']
+            },
+            onSort: 'compareFn',
+            toggleNode: {
+                ifAllOf: ['toggledNode', 'childrenFn', 'toggleNodeFn', 'idFn']
+            },
+            updateViewableNodes: {
+                ifAllOf: ['nodesCopy', 'idFn']
+            },
+            onToggledNodeId: 'toggledNodeId',
+            setLevels: {
+                ifAllOf: ['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
+            },
+            onCollapseAll: 'collapseAll',
+            onExpandAll: 'expandAll',
+            search: 'searchString'
+        },
+        style: {
+            display: 'none',
+        }
+    },
+    superclass: XtalTree,
+});

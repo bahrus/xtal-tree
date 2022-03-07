@@ -8,16 +8,16 @@
   "main": "XtalTreeDeco.js",
   "module": "XtalTreeDeco.js",
   "dependencies": {
-    "trans-render": "0.0.510",
-    "xtal-element": "0.0.483"
+    "trans-render": "0.0.511",
+    "xtal-element": "0.0.484"
   },
   "devDependencies": {
     "xtal-test": "0.0.55",
-    "xtal-vlist": "0.0.46",
-    "be-reformable": "0.0.32",
-    "be-channeling": "0.0.3",
-    "be-noticed": "0.0.55",
-    "be-observant": "0.0.100"
+    "xtal-vlist": "0.0.48",
+    "be-reformable": "0.0.34",
+    "be-channeling": "0.0.5",
+    "be-noticed": "0.0.57",
+    "be-observant": "0.0.101"
   },
   "scripts": {
     "serve": "node node_modules/xtal-test/serve.js"

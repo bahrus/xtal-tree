@@ -6,6 +6,8 @@
 
 # \<xtal-tree\>
 
+[Demo](https://codepen.io/bahrus/pen/GROLwBV)
+
 Often we want to take advantage of a nice flat list generator component, like dom-repeat, or iron-list, but we want to use it to display and manipulate tree data.
 
 This scenario seems to come up so frequently with various components, that this component strives to genericize that requirement.

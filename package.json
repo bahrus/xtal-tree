@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "xtal-test": "0.0.55",
-    "xtal-vlist": "0.0.48",
+    "xtal-vlist": "0.0.49",
     "be-reformable": "0.0.34",
     "be-channeling": "0.0.5",
     "be-noticed": "0.0.57",

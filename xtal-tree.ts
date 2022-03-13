@@ -1,8 +1,15 @@
 import {XtalTreeProps, XtalTreeActions, ITreeNode} from './types';
 import {XE} from 'xtal-element/src/XE.js';
+declare function structuredClone<T>(inp: T): T;
 
 export class XtalTree extends HTMLElement implements XtalTreeActions{
     #idToNodeLookup: {[id: string | number]: ITreeNode} = {};
+    onNodes({nodes, cloneNodes}: this){
+        const nodesCopy = cloneNodes ? structuredClone(nodes) : nodes;
+        return {
+            nodesCopy,
+        }
+    }
     calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
         if (!nodesCopy) return acc;
         nodesCopy.forEach(node => {
@@ -203,11 +210,6 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                 dry: false,
             },
             viewableNodes:dispatch,
-            nodes:{
-                notify:{
-                    cloneTo: 'nodesCopy',
-                }
-            },
             collapseAll:{
                 dry: false,
             },
@@ -237,7 +239,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             },
             onCollapseAll: 'collapseAll',
             onExpandAll: 'expandAll',
-            search:'searchString'
+            search:'searchString',
+            onNodes: 'nodes'
         },
         style:{
             display: 'none',

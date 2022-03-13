@@ -44,6 +44,7 @@ export interface XtalTreeProps{
     nodesCopy: ITreeNode[];
     expandAll: boolean;
     collapseAll: boolean;
+    cloneNodes: boolean;
 }
 
 export interface XtalTreeActions{
@@ -87,4 +88,7 @@ export interface XtalTreeActions{
     onSort(self: this, passedInNodes?: ITreeNode[]): {
         viewableNodes: ITreeNode[],
     } | void;
+    onNodes(self: this): {
+        nodesCopy: ITreeNode[],
+    }
 }

@@ -1,6 +1,12 @@
 import { XE } from 'xtal-element/src/XE.js';
 export class XtalTree extends HTMLElement {
     #idToNodeLookup = {};
+    onNodes({ nodes, cloneNodes }) {
+        const nodesCopy = cloneNodes ? structuredClone(nodes) : nodes;
+        return {
+            nodesCopy,
+        };
+    }
     calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn, idFn, searchString }, nodesCopy, acc) {
         if (!nodesCopy)
             return acc;
@@ -210,11 +216,6 @@ const xe = new XE({
                 dry: false,
             },
             viewableNodes: dispatch,
-            nodes: {
-                notify: {
-                    cloneTo: 'nodesCopy',
-                }
-            },
             collapseAll: {
                 dry: false,
             },
@@ -244,7 +245,8 @@ const xe = new XE({
             },
             onCollapseAll: 'collapseAll',
             onExpandAll: 'expandAll',
-            search: 'searchString'
+            search: 'searchString',
+            onNodes: 'nodes'
         },
         style: {
             display: 'none',

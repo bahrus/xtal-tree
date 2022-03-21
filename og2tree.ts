@@ -7,12 +7,16 @@ export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]
         for(const val of obj){
             let type: string = typeof val;
             if(Array.isArray(val)) type = 'array';
+            const name = '[' + count.toString() + ']';
             const node: IStandardTreeNode = {
-                name: count.toString(),
-                path: ancestors.join('.'),
+                name, 
+                path: ancestors.join('.') + name,
                 type,
                 val,
-            }
+            };
+            ancestors.push(name);
+            node.children = og2tree(val, ancestors);
+            ancestors.pop();
             nodes.push(node);
             count++;
         }

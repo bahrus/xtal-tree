@@ -10,6 +10,14 @@ interface INodePosition {
 export interface ITreeNode {
 }
 
+export interface IStandardTreeNode{
+    children?: IStandardTreeNode[];
+    name: string;
+    path: string;
+    val: any;
+    type: string;
+}
+
 export interface XtalTreeProps{
     /**
      * Do a structural clone before doing any modifications on the data.
@@ -45,6 +53,7 @@ export interface XtalTreeProps{
     expandAll: boolean;
     collapseAll: boolean;
     cloneNodes: boolean;
+    objectGraph: any;
 }
 
 export interface XtalTreeActions{
@@ -91,4 +100,7 @@ export interface XtalTreeActions{
     onNodes(self: this): {
         nodesCopy: ITreeNode[],
     }
+    onObjectGraph(self: this): Promise<{
+        nodes: ITreeNode[],
+    }>
 }

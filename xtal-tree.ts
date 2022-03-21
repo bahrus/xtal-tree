@@ -172,6 +172,13 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         });
         if(passedInNodes === undefined) return this.updateViewableNodes(this);
     }
+
+    async onObjectGraph({objectGraph}: this)  {
+        const {og2tree} = await import('./og2tree.js');
+        return {
+            nodes: og2tree(objectGraph),
+        };
+    }
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -240,7 +247,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             onCollapseAll: 'collapseAll',
             onExpandAll: 'expandAll',
             search:'searchString',
-            onNodes: 'nodes'
+            onNodes: 'nodes',
+            onObjectGraph: 'objectGraph',
         },
         style:{
             display: 'none',

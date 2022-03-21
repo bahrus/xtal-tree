@@ -182,6 +182,12 @@ export class XtalTree extends HTMLElement {
         if (passedInNodes === undefined)
             return this.updateViewableNodes(this);
     }
+    async onObjectGraph({ objectGraph }) {
+        const { og2tree } = await import('./og2tree.js');
+        return {
+            nodes: og2tree(objectGraph),
+        };
+    }
 }
 const dispatch = {
     notify: {
@@ -246,7 +252,8 @@ const xe = new XE({
             onCollapseAll: 'collapseAll',
             onExpandAll: 'expandAll',
             search: 'searchString',
-            onNodes: 'nodes'
+            onNodes: 'nodes',
+            onObjectGraph: 'objectGraph',
         },
         style: {
             display: 'none',

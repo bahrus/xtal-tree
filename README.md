@@ -20,6 +20,7 @@ xtal-tree also takes a "whatcha-want?" approach to what is displayed.  You can d
 
 Think of xtal-tree as a reusable "View Model" component.  
 
+xtal-tree also provides an option to turn any object graph JSON structure, and turn it into a regular tree structure that can be rendered quickly using a virtual list.
 
 
 ## Viewing This Element Locally

@@ -62,6 +62,7 @@
     }' row-transform='{
         "div": [{}, {}, {"data-path": "path", "style": "marginStyle"}],
         "label": "name",
+        "span": "asString",
         "expanderParts": [true, {"if": "open"}, ["-"], ["+"]],
         "button": [{}, {}, {"data-children": "hasChildren"}]
     }'
@@ -77,6 +78,7 @@
         <div class=node slot=row itemscope >
             <button class="expander" part=expander>.</button>
             <label></label>
+            <span></span>
         </div>
         <template slot="style">
             <style>

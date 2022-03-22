@@ -2,42 +2,48 @@ export function og2tree(obj, ancestors = []) {
     const nodes = [];
     if (Array.isArray(obj)) {
         let count = 0;
-        for (const val of obj) {
-            let type = typeof val;
-            if (Array.isArray(val))
+        for (const value of obj) {
+            let type = typeof value;
+            if (Array.isArray(value))
                 type = 'array';
             const name = '[' + count.toString() + ']';
             const node = {
                 name,
                 path: ancestors.join('.') + name,
                 type,
-                val,
+                value,
             };
-            ancestors.push(name);
-            node.children = og2tree(val, ancestors);
-            ancestors.pop();
+            if (typeof value === 'object') {
+                ancestors.push(name);
+                node.children = og2tree(value, ancestors);
+                ancestors.pop();
+            }
+            else {
+                node.asString = value.toString();
+            }
             nodes.push(node);
             count++;
         }
     }
     else {
         for (const name in obj) {
-            const val = obj[name];
-            let type = typeof val;
-            if (Array.isArray(val))
+            const value = obj[name];
+            let type = typeof value;
+            if (Array.isArray(value))
                 type = 'array';
             const node = {
                 name,
                 type,
-                val,
+                value,
                 path: ancestors.join('.') + name,
             };
-            switch (typeof val) {
-                case 'object':
-                    ancestors.push(name);
-                    node.children = og2tree(val, ancestors);
-                    ancestors.pop();
-                    break;
+            if (typeof value === 'object') {
+                ancestors.push(name);
+                node.children = og2tree(value, ancestors);
+                ancestors.pop();
+            }
+            else {
+                node.asString = value.toString();
             }
             nodes.push(node);
         }

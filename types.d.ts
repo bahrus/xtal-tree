@@ -14,7 +14,8 @@ export interface IStandardTreeNode{
     children?: IStandardTreeNode[];
     name: string;
     path: string;
-    val: any;
+    value: any;
+    asString?: string;
     type: string;
 }
 

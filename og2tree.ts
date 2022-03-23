@@ -18,6 +18,7 @@ export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]
                 ancestors.push(name);
                 node.children = og2tree(value, ancestors);
                 ancestors.pop();
+                node.asString = toString(value, 100);
             }else{
                 node.asString = value.toString();
             }
@@ -39,6 +40,7 @@ export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]
                 ancestors.push(name);
                 node.children = og2tree(value, ancestors);
                 ancestors.pop();
+                node.asString = toString(value, 100);
             }else{
                 node.asString = value.toString();
             }
@@ -49,4 +51,12 @@ export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]
     
     return nodes;
 
+}
+
+function toString(obj: any, max: number){
+    let ret = JSON.stringify(obj);
+    if(ret.length > max){
+        ret = ret.substring(0, max) + '...';
+    }
+    return ret;
 }

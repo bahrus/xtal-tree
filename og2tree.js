@@ -17,6 +17,7 @@ export function og2tree(obj, ancestors = []) {
                 ancestors.push(name);
                 node.children = og2tree(value, ancestors);
                 ancestors.pop();
+                node.asString = toString(value, 100);
             }
             else {
                 node.asString = value.toString();
@@ -41,6 +42,7 @@ export function og2tree(obj, ancestors = []) {
                 ancestors.push(name);
                 node.children = og2tree(value, ancestors);
                 ancestors.pop();
+                node.asString = toString(value, 100);
             }
             else {
                 node.asString = value.toString();
@@ -49,4 +51,11 @@ export function og2tree(obj, ancestors = []) {
         }
     }
     return nodes;
+}
+function toString(obj, max) {
+    let ret = JSON.stringify(obj);
+    if (ret.length > max) {
+        ret = ret.substring(0, max) + '...';
+    }
+    return ret;
 }

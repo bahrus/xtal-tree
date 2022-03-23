@@ -250,9 +250,6 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
         },
-        style:{
-            display: 'none',
-        }
     },
     superclass: XtalTree,
 });

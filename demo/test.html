@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form be-reformable='{
+        "autoSubmit": true,
+        "debug": true
+    }'
+
+        target="[-object-graph]"
+        action="test.json"
+    >
+    </form>
+    <button be-noticed='{
+        "click": {
+            "to": "/xtal-tree",
+            "prop": "collapseAll",
+            "val": true
+        }
+    }'>Collapse All</button>
+    <button be-noticed='{
+        "click": {
+            "to": "/xtal-tree",
+            "prop": "expandAll",
+            "val": true
+        }
+    }'>Expand All</button>
+    <button be-noticed='{
+        "click": {
+            "to": "/xtal-tree",
+            "prop": "sort",
+            "val": "asc"
+        }
+    }'>Sort Asc</button>
+    <button be-noticed='{
+        "click": {
+            "to": "/xtal-tree",
+            "prop": "sort",
+            "val": "desc"
+        }
+    }'>Sort Desc</button>
+    <label>
+        Search
+        <input type="search" be-noticed='{
+            "input": {
+                "to": "/xtal-tree",
+                "doInit": true,
+                "vft": "value",
+                "prop": "searchString"
+            }
+        }'>
+    </label>
+    <xtal-tree id="xtal-tree" -object-graph id-path="path"></xtal-tree>
+
+    <xtal-vlist 
+        style="height:600px;width:100%;" 
+        page-size="10" 
+        id="vlist"
+        min-item-height='19.5'
+        be-observant='{
+            "list": {"observe": "xtal-tree", "vft": "viewableNodes"}
+        }' 
+        row-transform='{
+            "div": [{}, {}, {"data-path": "path", "style": "marginStyle"}],
+            ".name": "name",
+            ".eq": [true, {"if": "asString"}, [" = "], [""]],
+            ".asString": "asString",
+            "expanderParts": [true, {"if": "open"}, ["-"], ["+"]],
+            "button": [{}, {}, {"data-children": "hasChildren"}]
+        }'
+        be-channeling='{
+            "eventFilter": "click",
+            "toNearestUpMatch": "xtal-tree",
+            "prop": "toggledNodeId",
+            "vfe": "path.0.parentElement.dataset.path",
+            "composedPathMatch": "button"
+        }'
+        row-intersectional-settings='{
+            "rootClosest": ".scroller",
+            "options": {
+                "rootMargin": "300px",
+                "threshold": 0
+            }
+        }'
+    >
+        <div class=node slot=row itemscope >
+            <button class="expander" part=expander>.</button>
+            <label class='name'></label>
+            <span class='eq'></span>
+            <span class='asString'></span>
+        </div>
+        <template slot="style">
+            <style>
+                button.expander{
+                    display:none;
+                }
+                button[data-children].expander{
+                    display:inline;
+                }
+            </style>
+        </template>
+    </xtal-vlist>
+
+    <script type=importmap>
+        {
+            "imports": {
+                "trans-render/": "../node_modules/trans-render/",
+                "xtal-element/": "../node_modules/xtal-element/",
+                "be-decorated/": "../node_modules/be-decorated/",
+                "be-deslotted/": "../node_modules/be-deslotted/",
+                "be-channeling/": "../node_modules/be-channeling/",
+                "be-intersectional/": "../node_modules/be-intersectional/",
+                "be-noticed/": "../node_modules/be-noticed/",
+                "be-observant/": "../node_modules/be-observant/",
+                "be-reformable/": "../node_modules/be-reformable/",
+                "be-repeated/": "../node_modules/be-repeated/",
+                "on-to-me/": "../node_modules/on-to-me/",
+                "be-hive/": "../node_modules/be-hive/",
+                "xtal-vlist/": "../node_modules/xtal-vlist/"
+            }
+        }
+    </script>
+    <script type=module>
+        import 'be-reformable/be-reformable.js';
+        import '../xtal-tree.js';
+        import 'xtal-vlist/xtal-vlist.js';
+        import 'be-observant/be-observant.js';
+        import 'be-channeling/be-channeling.js';
+        import 'be-noticed/be-noticed.js';
+    </script>
+</body>
+</html>

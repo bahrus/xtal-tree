@@ -183,7 +183,7 @@ export class XtalTree extends HTMLElement {
             return this.updateViewableNodes(this);
     }
     async onObjectGraph({ objectGraph }) {
-        const { og2tree } = await import('./og2tree.js');
+        const { og2tree } = await import('./og2tree.mjs');
         return {
             nodes: og2tree(objectGraph),
         };

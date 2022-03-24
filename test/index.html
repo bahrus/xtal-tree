@@ -1,17 +1,48 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <script type='module'>
+      import {og2tree} from '../og2tree.mjs';
+      import {getNodeFromPath} from '../getNodeFromPath.mjs';
 
-    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
-  </head>
-  <body>
-    <script>
-      // Load and run all tests (.html, .js):
-      WCT.loadSuites([
-        'xtal-tree_test.html'
-      ]);
+      const test1 = [1, 2, 3, 4, 5];
+
+      const tree1 = og2tree(test1);
+
+      //console.log(JSON.stringify(tree, null, 2));
+
+      const testPath1 = getNodeFromPath(tree1, '[1]');
+
+      //console.log(JSON.stringify(testPath1, null, 2));
+
+      const test2 = {
+          "string":"foo",
+          "number":5,
+          "array":[
+              1,2,3,4,5
+          ],
+          "object":{
+              "property":"value",
+              "subobj":{
+                  "arr":["foo","ha"],
+                  "numero":1
+              }
+          }
+      };
+
+      //console.log(JSON.stringify(og2tree(test2), null, 2));
+
+      const tree2 = og2tree(test2);
+
+      const testPath2 = getNodeFromPath(tree2, 'object.subobj.arr[1]');
+
+      console.log(JSON.stringify(testPath2, null, 2));
     </script>
-  </body>
+</body>
 </html>

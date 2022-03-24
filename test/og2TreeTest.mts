@@ -1,12 +1,35 @@
 import {og2tree} from '../og2tree.mjs';
-import {tree2og} from '../tree2og.mjs';
+import {getNodeFromPath} from '../getNodeFromPath.mjs';
 
 const test1 = [1, 2, 3, 4, 5];
 
-const tree = og2tree(test1);
+const tree1 = og2tree(test1);
 
-console.log(JSON.stringify(tree, null, 2));
+//console.log(JSON.stringify(tree, null, 2));
 
-const og = tree2og(tree);
+const testPath1 = getNodeFromPath(tree1, '[1]');
 
-console.log(JSON.stringify(og, null, 2));
+//console.log(JSON.stringify(testPath1, null, 2));
+
+const test2 = {
+    "string":"foo",
+    "number":5,
+    "array":[
+        1,2,3,4,5
+    ],
+    "object":{
+        "property":"value",
+        "subobj":{
+            "arr":["foo","ha"],
+            "numero":1
+        }
+    }
+};
+
+//console.log(JSON.stringify(og2tree(test2), null, 2));
+
+const tree2 = og2tree(test2);
+
+const testPath2 = getNodeFromPath(tree2, 'object.subobj.arr[1]');
+
+console.log(JSON.stringify(testPath2, null, 2));

@@ -19,6 +19,12 @@ export interface IStandardTreeNode{
     type: string;
 }
 
+export interface INodeRef{
+    baseValue: any;
+    prop?: string;
+    idx?: number;
+}
+
 export interface XtalTreeProps{
     /**
      * Do a structural clone before doing any modifications on the data.

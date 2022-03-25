@@ -179,6 +179,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             nodes: og2tree(objectGraph),
         };
     }
+
+    async onEditedNode({editedNode, nodes,}: this) {
+        const {updatePath} = await import('./updatePath.mjs');
+        updatePath(nodes, editedNode.name!, editedNode.value!);
+    }
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -249,6 +254,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             search:'searchString',
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
+            onEditedNode: 'editedNode',
         },
     },
     superclass: XtalTree,

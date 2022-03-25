@@ -188,6 +188,10 @@ export class XtalTree extends HTMLElement {
             nodes: og2tree(objectGraph),
         };
     }
+    async onEditedNode({ editedNode, nodes, }) {
+        const { updatePath } = await import('./updatePath.mjs');
+        updatePath(nodes, editedNode.name, editedNode.value);
+    }
 }
 const dispatch = {
     notify: {
@@ -254,6 +258,7 @@ const xe = new XE({
             search: 'searchString',
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
+            onEditedNode: 'editedNode',
         },
     },
     superclass: XtalTree,

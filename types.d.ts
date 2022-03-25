@@ -10,7 +10,7 @@ interface INodePosition {
 export interface ITreeNode {
 }
 
-export interface IStandardTreeNode{
+export interface IStandardTreeNode extends ITreeNode{
     children?: IStandardTreeNode[];
     name: string;
     path: string;
@@ -40,7 +40,7 @@ export interface XtalTreeProps{
     isOpenPath: string;
     idFn: (tn: ITreeNode) => string | number;
     idPath: string;
-    nodes: ITreeNode[];
+    nodes: IStandardTreeNode[];
     searchString: string;
     testNodeFn: (tn: ITreeNode, search: string) => boolean;
     testNodePath: string;
@@ -62,6 +62,7 @@ export interface XtalTreeProps{
     collapseAll: boolean;
     cloneNodes: boolean;
     objectGraph: any;
+    editedNode: HTMLInputElement;
 }
 
 export interface XtalTreeActions{
@@ -111,4 +112,5 @@ export interface XtalTreeActions{
     onObjectGraph(self: this): Promise<{
         nodes: ITreeNode[],
     }>
+    onEditedNode(self: this): void;
 }

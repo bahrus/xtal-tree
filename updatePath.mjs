@@ -1,6 +1,7 @@
 import { getNodeFromPath } from './getNodeFromPath.mjs';
 export async function updatePath(nodes, path, value) {
     const match = getNodeFromPath(nodes, path);
+    console.log(match);
     switch (match.node.type) {
         case 'string':
             match.baseValue[match.prop] = value;

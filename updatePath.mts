@@ -6,13 +6,13 @@ export async function updatePath(nodes: IStandardTreeNode[], path: string, value
     console.log(match);
     switch(match.node!.type){
         case 'string':
-            match.baseValue[match.prop!] = value;
+            match.node!.value = value;
             break;
         case 'number':
-            match.baseValue[match.prop!] = Number(value);
+            match.node!.value = Number(value);
             break;
         case 'boolean':
-            match.baseValue[match.prop!] = value === 'true';
+            match.node!.value = value === 'true';
             break;
         default:
             throw 'NI';

@@ -23,6 +23,7 @@ export interface INodeRef{
     baseValue: any;
     prop?: string;
     idx?: number;
+    node?: IStandardTreeNode;
 }
 
 export interface XtalTreeProps{

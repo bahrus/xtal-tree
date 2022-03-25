@@ -10,10 +10,10 @@ export function getNodeFromSplit(nodes: IStandardTreeNode[], split: string[]): I
     let rest = split.slice(1);
     if(first[0] === '['){
         const idx = parseInt(first.substr(1, first.length - 2));
+        const node = nodes[idx];
         if(rest.length === 0){
-            return {baseValue: nodes, idx};
+            return {baseValue: nodes, idx, node};
         }else{
-            const node = nodes[idx];
             return getNodeFromSplit(node.children!, rest);
         }
     }else{
@@ -27,10 +27,11 @@ export function getNodeFromSplit(nodes: IStandardTreeNode[], split: string[]): I
         if(idx === -1){
             throw new Error(`No node found with name ${first}`);
         }
+        const node = nodes[idx];
         if(rest.length === 0){
-            return {baseValue: nodes, prop: first};
+            return {baseValue: nodes, prop: first, node};
         }else{
-            const node = nodes[idx];
+            
             return getNodeFromSplit(node.children!, rest);
         }
 

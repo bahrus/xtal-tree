@@ -189,7 +189,7 @@ export class XtalTree extends HTMLElement {
         };
     }
     async onEditedNode({ editedNode, nodes, }) {
-        console.log(editedNode);
+        //console.log(editedNode);
         const { updatePath } = await import('./updatePath.mjs');
         updatePath(nodes, editedNode.name, editedNode.value);
     }

@@ -181,7 +181,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
 
     async onEditedNode({editedNode, nodes,}: this) {
-        console.log(editedNode);
+        //console.log(editedNode);
         const {updatePath} = await import('./updatePath.mjs');
         updatePath(nodes, editedNode.name!, editedNode.value!);
     }

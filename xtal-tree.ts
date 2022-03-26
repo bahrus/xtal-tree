@@ -10,7 +10,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             nodesCopy,
         }
     }
-    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
+    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString, parentPath}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
         if (!nodesCopy) return acc;
         nodesCopy.forEach(node => {
             if (searchString) {
@@ -18,7 +18,16 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             }
             this.#idToNodeLookup[idFn(node)] = node;
             acc.push(node);
-            if (isOpenFn(node)) this.calculateViewableNodes(this, childrenFn(node), acc);
+            if (isOpenFn(node)) {
+                const children = childrenFn(node);
+                if (children) {
+                    for(const child of children){
+                        (<any>child)[parentPath] = node;
+                    }
+                    this.calculateViewableNodes(this, children, acc);
+                }
+                
+            }
         });
         return acc;
     }
@@ -69,6 +78,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     defineTestNodeFn({testNodePath}: this) {
         return {
             testNodeFn: (tn: ITreeNode, searchString: string) => (<any>tn)[testNodePath].toLowerCase().includes(searchString.toLowerCase())
+        }
+    }
+    defineParentFn({parentPath}: this){
+        return {
+            parentFn: (tn: ITreeNode) => (<any>tn)[parentPath]
         }
     }
     defineIdFn({idPath}: this) {
@@ -182,9 +196,9 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
     async onEditedNode({editedNode, nodes, objectGraph}: this) {
         //console.log(editedNode);
-        const {updateTreeNodeFromPath: updatePath} = await import('./updateTreeNodeFromPath.mjs');
+        const {updateTreeNodeFromPath} = await import('./updateTreeNodeFromPath.mjs');
         const {name, value} = editedNode;
-        updatePath(nodes, name, value);
+        updateTreeNodeFromPath(nodes, name, value);
         if(objectGraph !== undefined){
             const {updateOGFromPath} = await import('./updateOGFromPath.mjs');
             updateOGFromPath(objectGraph, name, value);
@@ -194,10 +208,10 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
     synchNodesCopyOrObjectGraph({nodes, cloneNodes, objectGraph}: this){
         // if(objectGraph === undefined) {
-            const nodesCopy = [...nodes];
-            return {
-                nodesCopy,
-            }
+            // const nodesCopy = [...nodes];
+            // return {
+            //     nodesCopy,
+            // }
         // }
         // const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : {...objectGraph};
         // return {
@@ -223,6 +237,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             isOpenPath: 'open',
             testNodePath: 'name',
             idPath: 'id',
+            parentPath: 'parent',
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',

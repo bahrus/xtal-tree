@@ -17,6 +17,7 @@ export interface IStandardTreeNode extends ITreeNode{
     value: any;
     asString?: string;
     type: string;
+    parent?: IStandardTreeNode;
 }
 
 export interface INodeRef{
@@ -52,6 +53,8 @@ export interface XtalTreeProps{
     testNodePath: string;
     compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
     comparePath: string;
+    parentFn: (tn: ITreeNode) => ITreeNode;
+    parentPath: string;
     sort: 'asc' | 'desc' | 'none' | undefined;
     viewableNodes: ITreeNode[];
     toggleNodeFn: (tn: ITreeNode) => void;
@@ -82,6 +85,9 @@ export interface XtalTreeActions{
     }
     defineTestNodeFn(self: this): {
         testNodeFn: (tn: ITreeNode, search: string) => boolean;
+    }
+    defineParentFn(self: this): {
+        parentFn: (tn: ITreeNode) => ITreeNode;
     }
     defineIdFn(self: this): {
         idFn: (tn: ITreeNode) => string | number;

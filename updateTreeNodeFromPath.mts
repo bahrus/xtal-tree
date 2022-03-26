@@ -24,4 +24,10 @@ export function updateTreeNodeFromPath(nodes: IStandardTreeNode[], path: string,
             match.node!.asString = value.toString();
             break;
     }
+    const node = match.node!;
+    const parent = node.parent;
+    while(parent){
+        const {value} = parent;
+        parent.asString = typeof(value) === 'object' ?  JSON.stringify(value) : value.toString();
+    }
 }

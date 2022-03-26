@@ -221,6 +221,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             //     nodesCopy,
             // }
         // }
+        if(objectGraph === undefined) return;
         const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : {...objectGraph};
         return {
             objectGraph: objectGraphCopy,
@@ -312,7 +313,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             },
             synchNodesCopyOrObjectGraph:{
                 ifEquals:['updateCount', 'updateCountEcho'],
-                ifAllOf:['updateCount', 'updateCountEcho', 'objectGraph']
+                //ifAllOf:['updateCount', 'updateCountEcho', 'objectGraph']
             }
         },
     },

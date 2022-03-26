@@ -15,4 +15,11 @@ export function updateTreeNodeFromPath(nodes, path, value) {
         default:
             throw 'NI';
     }
+    switch (match.node.type) {
+        case 'string':
+        case 'number':
+        case 'boolean':
+            match.node.asString = value.toString();
+            break;
+    }
 }

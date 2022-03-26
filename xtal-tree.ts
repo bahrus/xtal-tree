@@ -193,20 +193,18 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
 
     synchNodesCopyOrObjectGraph({nodes, cloneNodes, objectGraph}: this){
-        //if(objectGraph === undefined) {
+        if(objectGraph === undefined) {
             const nodesCopy = [...nodes];
             return {
                 nodesCopy,
             }
-        //}
-        // const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : {...objectGraph};
-        // return {
-        //     objectGraph: objectGraphCopy,
-        // };
+        }
+        const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : {...objectGraph};
+        return {
+            objectGraph: objectGraphCopy,
+        };
     }
-    // async synchEditedObjectGraph(self: this){
-        
-    // }
+
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -235,7 +233,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             comparePath: 'name',
             updateCount: 0,
             updateCountEcho: 0,
-
+            cloneNodes: false,
         },
         propInfo: {
             toggledNode:{

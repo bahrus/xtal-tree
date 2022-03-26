@@ -17,4 +17,11 @@ export function updateTreeNodeFromPath(nodes: IStandardTreeNode[], path: string,
         default:
             throw 'NI';
     }
+    switch(match.node!.type){
+        case 'string':
+            case 'number':
+            case 'boolean':
+            match.node!.asString = value.toString();
+            break;
+    }
 }

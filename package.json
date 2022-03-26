@@ -9,7 +9,7 @@
   "module": "XtalTreeDeco.js",
   "dependencies": {
     "trans-render": "0.0.514",
-    "xtal-element": "0.0.484"
+    "xtal-element": "0.0.485"
   },
   "devDependencies": {
     "xtal-test": "0.0.56",

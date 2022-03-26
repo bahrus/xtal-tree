@@ -193,16 +193,16 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
 
     synchNodesCopyOrObjectGraph({nodes, cloneNodes, objectGraph}: this){
-        if(objectGraph === undefined) {
-            const nodesCopy = [...nodes];
-            return {
-                nodesCopy,
-            }
-        }
-        const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : {...objectGraph};
-        return {
-            objectGraph: objectGraphCopy,
-        };
+        // if(objectGraph === undefined) {
+        //     const nodesCopy = [...nodes];
+        //     return {
+        //         nodesCopy,
+        //     }
+        // }
+        // const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : {...objectGraph};
+        // return {
+        //     objectGraph: objectGraphCopy,
+        // };
     }
 
 }

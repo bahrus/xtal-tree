@@ -9,7 +9,7 @@ export function og2tree(obj, ancestors = []) {
             const name = '[' + count.toString() + ']';
             const node = {
                 name,
-                path: ancestors.join('.') + name,
+                path: ancestors.join('.') + '.' + name,
                 type,
                 value,
             };
@@ -36,7 +36,7 @@ export function og2tree(obj, ancestors = []) {
                 name,
                 type,
                 value,
-                path: ancestors.join('.') + name,
+                path: ancestors.join('.') + '.' + name,
             };
             if (typeof value === 'object') {
                 ancestors.push(name);

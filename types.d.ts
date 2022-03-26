@@ -61,7 +61,7 @@ export interface XtalTreeProps{
     toggleNodePath: string;
     toggledNode: ITreeNode;
     toggledNodeId: string | number;
-    openedNode: ITreeNode;
+    openedNode: IStandardTreeNode;
     closedNode: ITreeNode;
     levelPath: string;
     marginStylePath: string;

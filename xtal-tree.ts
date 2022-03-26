@@ -1,9 +1,10 @@
-import {XtalTreeProps, XtalTreeActions, ITreeNode} from './types';
+import {XtalTreeProps, XtalTreeActions, ITreeNode, IStandardTreeNode} from './types';
 import {XE} from 'xtal-element/src/XE.js';
 declare function structuredClone<T>(inp: T): T;
 
 export class XtalTree extends HTMLElement implements XtalTreeActions{
     #idToNodeLookup: {[id: string | number]: ITreeNode} = {};
+    #openNode: {[path: string]: boolean} = {};
     onNodes({nodes, cloneNodes}: this){
         const nodesCopy = cloneNodes ? structuredClone(nodes) : nodes;
         return {
@@ -34,7 +35,12 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
     defineIsOpenFn({isOpenPath}: this) {
         return {
-            isOpenFn: (tn: ITreeNode) => (<any>tn)[isOpenPath]
+            isOpenFn: (tn: ITreeNode) => {
+                const stn = tn as IStandardTreeNode;
+                if(stn.path && this.#openNode[stn.path]) return true;
+                //TODO:  resolve redundancy
+                return (<any>tn)[isOpenPath]
+            }
         }
     }
     defineChildrenFn({childrenPath}: this){
@@ -103,6 +109,9 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     openNode({openedNode, isOpenFn}: this){
         if(!isOpenFn(openedNode)){
             this.toggledNode = openedNode;
+            this.#openNode[openedNode.path] = true;
+        }else{
+            this.#openNode[openedNode.path] = false;
         }
     }
     closeNode({closedNode, isOpenFn}: this){
@@ -196,13 +205,12 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
     async onEditedNode({editedNode, nodes, objectGraph}: this) {
         //console.log(editedNode);
-        const {updateTreeNodeFromPath} = await import('./updateTreeNodeFromPath.mjs');
+        //const {updateTreeNodeFromPath} = await import('./updateTreeNodeFromPath.mjs');
         const {name, value} = editedNode;
-        updateTreeNodeFromPath(nodes, name, value);
-        if(objectGraph !== undefined){
-            const {updateOGFromPath} = await import('./updateOGFromPath.mjs');
-            updateOGFromPath(objectGraph, name, value);
-        }
+        //updateTreeNodeFromPath(nodes, name, value);
+        
+        const {updateOGFromPath} = await import('./updateOGFromPath.mjs');
+        updateOGFromPath(objectGraph, name, value);
         this.updateCount++;
     }
 
@@ -299,7 +307,9 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             search:'searchString',
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
-            onEditedNode: 'editedNode',
+            onEditedNode: {
+                ifAllOf: ['editedNode', 'objectGraph']
+            },
             synchNodesCopyOrObjectGraph:{
                 ifEquals:['updateCount', 'updateCountEcho'],
                 ifAllOf:['updateCount', 'updateCountEcho']

@@ -1,6 +1,7 @@
 import { XE } from 'xtal-element/src/XE.js';
 export class XtalTree extends HTMLElement {
     #idToNodeLookup = {};
+    #openNode = {};
     onNodes({ nodes, cloneNodes }) {
         const nodesCopy = cloneNodes ? structuredClone(nodes) : nodes;
         return {
@@ -31,7 +32,13 @@ export class XtalTree extends HTMLElement {
     }
     defineIsOpenFn({ isOpenPath }) {
         return {
-            isOpenFn: (tn) => tn[isOpenPath]
+            isOpenFn: (tn) => {
+                const stn = tn;
+                if (stn.path && this.#openNode[stn.path])
+                    return true;
+                //TODO:  resolve redundancy
+                return tn[isOpenPath];
+            }
         };
     }
     defineChildrenFn({ childrenPath }) {
@@ -104,6 +111,10 @@ export class XtalTree extends HTMLElement {
     openNode({ openedNode, isOpenFn }) {
         if (!isOpenFn(openedNode)) {
             this.toggledNode = openedNode;
+            this.#openNode[openedNode.path] = true;
+        }
+        else {
+            this.#openNode[openedNode.path] = false;
         }
     }
     closeNode({ closedNode, isOpenFn }) {
@@ -202,13 +213,11 @@ export class XtalTree extends HTMLElement {
     }
     async onEditedNode({ editedNode, nodes, objectGraph }) {
         //console.log(editedNode);
-        const { updateTreeNodeFromPath } = await import('./updateTreeNodeFromPath.mjs');
+        //const {updateTreeNodeFromPath} = await import('./updateTreeNodeFromPath.mjs');
         const { name, value } = editedNode;
-        updateTreeNodeFromPath(nodes, name, value);
-        if (objectGraph !== undefined) {
-            const { updateOGFromPath } = await import('./updateOGFromPath.mjs');
-            updateOGFromPath(objectGraph, name, value);
-        }
+        //updateTreeNodeFromPath(nodes, name, value);
+        const { updateOGFromPath } = await import('./updateOGFromPath.mjs');
+        updateOGFromPath(objectGraph, name, value);
         this.updateCount++;
     }
     synchNodesCopyOrObjectGraph({ nodes, cloneNodes, objectGraph }) {
@@ -299,7 +308,9 @@ const xe = new XE({
             search: 'searchString',
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
-            onEditedNode: 'editedNode',
+            onEditedNode: {
+                ifAllOf: ['editedNode', 'objectGraph']
+            },
             synchNodesCopyOrObjectGraph: {
                 ifEquals: ['updateCount', 'updateCountEcho'],
                 ifAllOf: ['updateCount', 'updateCountEcho']

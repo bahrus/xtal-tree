@@ -180,16 +180,21 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         };
     }
 
-    async onEditedNode({editedNode, nodes,}: this) {
+    async onEditedNode({editedNode, nodes, objectGraph}: this) {
         //console.log(editedNode);
-        const {updatePath} = await import('./updateTreeNodeFromPath.mjs');
-        updatePath(nodes, editedNode.name!, editedNode.value!);
+        const {updateTreeNodeFromPath: updatePath} = await import('./updateTreeNodeFromPath.mjs');
+        const {name, value} = editedNode;
+        updatePath(nodes, name, value);
+        if(objectGraph !== undefined){
+            const {updateOGFromPath} = await import('./updateOGFromPath.mjs');
+            updateOGFromPath(objectGraph, name, value);
+        }
         //this.updateCount++;
     }
 
-    async synchEditedObjectGraph(self: this){
+    // async synchEditedObjectGraph(self: this){
         
-    }
+    // }
 }
 
 export interface XtalTree extends XtalTreeProps{}

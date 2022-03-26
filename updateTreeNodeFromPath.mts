@@ -1,7 +1,7 @@
-import {ITreeNode, IStandardTreeNode} from './types';
+import {IStandardTreeNode} from './types';
 import {getTreeNodeFromPath} from './getTreeNodeFromPath.mjs';
 
-export async function updatePath(nodes: IStandardTreeNode[], path: string, value: string){
+export function updateTreeNodeFromPath(nodes: IStandardTreeNode[], path: string, value: string){
     const match = getTreeNodeFromPath(nodes, path);
     //console.log(match);
     switch(match.node!.type){

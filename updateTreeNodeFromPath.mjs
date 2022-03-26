@@ -1,5 +1,5 @@
 import { getTreeNodeFromPath } from './getTreeNodeFromPath.mjs';
-export async function updatePath(nodes, path, value) {
+export function updateTreeNodeFromPath(nodes, path, value) {
     const match = getTreeNodeFromPath(nodes, path);
     //console.log(match);
     switch (match.node.type) {

@@ -124,5 +124,5 @@ export interface XtalTreeActions{
     }>
     onEditedNode(self: this): void;
 
-    synchEditedObjectGraph(self: this): void;
+    //synchEditedObjectGraph(self: this): void;
 }

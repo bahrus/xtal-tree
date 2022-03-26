@@ -101,9 +101,10 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
         };
     }
-    toggleNode({toggledNode, childrenFn, toggleNodeFn}: this){
+    toggleNode({toggledNode, childrenFn, toggleNodeFn, isOpenFn}: this){
         if(!childrenFn(toggledNode)) return;
         toggleNodeFn(toggledNode);
+        this.#openNode[(toggledNode as IStandardTreeNode).path] = isOpenFn(toggledNode);
         return this.updateViewableNodes(this);
     }
     openNode({openedNode, isOpenFn}: this){

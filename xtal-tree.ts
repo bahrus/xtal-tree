@@ -204,6 +204,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
 
     async onEditedNode({editedNode, nodes, objectGraph}: this) {
+        if(objectGraph === undefined) return;
         //console.log(editedNode);
         //const {updateTreeNodeFromPath} = await import('./updateTreeNodeFromPath.mjs');
         const {name, value} = editedNode;
@@ -308,9 +309,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             search:'searchString',
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
-            onEditedNode: {
-                ifAllOf: ['editedNode', 'objectGraph']
-            },
+            onEditedNode: 'editedNode',
             synchNodesCopyOrObjectGraph:{
                 ifEquals:['updateCount', 'updateCountEcho'],
                 //ifAllOf:['updateCount', 'updateCountEcho', 'objectGraph']

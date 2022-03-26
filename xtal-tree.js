@@ -243,6 +243,9 @@ const dispatch = {
         dispatch: true
     }
 };
+const noDry = {
+    dry: false
+};
 const xe = new XE({
     config: {
         tagName: 'xtal-tree',
@@ -271,16 +274,11 @@ const xe = new XE({
                 },
                 dry: false,
             },
-            toggledNodeId: {
-                dry: false,
-            },
+            toggledNodeId: noDry,
+            editedNode: noDry,
             viewableNodes: dispatch,
-            collapseAll: {
-                dry: false,
-            },
-            expandAll: {
-                dry: false,
-            },
+            collapseAll: noDry,
+            expandAll: noDry,
             updateCount: {
                 notify: {
                     echoDelay: 200,

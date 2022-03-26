@@ -227,10 +227,10 @@ export class XtalTree extends HTMLElement {
         //     nodesCopy,
         // }
         // }
-        // const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : {...objectGraph};
-        // return {
-        //     objectGraph: objectGraphCopy,
-        // };
+        const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : { ...objectGraph };
+        return {
+            objectGraph: objectGraphCopy,
+        };
     }
 }
 const dispatch = {
@@ -313,7 +313,7 @@ const xe = new XE({
             },
             synchNodesCopyOrObjectGraph: {
                 ifEquals: ['updateCount', 'updateCountEcho'],
-                ifAllOf: ['updateCount', 'updateCountEcho']
+                ifAllOf: ['updateCount', 'updateCountEcho', 'objectGraph']
             }
         },
     },

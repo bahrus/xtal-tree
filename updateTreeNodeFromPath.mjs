@@ -23,9 +23,10 @@ export function updateTreeNodeFromPath(nodes, path, value) {
             break;
     }
     const node = match.node;
-    const parent = node.parent;
+    let parent = node.parent;
     while (parent) {
         const { value } = parent;
         parent.asString = typeof (value) === 'object' ? JSON.stringify(value) : value.toString();
+        parent = parent.parent;
     }
 }

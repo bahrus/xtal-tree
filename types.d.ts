@@ -69,9 +69,9 @@ export interface XtalTreeProps{
     cloneNodes: boolean;
     objectGraph: any;
     editedNode: HTMLInputElement;
-    updateCount: number;
-    updateCountEcho: number;
-    editedObjectGraph: any;
+    // updateCount: number;
+    // updateCountEcho: number;
+    // editedObjectGraph: any;
 
 }
 

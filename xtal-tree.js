@@ -287,7 +287,8 @@ const xe = new XE({
             onObjectGraph: 'objectGraph',
             onEditedNode: 'editedNode',
             synchNodesCopyOrObjectGraph: {
-                ifEquals: ['updateCount', 'updateCountEcho']
+                ifEquals: ['updateCount', 'updateCountEcho'],
+                ifAllOf: ['updateCount', 'updateCountEcho']
             }
         },
     },

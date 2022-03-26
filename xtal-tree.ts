@@ -288,7 +288,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             onObjectGraph: 'objectGraph',
             onEditedNode: 'editedNode',
             synchNodesCopyOrObjectGraph:{
-                ifEquals:['updateCount', 'updateCountEcho']
+                ifEquals:['updateCount', 'updateCountEcho'],
+                ifAllOf:['updateCount', 'updateCountEcho']
             }
         },
     },

@@ -69,8 +69,8 @@ export interface XtalTreeProps{
     cloneNodes: boolean;
     objectGraph: any;
     editedNode: HTMLInputElement;
-    // updateCount: number;
-    // updateCountEcho: number;
+    updateCount: number;
+    updateCountEcho: number;
     // editedObjectGraph: any;
 
 }
@@ -124,5 +124,6 @@ export interface XtalTreeActions{
     }>
     onEditedNode(self: this): void;
 
+    synchNodesCopy(self: this): void;
     //synchEditedObjectGraph(self: this): void;
 }

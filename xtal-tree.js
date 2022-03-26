@@ -197,7 +197,13 @@ export class XtalTree extends HTMLElement {
             const { updateOGFromPath } = await import('./updateOGFromPath.mjs');
             updateOGFromPath(objectGraph, name, value);
         }
-        //this.updateCount++;
+        this.updateCount++;
+    }
+    synchNodesCopy({ nodes, cloneNodes }) {
+        const nodesCopy = cloneNodes ? structuredClone(nodes) : [...nodes];
+        return {
+            nodesCopy,
+        };
     }
 }
 const dispatch = {
@@ -221,8 +227,8 @@ const xe = new XE({
             expandAll: false,
             sort: 'none',
             comparePath: 'name',
-            // updateCount: 0,
-            // updateCountEcho: 0,
+            updateCount: 0,
+            updateCountEcho: 0,
         },
         propInfo: {
             toggledNode: {
@@ -241,12 +247,12 @@ const xe = new XE({
             expandAll: {
                 dry: false,
             },
-            // updateCount:{
-            //     notify:{
-            //         echoDelay: 200,
-            //         echoTo: 'updateCountEcho',
-            //     }
-            // }
+            updateCount: {
+                notify: {
+                    echoDelay: 200,
+                    echoTo: 'updateCountEcho',
+                }
+            }
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
@@ -274,6 +280,9 @@ const xe = new XE({
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
             onEditedNode: 'editedNode',
+            synchNodesCopy: {
+                ifEquals: ['updateCount', 'updateCountEcho']
+            }
         },
     },
     superclass: XtalTree,

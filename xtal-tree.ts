@@ -189,9 +189,15 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             const {updateOGFromPath} = await import('./updateOGFromPath.mjs');
             updateOGFromPath(objectGraph, name, value);
         }
-        //this.updateCount++;
+        this.updateCount++;
     }
 
+    synchNodesCopy({nodes, cloneNodes}: this): {nodesCopy: ITreeNode[]} {
+        const nodesCopy = cloneNodes ? structuredClone(nodes) : [...nodes];
+        return {
+            nodesCopy,
+        }
+    }
     // async synchEditedObjectGraph(self: this){
         
     // }
@@ -221,8 +227,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             expandAll: false,
             sort: 'none',
             comparePath: 'name',
-            // updateCount: 0,
-            // updateCountEcho: 0,
+            updateCount: 0,
+            updateCountEcho: 0,
 
         },
         propInfo: {
@@ -242,12 +248,12 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             expandAll:{
                 dry: false,
             },
-            // updateCount:{
-            //     notify:{
-            //         echoDelay: 200,
-            //         echoTo: 'updateCountEcho',
-            //     }
-            // }
+            updateCount:{
+                notify:{
+                    echoDelay: 200,
+                    echoTo: 'updateCountEcho',
+                }
+            }
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
@@ -275,6 +281,9 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
             onEditedNode: 'editedNode',
+            synchNodesCopy:{
+                ifEquals:['updateCount', 'updateCountEcho']
+            }
         },
     },
     superclass: XtalTree,

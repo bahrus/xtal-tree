@@ -5,16 +5,16 @@ export function updateOGFromPath(og: any, path: string, value: any){
     const {baseValue, prop, idx} = match;
     const isArray = Array.isArray(baseValue);
     const key = isArray ? idx : prop;
-    const currVal = baseValue[key];
+    const currVal = baseValue[key!];
     switch(typeof currVal){
         case 'string':
-            baseValue[key] = value;
+            baseValue[key!] = value;
             break;
         case 'number':
-            baseValue[key] = Number(value);
+            baseValue[key!] = Number(value);
             break;
         case 'boolean':
-            baseValue[key] = value === 'true';
+            baseValue[key!] = value === 'true';
             break;
         default:
             throw 'NI';

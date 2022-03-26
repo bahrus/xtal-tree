@@ -7,9 +7,10 @@ export function og2tree(obj, ancestors = []) {
             if (Array.isArray(value))
                 type = 'array';
             const name = '[' + count.toString() + ']';
+            const dlim = ancestors.length === 0 ? '' : '.';
             const node = {
                 name,
-                path: ancestors.join('.') + '.' + name,
+                path: ancestors.join('.') + dlim + name,
                 type,
                 value,
             };
@@ -32,11 +33,12 @@ export function og2tree(obj, ancestors = []) {
             let type = typeof value;
             if (Array.isArray(value))
                 type = 'array';
+            const dlim = ancestors.length === 0 ? '' : '.';
             const node = {
                 name,
                 type,
                 value,
-                path: ancestors.join('.') + '.' + name,
+                path: ancestors.join('.') + dlim + name,
             };
             if (typeof value === 'object') {
                 ancestors.push(name);

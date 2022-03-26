@@ -8,9 +8,10 @@ export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]
             let type: string = typeof value;
             if(Array.isArray(value)) type = 'array';
             const name = '[' + count.toString() + ']';
+            const dlim = ancestors.length === 0 ? '' : '.';
             const node: IStandardTreeNode = {
                 name, 
-                path: ancestors.join('.') + '.' + name,
+                path: ancestors.join('.') + dlim + name,
                 type,
                 value,
             };
@@ -30,11 +31,12 @@ export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]
             const value = obj[name];
             let type: string = typeof value;
             if(Array.isArray(value)) type = 'array';
+            const dlim = ancestors.length === 0 ? '' : '.';
             const node: IStandardTreeNode = {
                 name,
                 type,
                 value,
-                path: ancestors.join('.') + '.' + name,
+                path: ancestors.join('.') + dlim + name,
             };
             if(typeof value === 'object'){
                 ancestors.push(name);

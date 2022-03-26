@@ -28,11 +28,11 @@ export function getNodeFromSplit(og: any, split: string[]): IOGRef{
         //     throw new Error(`No node found with name ${first}`);
         // }
         // const node = nodes[idx];
-        const baseValue = og[first];
+        const baseValue = og;
         if(rest.length === 0){
             return {prop: first, baseValue};
         }else{
-            return getNodeFromSplit(baseValue, rest);
+            return getNodeFromSplit(baseValue[first], rest);
         }
 
     }

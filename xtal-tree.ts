@@ -192,11 +192,17 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         this.updateCount++;
     }
 
-    synchNodesCopy({nodes, cloneNodes}: this): {nodesCopy: ITreeNode[]} {
-        const nodesCopy = cloneNodes ? structuredClone(nodes) : [...nodes];
-        return {
-            nodesCopy,
+    synchNodesCopyOrObjectGraph({nodes, cloneNodes, objectGraph}: this){
+        if(objectGraph === undefined) {
+            const nodesCopy = cloneNodes ? structuredClone(nodes) : [...nodes];
+            return {
+                nodesCopy,
+            }
         }
+        const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : {...objectGraph};
+        return {
+            objectGraph: objectGraphCopy,
+        };
     }
     // async synchEditedObjectGraph(self: this){
         
@@ -281,7 +287,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
             onEditedNode: 'editedNode',
-            synchNodesCopy:{
+            synchNodesCopyOrObjectGraph:{
                 ifEquals:['updateCount', 'updateCountEcho']
             }
         },

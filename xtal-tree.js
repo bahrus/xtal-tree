@@ -199,10 +199,16 @@ export class XtalTree extends HTMLElement {
         }
         this.updateCount++;
     }
-    synchNodesCopy({ nodes, cloneNodes }) {
-        const nodesCopy = cloneNodes ? structuredClone(nodes) : [...nodes];
+    synchNodesCopyOrObjectGraph({ nodes, cloneNodes, objectGraph }) {
+        if (objectGraph === undefined) {
+            const nodesCopy = cloneNodes ? structuredClone(nodes) : [...nodes];
+            return {
+                nodesCopy,
+            };
+        }
+        const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : { ...objectGraph };
         return {
-            nodesCopy,
+            objectGraph: objectGraphCopy,
         };
     }
 }
@@ -280,7 +286,7 @@ const xe = new XE({
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
             onEditedNode: 'editedNode',
-            synchNodesCopy: {
+            synchNodesCopyOrObjectGraph: {
                 ifEquals: ['updateCount', 'updateCountEcho']
             }
         },

@@ -1,18 +1,18 @@
-export function getNodeFromPath(nodes, path) {
+export function getOGFromPath(og, path) {
     const split = path.split('.');
-    return getNodeFromSplit(nodes, split);
+    return getNodeFromSplit(og, split);
 }
-export function getNodeFromSplit(nodes, split) {
+export function getNodeFromSplit(og, split) {
     let first = split[0];
     let rest = split.slice(1);
     if (first[0] === '[') {
         const idx = parseInt(first.substr(1, first.length - 2));
-        const node = nodes[idx];
+        const baseValue = og;
         if (rest.length === 0) {
-            return { baseValue: nodes, idx, node };
+            return { idx, baseValue };
         }
         else {
-            return getNodeFromSplit(node.children, rest);
+            return getNodeFromSplit(baseValue[idx], rest);
         }
     }
     else {
@@ -22,16 +22,17 @@ export function getNodeFromSplit(nodes, split) {
             rest = [arrayPath, ...rest];
             first = bracketSplit[0];
         }
-        const idx = nodes.findIndex(node => node.name === first);
-        if (idx === -1) {
-            throw new Error(`No node found with name ${first}`);
-        }
-        const node = nodes[idx];
+        // const idx = nodes.findIndex(node => node.name === first);
+        // if(idx === -1){
+        //     throw new Error(`No node found with name ${first}`);
+        // }
+        // const node = nodes[idx];
+        const baseValue = og[first];
         if (rest.length === 0) {
-            return { baseValue: nodes, prop: first, node };
+            return { prop: first, baseValue };
         }
         else {
-            return getNodeFromSplit(node.children, rest);
+            return getNodeFromSplit(baseValue, rest);
         }
     }
 }

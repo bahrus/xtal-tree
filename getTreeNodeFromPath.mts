@@ -1,20 +1,20 @@
-import {ITreeNode, IStandardTreeNode, INodeRef} from './types';
+import {IStandardTreeNode, INodeRef} from './types';
 
-export function getNodeFromPath(nodes: IStandardTreeNode[], path: string): INodeRef{
+export function getTreeNodeFromPath(nodes: IStandardTreeNode[], path: string): INodeRef{
     const split = path.split('.');
-    return getNodeFromSplit(nodes, split);
+    return getTreeNodeFromSplit(nodes, split);
 }
 
-export function getNodeFromSplit(nodes: IStandardTreeNode[], split: string[]): INodeRef{
+export function getTreeNodeFromSplit(nodes: IStandardTreeNode[], split: string[]): INodeRef{
     let first = split[0];
     let rest = split.slice(1);
     if(first[0] === '['){
         const idx = parseInt(first.substr(1, first.length - 2));
         const node = nodes[idx];
         if(rest.length === 0){
-            return {baseValue: nodes, idx, node};
+            return {idx, node};
         }else{
-            return getNodeFromSplit(node.children!, rest);
+            return getTreeNodeFromSplit(node.children!, rest);
         }
     }else{
         const bracketSplit = first.split('[');
@@ -29,10 +29,10 @@ export function getNodeFromSplit(nodes: IStandardTreeNode[], split: string[]): I
         }
         const node = nodes[idx];
         if(rest.length === 0){
-            return {baseValue: nodes, prop: first, node};
+            return {prop: first, node};
         }else{
             
-            return getNodeFromSplit(node.children!, rest);
+            return getTreeNodeFromSplit(node.children!, rest);
         }
 
     }

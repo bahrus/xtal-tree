@@ -20,10 +20,16 @@ export interface IStandardTreeNode extends ITreeNode{
 }
 
 export interface INodeRef{
-    baseValue: any;
+    //baseValue: any;
     prop?: string;
     idx?: number;
     node?: IStandardTreeNode;
+}
+
+export interface IOGRef{
+    prop?: string;
+    idx?: number;
+    baseValue: any;
 }
 
 export interface XtalTreeProps{
@@ -63,6 +69,10 @@ export interface XtalTreeProps{
     cloneNodes: boolean;
     objectGraph: any;
     editedNode: HTMLInputElement;
+    updateCount: number;
+    updateCountEcho: number;
+    editedObjectGraph: any;
+
 }
 
 export interface XtalTreeActions{
@@ -113,4 +123,6 @@ export interface XtalTreeActions{
         nodes: ITreeNode[],
     }>
     onEditedNode(self: this): void;
+
+    synchEditedObjectGraph(self: this): void;
 }

@@ -190,8 +190,11 @@ export class XtalTree extends HTMLElement {
     }
     async onEditedNode({ editedNode, nodes, }) {
         //console.log(editedNode);
-        const { updatePath } = await import('./updatePath.mjs');
+        const { updatePath } = await import('./updateTreeNodeFromPath.mjs');
         updatePath(nodes, editedNode.name, editedNode.value);
+        this.updateCount++;
+    }
+    async synchEditedObjectGraph(self) {
     }
 }
 const dispatch = {
@@ -214,7 +217,9 @@ const xe = new XE({
             collapseAll: false,
             expandAll: false,
             sort: 'none',
-            comparePath: 'name'
+            comparePath: 'name',
+            updateCount: 0,
+            updateCountEcho: 0,
         },
         propInfo: {
             toggledNode: {
@@ -232,6 +237,12 @@ const xe = new XE({
             },
             expandAll: {
                 dry: false,
+            },
+            updateCount: {
+                notify: {
+                    echoDelay: 200,
+                    echoTo: 'updateCountEcho',
+                }
             }
         },
         actions: {

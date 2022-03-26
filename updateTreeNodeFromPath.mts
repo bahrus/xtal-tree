@@ -1,8 +1,8 @@
 import {ITreeNode, IStandardTreeNode} from './types';
-import {getNodeFromPath} from './getNodeFromPath.mjs';
+import {getTreeNodeFromPath} from './getTreeNodeFromPath.mjs';
 
 export async function updatePath(nodes: IStandardTreeNode[], path: string, value: string){
-    const match = getNodeFromPath(nodes, path);
+    const match = getTreeNodeFromPath(nodes, path);
     //console.log(match);
     switch(match.node!.type){
         case 'string':

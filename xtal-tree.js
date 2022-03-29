@@ -106,7 +106,8 @@ export class XtalTree extends HTMLElement {
         if (!childrenFn(toggledNode))
             return;
         toggleNodeFn(toggledNode);
-        this.#openNode[toggledNode.path] = isOpenFn(toggledNode);
+        const path = toggledNode.path;
+        this.#openNode[path] = !this.#openNode[path];
         return this.updateViewableNodes(this);
     }
     openNode({ openedNode, isOpenFn }) {

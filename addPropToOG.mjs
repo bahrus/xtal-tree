@@ -1,4 +1,4 @@
-export function addPropToOG(og, path, type, baseEl) {
+export function addPropToOG(og, path, type, baseEl, callback) {
     let dialogEl = baseEl.querySelector('dialog');
     if (dialogEl === null) {
         dialogEl = document.createElement('dialog');
@@ -49,6 +49,7 @@ export function addPropToOG(og, path, type, baseEl) {
                     const { getOGFromPath } = await import('./getOGFromPath.mjs');
                     const ref = getOGFromPath(og, path);
                     ref.baseValue[name] = val;
+                    callback(og);
             }
         });
     }

@@ -229,8 +229,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
     async onNewNode({newNode, objectGraph}: this){
         const {addPropToOG} = await import('./addPropToOG.mjs');
-        addPropToOG(objectGraph, newNode.name, newNode.value as NodeTypes, this);
-        this.updateCount++;
+        addPropToOG(objectGraph, newNode.name, newNode.value as NodeTypes, this, (og) => {
+            console.log(og);
+            this.updateCount++;
+        });
+        
     }
 
 }

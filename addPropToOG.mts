@@ -1,4 +1,5 @@
 import { getOGFromPath } from './getOGFromPath.mjs';
+import { NodeTypes} from './types';
 
 declare class DialogElement extends HTMLElement {
     showModal(): void;
@@ -7,7 +8,8 @@ declare class DialogElement extends HTMLElement {
 
 
 
-export function addPropToOG(og: any, path: string, type: 'string' | 'boolean' | 'number' | 'object' | 'arr', baseEl: HTMLElement) {
+export function addPropToOG(
+    og: any, path: string, type: NodeTypes, baseEl: HTMLElement, callback: (og: any) => void) {
     let dialogEl = baseEl.querySelector('dialog') as DialogElement;
     if (dialogEl === null) {
         dialogEl = document.createElement('dialog') as DialogElement;
@@ -59,6 +61,7 @@ export function addPropToOG(og: any, path: string, type: 'string' | 'boolean' | 
                     const { getOGFromPath } = await import('./getOGFromPath.mjs');
                     const ref = getOGFromPath(og, path);
                     ref.baseValue[name] = val;
+                    callback(og);
             }
 
         })

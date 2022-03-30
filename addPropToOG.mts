@@ -22,8 +22,8 @@ export function addPropToOG(og: any, path: string, type: 'string' | 'boolean' | 
                     Value: <input class=value>
                 </label>
                 <menu>
-                    <button value="cancel">Cancel</button>
-                    <button value="confirm">Confirm</button>
+                    <button type=button value="cancel">Cancel</button>
+                    <button type=button value="confirm">Confirm</button>
                 </menu>
             </fieldset>
         </form>`;

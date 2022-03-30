@@ -1,4 +1,4 @@
-import {XtalTreeProps, XtalTreeActions, ITreeNode, IStandardTreeNode} from './types';
+import {XtalTreeProps, XtalTreeActions, ITreeNode, IStandardTreeNode, NodeTypes} from './types';
 import {XE, PropInfoExt} from 'xtal-element/src/XE.js';
 declare function structuredClone<T>(inp: T): T;
 
@@ -229,7 +229,8 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
     async onNewNode({newNode, objectGraph}: this){
         const {addPropToOG} = await import('./addPropToOG.mjs');
-        addPropToOG(objectGraph, newNode.name, newNode.value, this);
+        addPropToOG(objectGraph, newNode.name, newNode.value as NodeTypes, this);
+        this.updateCount++;
     }
 
 }

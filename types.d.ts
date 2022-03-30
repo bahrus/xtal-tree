@@ -143,3 +143,5 @@ export interface XtalTreeActions{
 
     //synchEditedObjectGraph(self: this): void;
 }
+
+export type NodeTypes = 'string' | 'number' | 'object' | 'arr' | 'boolean';

@@ -25,6 +25,7 @@ export function addPropToOG(og, path, type, baseEl) {
                     dialogEl.close();
                     break;
                 case 'confirm':
+                    dialogEl.close();
                     const name = dialogEl.querySelector('.name').value;
                     let valueEl = dialogEl.querySelector('.value');
                     let val = valueEl.value;

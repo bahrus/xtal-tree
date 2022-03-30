@@ -34,6 +34,7 @@ export function addPropToOG(og: any, path: string, type: 'string' | 'boolean' | 
                     dialogEl.close();
                     break;
                 case 'confirm':
+                    dialogEl.close();
                     const name = (dialogEl.querySelector('.name') as HTMLInputElement).value;
                     let valueEl = dialogEl.querySelector('.value') as HTMLInputElement;
                     let val: any = valueEl.value;

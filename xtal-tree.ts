@@ -227,6 +227,10 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             objectGraph: objectGraphCopy,
         };
     }
+    async onNewNode({newNode, objectGraph}: this){
+        const {addPropToOG} = await import('./addPropToOG.mjs');
+        addPropToOG(objectGraph, newNode.name, newNode.value, this);
+    }
 
 }
 
@@ -240,6 +244,11 @@ const dispatch = {
 
 const noDry: PropInfoExt ={
     dry: false
+}
+
+const noDryNoP: PropInfoExt = {
+    dry: false,
+    parse: false,
 }
 
 const xe = new XE<XtalTreeProps, XtalTreeActions>({
@@ -270,8 +279,9 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                 },
                 dry: false,
             },
+            newNode:noDryNoP,
             toggledNodeId:noDry,
-            editedNode:noDry,
+            editedNode:noDryNoP,
             viewableNodes:dispatch,
             collapseAll:noDry,
             expandAll:noDry,
@@ -311,7 +321,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             synchNodesCopyOrObjectGraph:{
                 ifEquals:['updateCount', 'updateCountEcho'],
                 //ifAllOf:['updateCount', 'updateCountEcho', 'objectGraph']
-            }
+            },
+            onNewNode: 'newNode',
         },
     },
     superclass: XtalTree,

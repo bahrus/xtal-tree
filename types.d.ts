@@ -74,8 +74,11 @@ export interface XtalTreeProps{
     editedNode: HTMLInputElement;
     updateCount: number;
     updateCountEcho: number;
-    // editedObjectGraph: any;
-
+    newNode: HTMLButtonElement;
+    // newStringNode: HTMLButtonElement;
+    // newNumberNode: HTMLButtonElement;
+    // newObjectNode: HTMLButtonElement;
+    // newArrayNode: HTMLButtonElement;
 }
 
 export interface XtalTreeActions{
@@ -131,5 +134,12 @@ export interface XtalTreeActions{
     onEditedNode(self: this): void;
 
     synchNodesCopyOrObjectGraph(self: this): void;
+
+    onNewNode(self: this): void;
+    // onNewStringNode(self: this): void;
+    // onNewNumberNode(self: this): void;
+    // onNewObjectNode(self: this): void;
+    // onNewArrayNode(self: this): void;
+
     //synchEditedObjectGraph(self: this): void;
 }

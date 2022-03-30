@@ -48,7 +48,7 @@ export function addPropToOG(og, path, type, baseEl, callback) {
                     }
                     const { getOGFromPath } = await import('./getOGFromPath.mjs');
                     const ref = getOGFromPath(og, path);
-                    ref.baseValue[name] = val;
+                    ref.baseValue[ref.prop][name] = val;
                     callback(og);
             }
         });

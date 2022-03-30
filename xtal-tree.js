@@ -222,12 +222,6 @@ export class XtalTree extends HTMLElement {
         this.updateCount++;
     }
     synchNodesCopyOrObjectGraph({ nodes, cloneNodes, objectGraph }) {
-        // if(objectGraph === undefined) {
-        // const nodesCopy = [...nodes];
-        // return {
-        //     nodesCopy,
-        // }
-        // }
         if (objectGraph === undefined)
             return;
         const objectGraphCopy = Array.isArray(objectGraph) ? [...objectGraph] : { ...objectGraph };
@@ -238,7 +232,6 @@ export class XtalTree extends HTMLElement {
     async onNewNode({ newNode, objectGraph }) {
         const { addPropToOG } = await import('./addPropToOG.mjs');
         addPropToOG(objectGraph, newNode.name, newNode.value, this, (og) => {
-            console.log(og);
             this.updateCount++;
         });
     }

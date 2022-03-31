@@ -126,8 +126,8 @@ export class XtalTree extends HTMLElement {
             };
         }
     }
-    onToggledNodeId({ toggledNodeId }) {
-        const toggledNode = this.#idToNodeLookup[toggledNodeId];
+    onToggledNodePath({ toggledNodePath }) {
+        const toggledNode = this.#idToNodeLookup[toggledNodePath];
         return { toggledNode };
     }
     defineToggledNodeFn({ toggleNodePath }) {
@@ -232,6 +232,7 @@ export class XtalTree extends HTMLElement {
     async onNewNode({ newNode, objectGraph }) {
         const { addPropToOG } = await import('./addPropToOG.mjs');
         addPropToOG(objectGraph, newNode.name, newNode.value, this, (og) => {
+            this.#openNode[newNode.name] = true;
             this.updateCount++;
         });
     }
@@ -277,7 +278,7 @@ const xe = new XE({
                 dry: false,
             },
             newNode: noDryNoP,
-            toggledNodeId: noDry,
+            toggledNodePath: noDry,
             editedNode: noDryNoP,
             viewableNodes: dispatch,
             collapseAll: noDry,
@@ -305,7 +306,7 @@ const xe = new XE({
             updateViewableNodes: {
                 ifAllOf: ['nodesCopy', 'idFn']
             },
-            onToggledNodeId: 'toggledNodeId',
+            onToggledNodePath: 'toggledNodePath',
             setLevels: {
                 ifAllOf: ['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
             },

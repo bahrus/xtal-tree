@@ -123,8 +123,8 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             }
         }
     }
-    onToggledNodeId({toggledNodeId}: this){
-        const toggledNode = this.#idToNodeLookup[toggledNodeId];
+    onToggledNodePath({toggledNodePath}: this){
+        const toggledNode = this.#idToNodeLookup[toggledNodePath];
         return {toggledNode};
     }
     defineToggledNodeFn({toggleNodePath}: this){
@@ -224,6 +224,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     async onNewNode({newNode, objectGraph}: this){
         const {addPropToOG} = await import('./addPropToOG.mjs');
         addPropToOG(objectGraph, newNode.name, newNode.value as NodeTypes, this, (og) => {
+            this.#openNode[newNode.name] = true;
             this.updateCount++;
         });
         
@@ -277,7 +278,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                 dry: false,
             },
             newNode:noDryNoP,
-            toggledNodeId:noDry,
+            toggledNodePath:noDry,
             editedNode:noDryNoP,
             viewableNodes:dispatch,
             collapseAll:noDry,
@@ -305,7 +306,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             updateViewableNodes:{
                 ifAllOf: ['nodesCopy', 'idFn']
             },
-            onToggledNodeId: 'toggledNodeId',
+            onToggledNodePath: 'toggledNodePath',
             setLevels:{
                 ifAllOf:['nodesCopy', 'levelPath', 'marginStylePath', 'childrenFn']
             },

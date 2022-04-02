@@ -236,6 +236,12 @@ export class XtalTree extends HTMLElement {
             this.updateCount++;
         });
     }
+    async onDeleteNode({ deleteNode, objectGraph }) {
+        const { deleteOGNodeFromPath } = await import('./deleteOGNodeFromPath.mjs');
+        deleteOGNodeFromPath(objectGraph, deleteNode.name);
+        delete this.#openNode[deleteNode.name];
+        this.updateCount++;
+    }
 }
 const dispatch = {
     notify: {

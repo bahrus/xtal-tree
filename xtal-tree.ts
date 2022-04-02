@@ -230,6 +230,13 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         
     }
 
+    async onDeleteNode({deleteNode, objectGraph}: this){
+        const {deleteOGNodeFromPath} = await import('./deleteOGNodeFromPath.mjs');
+        deleteOGNodeFromPath(objectGraph, deleteNode.name);
+        delete this.#openNode[deleteNode.name];
+        this.updateCount++;
+    }
+
 }
 
 export interface XtalTree extends XtalTreeProps{}

@@ -22,11 +22,6 @@ export function getNodeFromSplit(og, split) {
             rest = [arrayPath, ...rest];
             first = bracketSplit[0];
         }
-        // const idx = nodes.findIndex(node => node.name === first);
-        // if(idx === -1){
-        //     throw new Error(`No node found with name ${first}`);
-        // }
-        // const node = nodes[idx];
         const baseValue = og;
         if (rest.length === 0) {
             return { prop: first, baseValue };

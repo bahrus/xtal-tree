@@ -328,6 +328,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                 //ifAllOf:['updateCount', 'updateCountEcho', 'objectGraph']
             },
             onNewNode: 'newNode',
+            onDeleteNode: 'deleteNode',
         },
     },
     superclass: XtalTree,

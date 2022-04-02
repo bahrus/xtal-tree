@@ -327,6 +327,7 @@ const xe = new XE({
                 //ifAllOf:['updateCount', 'updateCountEcho', 'objectGraph']
             },
             onNewNode: 'newNode',
+            onDeleteNode: 'deleteNode',
         },
     },
     superclass: XtalTree,

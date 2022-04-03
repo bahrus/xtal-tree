@@ -298,7 +298,8 @@ const xe = new XE({
                     echoDelay: 200,
                     echoTo: 'updateCountEcho',
                 }
-            }
+            },
+            copyNodeToClipboard: noDryNoP
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',

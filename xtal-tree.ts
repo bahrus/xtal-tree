@@ -300,7 +300,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                     echoDelay: 200,
                     echoTo: 'updateCountEcho',
                 }
-            }
+            },
+            copyNodeToClipboard: noDryNoP
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',

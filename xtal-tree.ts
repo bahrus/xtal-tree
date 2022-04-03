@@ -237,6 +237,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         this.updateCount++;
     }
 
+    async onCopyNodeToClipboard({copyNodeToClipboard, objectGraph}: this){
+        const {copyOGNodeToClipboard} = await import('./copyOGNodeToClipboard.mjs');
+        copyOGNodeToClipboard(objectGraph, copyNodeToClipboard.name);
+    }
+
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -329,6 +334,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             },
             onNewNode: 'newNode',
             onDeleteNode: 'deleteNode',
+            onCopyNodeToClipboard: 'copyNodeToClipboard',
         },
     },
     superclass: XtalTree,

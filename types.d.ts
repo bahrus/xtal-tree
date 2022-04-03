@@ -71,15 +71,21 @@ export interface XtalTreeProps{
     collapseAll: boolean;
     cloneNodes: boolean;
     objectGraph: any;
-    editedNode: HTMLInputElement;
+    editedNode: XtalTreeFormElement;
     updateCount: number;
     updateCountEcho: number;
-    newNode: HTMLFormElement;
-    deleteNode: HTMLFormElement;
+    newNode: XtalTreeFormElement;
+    deleteNode: XtalTreeFormElement;
+    copyNodeToClipboard: XtalTreeFormElement;
     // newStringNode: HTMLButtonElement;
     // newNumberNode: HTMLButtonElement;
     // newObjectNode: HTMLButtonElement;
     // newArrayNode: HTMLButtonElement;
+}
+
+export interface XtalTreeFormElement {
+    name: string,
+    value: string,
 }
 
 export interface XtalTreeActions{
@@ -139,6 +145,8 @@ export interface XtalTreeActions{
     onNewNode(self: this): void;
 
     onDeleteNode(self: this): void;
+
+    onCopyNodeToClipboard(self: this): void;
     // onNewStringNode(self: this): void;
     // onNewNumberNode(self: this): void;
     // onNewObjectNode(self: this): void;

@@ -252,6 +252,12 @@ export class XtalTree extends HTMLElement {
         this.onExpandAll(this, [node.node]);
         return this.updateViewableNodes(this);
     }
+    async onCollapseAllNode({ expandAllNode, nodesCopy }) {
+        const { getTreeNodeFromPath } = await import('./getTreeNodeFromPath.mjs');
+        const node = getTreeNodeFromPath(nodesCopy, expandAllNode.name);
+        this.onCollapseAll(this, [node.node]);
+        return this.updateViewableNodes(this);
+    }
 }
 const dispatch = {
     notify: {
@@ -340,7 +346,8 @@ const xe = new XE({
             onNewNode: 'newNode',
             onDeleteNode: 'deleteNode',
             onCopyNodeToClipboard: 'copyNodeToClipboard',
-            onExpandAllNode: 'expandAllNode'
+            onExpandAllNode: 'expandAllNode',
+            onCollapseAllNode: 'collapseAllNode',
         },
     },
     superclass: XtalTree,

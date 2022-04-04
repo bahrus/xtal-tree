@@ -148,6 +148,7 @@ export interface XtalTreeActions{
 
     onExpandAllNode(self: this): void;
 
+    onCollapseAllNode(self: this): void;
 }
 
 export type NodeTypes = 'string' | 'number' | 'object' | 'arr' | 'boolean';

@@ -249,6 +249,13 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         return this.updateViewableNodes(this);
     }
 
+    async onCollapseAllNode({expandAllNode, nodesCopy}: this) {
+        const {getTreeNodeFromPath} = await import('./getTreeNodeFromPath.mjs');
+        const node = getTreeNodeFromPath(nodesCopy as IStandardTreeNode[], expandAllNode.name);
+        this.onCollapseAll(this, [node.node!]);
+        return this.updateViewableNodes(this);
+    }
+
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -343,7 +350,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             onNewNode: 'newNode',
             onDeleteNode: 'deleteNode',
             onCopyNodeToClipboard: 'copyNodeToClipboard',
-            onExpandAllNode: 'expandAllNode'
+            onExpandAllNode: 'expandAllNode',
+            onCollapseAllNode: 'collapseAllNode',
         },
     },
     superclass: XtalTree,

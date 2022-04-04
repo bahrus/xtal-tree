@@ -249,9 +249,9 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         return this.updateViewableNodes(this);
     }
 
-    async onCollapseAllNode({expandAllNode, nodesCopy}: this) {
+    async onCollapseAllNode({collapseAllNode, nodesCopy}: this) {
         const {getTreeNodeFromPath} = await import('./getTreeNodeFromPath.mjs');
-        const node = getTreeNodeFromPath(nodesCopy as IStandardTreeNode[], expandAllNode.name);
+        const node = getTreeNodeFromPath(nodesCopy as IStandardTreeNode[], collapseAllNode.name);
         this.onCollapseAll(this, [node.node!]);
         return this.updateViewableNodes(this);
     }
@@ -309,6 +309,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             viewableNodes:dispatch,
             collapseAll:noDry,
             expandAll:noDry,
+            expandAllNode:noDryNoP,
+            collapseAllNode:noDryNoP,
             updateCount:{
                 notify:{
                     echoDelay: 200,

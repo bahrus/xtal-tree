@@ -252,9 +252,9 @@ export class XtalTree extends HTMLElement {
         this.onExpandAll(this, [node.node]);
         return this.updateViewableNodes(this);
     }
-    async onCollapseAllNode({ expandAllNode, nodesCopy }) {
+    async onCollapseAllNode({ collapseAllNode, nodesCopy }) {
         const { getTreeNodeFromPath } = await import('./getTreeNodeFromPath.mjs');
-        const node = getTreeNodeFromPath(nodesCopy, expandAllNode.name);
+        const node = getTreeNodeFromPath(nodesCopy, collapseAllNode.name);
         this.onCollapseAll(this, [node.node]);
         return this.updateViewableNodes(this);
     }
@@ -305,6 +305,8 @@ const xe = new XE({
             viewableNodes: dispatch,
             collapseAll: noDry,
             expandAll: noDry,
+            expandAllNode: noDryNoP,
+            collapseAllNode: noDryNoP,
             updateCount: {
                 notify: {
                     echoDelay: 200,

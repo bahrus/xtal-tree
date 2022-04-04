@@ -77,10 +77,8 @@ export interface XtalTreeProps{
     newNode: XtalTreeFormElement;
     deleteNode: XtalTreeFormElement;
     copyNodeToClipboard: XtalTreeFormElement;
-    // newStringNode: HTMLButtonElement;
-    // newNumberNode: HTMLButtonElement;
-    // newObjectNode: HTMLButtonElement;
-    // newArrayNode: HTMLButtonElement;
+    expandAllNode: XtalTreeFormElement;
+    collapseAllNode: XtalTreeFormElement;
 }
 
 export interface XtalTreeFormElement {
@@ -147,12 +145,9 @@ export interface XtalTreeActions{
     onDeleteNode(self: this): void;
 
     onCopyNodeToClipboard(self: this): void;
-    // onNewStringNode(self: this): void;
-    // onNewNumberNode(self: this): void;
-    // onNewObjectNode(self: this): void;
-    // onNewArrayNode(self: this): void;
 
-    //synchEditedObjectGraph(self: this): void;
+    onExpandAllNode(self: this): void;
+
 }
 
 export type NodeTypes = 'string' | 'number' | 'object' | 'arr' | 'boolean';

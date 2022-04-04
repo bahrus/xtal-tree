@@ -246,6 +246,11 @@ export class XtalTree extends HTMLElement {
         const { copyOGNodeToClipboard } = await import('./copyOGNodeToClipboard.mjs');
         copyOGNodeToClipboard(objectGraph, copyNodeToClipboard.name);
     }
+    async onExpandAllNode({ expandAllNode, nodesCopy }) {
+        const { getTreeNodeFromPath } = await import('./getTreeNodeFromPath.mjs');
+        const node = getTreeNodeFromPath(nodesCopy, expandAllNode.name);
+        this.onExpandAll(this, [node.node]);
+    }
 }
 const dispatch = {
     notify: {
@@ -334,6 +339,7 @@ const xe = new XE({
             onNewNode: 'newNode',
             onDeleteNode: 'deleteNode',
             onCopyNodeToClipboard: 'copyNodeToClipboard',
+            onExpandAllNode: 'expandAllNode'
         },
     },
     superclass: XtalTree,

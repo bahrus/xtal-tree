@@ -245,7 +245,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     async onExpandAllNode({expandAllNode, nodesCopy}: this) {
         const {getTreeNodeFromPath} = await import('./getTreeNodeFromPath.mjs');
         const node = getTreeNodeFromPath(nodesCopy as IStandardTreeNode[], expandAllNode.name);
-        return this.onExpandAll(this, [node.node!])
+        return this.updateViewableNodes(this);
     }
 
 }

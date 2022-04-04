@@ -249,6 +249,7 @@ export class XtalTree extends HTMLElement {
     async onExpandAllNode({ expandAllNode, nodesCopy }) {
         const { getTreeNodeFromPath } = await import('./getTreeNodeFromPath.mjs');
         const node = getTreeNodeFromPath(nodesCopy, expandAllNode.name);
+        this.onExpandAll(this, [node.node]);
         return this.updateViewableNodes(this);
     }
 }

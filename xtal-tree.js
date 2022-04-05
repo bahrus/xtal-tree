@@ -135,7 +135,7 @@ export class XtalTree extends HTMLElement {
             toggleNodeFn: (tn) => tn[toggleNodePath] = !tn[toggleNodePath]
         };
     }
-    setLevels({ nodesCopy, levelPath, marginStylePath, childrenFn }, passedInNodes, level) {
+    setLevels({ nodesCopy, levelPath, marginStylePath, childrenFn, indentFactor }, passedInNodes, level) {
         if (passedInNodes === undefined)
             passedInNodes = nodesCopy;
         if (level === undefined)
@@ -143,7 +143,7 @@ export class XtalTree extends HTMLElement {
         for (const node of passedInNodes) {
             this.setHasChildren(this, node, false);
             node[levelPath] = level;
-            node[marginStylePath] = "margin-left:" + level * 18 + "px";
+            node[marginStylePath] = "margin-left:" + level * indentFactor + "px";
             const children = childrenFn(node);
             if (children === undefined)
                 continue;
@@ -291,6 +291,7 @@ const xe = new XE({
             updateCount: 0,
             updateCountEcho: 0,
             cloneNodes: false,
+            indentFactor: 25,
         },
         propInfo: {
             toggledNode: {

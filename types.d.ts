@@ -79,6 +79,7 @@ export interface XtalTreeProps{
     copyNodeToClipboard: XtalTreeFormElement;
     expandAllNode: XtalTreeFormElement;
     collapseAllNode: XtalTreeFormElement;
+    indentFactor: number;
 }
 
 export interface XtalTreeFormElement {

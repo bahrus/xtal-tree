@@ -132,13 +132,13 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             toggleNodeFn: (tn: ITreeNode) => (<any>tn)[toggleNodePath] = !(<any>tn)[toggleNodePath]
         }
     }
-    setLevels({nodesCopy, levelPath, marginStylePath, childrenFn}: this, passedInNodes?: ITreeNode[], level?: number): void {
+    setLevels({nodesCopy, levelPath, marginStylePath, childrenFn, indentFactor}: this, passedInNodes?: ITreeNode[], level?: number): void {
         if(passedInNodes === undefined) passedInNodes = nodesCopy;
         if(level === undefined) level = 0;
         for(const node of passedInNodes){
             this.setHasChildren(this, node, false);
             (<any>node)[levelPath] = level;
-            (<any>node)[marginStylePath] = "margin-left:" + level * 18 + "px";
+            (<any>node)[marginStylePath] = "margin-left:" + level * indentFactor + "px";
             const children = childrenFn(node);
             if(children === undefined) continue;
             this.setLevels(this, children, level + 1);
@@ -295,6 +295,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             updateCount: 0,
             updateCountEcho: 0,
             cloneNodes: false,
+            indentFactor: 25,
         },
         propInfo: {
             toggledNode:{

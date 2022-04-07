@@ -348,7 +348,9 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             },
             onCollapseAll: 'collapseAll',
             onExpandAll: 'expandAll',
-            search:'searchString',
+            search:{
+                ifKeyIn:['searchString'],
+            },
             onNodes: 'nodes',
             onObjectGraph: 'objectGraph',
             onEditedNode: 'editedNode',

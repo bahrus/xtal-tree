@@ -256,6 +256,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         return this.updateViewableNodes(this);
     }
 
+    makeDownloadBlob({objectGraph}: this){
+        const file = new Blob([JSON.stringify(objectGraph, null, 2)], {type: 'text/json'});
+        this.downloadHref = URL.createObjectURL(file);
+    }
+
 }
 
 export interface XtalTree extends XtalTreeProps{}
@@ -318,7 +323,8 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
                     echoTo: 'updateCountEcho',
                 }
             },
-            copyNodeToClipboard: noDryNoP
+            copyNodeToClipboard: noDryNoP,
+            downloadHref: noDryNoP,
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
@@ -355,6 +361,11 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             onCopyNodeToClipboard: 'copyNodeToClipboard',
             onExpandAllNode: 'expandAllNode',
             onCollapseAllNode: 'collapseAllNode',
+            makeDownloadBlob: {
+                ifAllOf: ['objectGraph'],
+                ifKeyIn: ['updateCount', 'updateCountEcho'],
+                ifEquals: ['updateCount', 'updateCountEcho'],
+            }
         },
     },
     superclass: XtalTree,

@@ -258,6 +258,10 @@ export class XtalTree extends HTMLElement {
         this.onCollapseAll(this, [node.node]);
         return this.updateViewableNodes(this);
     }
+    makeDownloadBlob({ objectGraph }) {
+        const file = new Blob([JSON.stringify(objectGraph, null, 2)], { type: 'text/json' });
+        this.downloadHref = URL.createObjectURL(file);
+    }
 }
 const dispatch = {
     notify: {
@@ -314,7 +318,8 @@ const xe = new XE({
                     echoTo: 'updateCountEcho',
                 }
             },
-            copyNodeToClipboard: noDryNoP
+            copyNodeToClipboard: noDryNoP,
+            downloadHref: noDryNoP,
         },
         actions: {
             defineIsOpenFn: 'isOpenPath',
@@ -351,6 +356,11 @@ const xe = new XE({
             onCopyNodeToClipboard: 'copyNodeToClipboard',
             onExpandAllNode: 'expandAllNode',
             onCollapseAllNode: 'collapseAllNode',
+            makeDownloadBlob: {
+                ifAllOf: ['objectGraph'],
+                ifKeyIn: ['updateCount', 'updateCountEcho'],
+                ifEquals: ['updateCount', 'updateCountEcho'],
+            }
         },
     },
     superclass: XtalTree,

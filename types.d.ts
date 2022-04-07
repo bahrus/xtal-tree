@@ -80,6 +80,7 @@ export interface XtalTreeProps{
     expandAllNode: XtalTreeFormElement;
     collapseAllNode: XtalTreeFormElement;
     indentFactor: number;
+    downloadHref: string;
 }
 
 export interface XtalTreeFormElement {
@@ -150,6 +151,8 @@ export interface XtalTreeActions{
     onExpandAllNode(self: this): void;
 
     onCollapseAllNode(self: this): void;
+
+    makeDownloadBlob(self: this): void;
 }
 
 export type NodeTypes = 'string' | 'number' | 'object' | 'arr' | 'boolean';

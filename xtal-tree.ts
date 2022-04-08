@@ -81,9 +81,16 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             }
         }
     }
-    defineTestNodeFn({testNodePath}: this) {
+    defineTestNodeFn({testNodePaths}: this) {
         return {
-            testNodeFn: (tn: ITreeNode, searchString: string) => (<any>tn)[testNodePath].toLowerCase().includes(searchString.toLowerCase())
+            testNodeFn: (tn: ITreeNode, searchString: string) => {
+                for(const path of testNodePaths){
+                    const val = (<any>tn)[path];
+                    if(typeof val != 'string') continue;
+                    if(val.toLowerCase().includes(searchString.toLowerCase())) return true;
+                }
+                return false;
+            }
         }
     }
     defineParentFn({parentPath}: this){
@@ -146,26 +153,34 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
 
     search({nodesCopy, testNodeFn, searchString, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: ITreeNode[], passedInParent?: ITreeNode){
-        //if(passedInNodes === undefined) this.onCollapseAll(this);
+        if(passedInNodes === undefined) this.onCollapseAll(this);
+        let foundMatch = false;
         const nodes = passedInNodes || nodesCopy;
-        nodes.forEach(node => {
-             
+        for(const node of nodes){
             if(testNodeFn(node, searchString)){
+                foundMatch = true;
                 if(!isOpenFn(node)){
                     toggleNodeFn(node);
                 }
             }else{
                 const children = childrenFn(node);
                 if(children !== undefined){
-                    this.search(this, children, node);
+                    const foundChildMatch = this.search(this, children, node);
+                    if(foundChildMatch) foundMatch = true;
                     if(passedInParent && isOpenFn(node) && !isOpenFn(passedInParent)){
                         toggleNodeFn(passedInParent)
                     }
                 }
             }
             
-        });
-        if(passedInNodes === undefined) return this.updateViewableNodes(this);
+        };
+        if(foundMatch && passedInParent && !isOpenFn(passedInParent)){
+            toggleNodeFn(passedInParent);
+        }
+        if(passedInNodes === undefined) {
+            this.viewableNodes = this.updateViewableNodes(this).viewableNodes;
+        }
+        return foundMatch;
     }
 
     onCollapseAll({nodesCopy, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: ITreeNode[]){
@@ -286,7 +301,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
         propDefaults: {
             childrenPath: 'children',
             isOpenPath: 'open',
-            testNodePath: 'name',
+            testNodePaths: ['name', 'value'],
             idPath: 'id',
             parentPath: 'parent',
             toggleNodePath: 'open',
@@ -330,7 +345,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             defineIsOpenFn: 'isOpenPath',
             defineIdFn: 'idPath',
             defineChildrenFn: 'childrenPath',
-            defineTestNodeFn: 'testNodePath',
+            defineTestNodeFn: 'testNodePaths',
             defineToggledNodeFn: 'toggleNodePath',
             defineCompareFn:{
                 ifAllOf:['sort', 'comparePath']

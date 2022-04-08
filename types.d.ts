@@ -50,7 +50,7 @@ export interface XtalTreeProps{
     nodes: IStandardTreeNode[];
     searchString: string;
     testNodeFn: (tn: ITreeNode, search: string) => boolean;
-    testNodePath: string;
+    testNodePaths: string[];
     compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
     comparePath: string;
     parentFn: (tn: ITreeNode) => ITreeNode;

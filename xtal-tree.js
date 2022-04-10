@@ -8,10 +8,14 @@ export class XtalTree extends HTMLElement {
             nodesCopy,
         };
     }
-    calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn, idFn, searchString, parentPath }, nodesCopy, acc) {
+    calculateViewableNodes({ isOpenFn, testNodeFn, childrenFn, idFn, searchString, parentPath, isOpenPath }, nodesCopy, acc) {
         if (!nodesCopy)
             return acc;
         nodesCopy.forEach(node => {
+            //TODO:  less hardcoding
+            if (this.#openNode[node.path]) {
+                node.open = true;
+            }
             if (searchString) {
                 if (!isOpenFn(node) && !testNodeFn(node, this.searchString))
                     return;
@@ -249,10 +253,13 @@ export class XtalTree extends HTMLElement {
             objectGraph: objectGraphCopy,
         };
     }
-    async onNewNode({ newNode, objectGraph }) {
+    async onNewNode({ newNode, objectGraph, nodesCopy, isOpenPath }) {
         const { addPropToOG } = await import('./addPropToOG.mjs');
-        addPropToOG(objectGraph, newNode.name, newNode.value, this, (og) => {
+        addPropToOG(objectGraph, newNode.name, newNode.value, this, async (og) => {
             this.#openNode[newNode.name] = true;
+            const { getTreeNodeFromPath } = await import('./getTreeNodeFromPath.mjs');
+            const ref = getTreeNodeFromPath(nodesCopy, newNode.name);
+            ref.node[isOpenPath] = true;
             this.updateCount++;
         });
     }

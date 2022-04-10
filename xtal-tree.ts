@@ -11,9 +11,13 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             nodesCopy,
         }
     }
-    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString, parentPath}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
+    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString, parentPath, isOpenPath}: this, nodesCopy: IStandardTreeNode[], acc: ITreeNode[]) {
         if (!nodesCopy) return acc;
         nodesCopy.forEach(node => {
+            //TODO:  less hardcoding
+            if(this.#openNode[node.path]){
+                node.open = true;
+            }
             if (searchString) {
                 if (!isOpenFn(node) && !testNodeFn(node, this.searchString)) return;
             }
@@ -25,7 +29,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
                     for(const child of children){
                         (<any>child)[parentPath] = node;
                     }
-                    this.calculateViewableNodes(this, children, acc);
+                    this.calculateViewableNodes(this, children as IStandardTreeNode[], acc);
                 }
                 
             }
@@ -236,10 +240,13 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             objectGraph: objectGraphCopy,
         };
     }
-    async onNewNode({newNode, objectGraph}: this){
+    async onNewNode({newNode, objectGraph, nodesCopy, isOpenPath}: this){
         const {addPropToOG} = await import('./addPropToOG.mjs');
-        addPropToOG(objectGraph, newNode.name, newNode.value as NodeTypes, this, (og) => {
+        addPropToOG(objectGraph, newNode.name, newNode.value as NodeTypes, this, async (og) => {
             this.#openNode[newNode.name] = true;
+            const {getTreeNodeFromPath} = await import('./getTreeNodeFromPath.mjs');
+            const ref = getTreeNodeFromPath(nodesCopy as IStandardTreeNode[], newNode.name) as IStandardTreeNode;
+            (<any>ref).node[isOpenPath] = true;
             this.updateCount++;
         });
         

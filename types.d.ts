@@ -18,6 +18,7 @@ export interface IStandardTreeNode extends ITreeNode{
     asString?: string;
     type: string;
     parent?: IStandardTreeNode;
+    open: boolean;
 }
 
 export interface INodeRef{
@@ -66,7 +67,7 @@ export interface XtalTreeProps{
     levelPath: string;
     marginStylePath: string;
     levelSetterFn: (nodes: ITreeNode[], level: number) => string;
-    nodesCopy: ITreeNode[];
+    nodesCopy: IStandardTreeNode[];
     expandAll: boolean;
     collapseAll: boolean;
     cloneNodes: boolean;

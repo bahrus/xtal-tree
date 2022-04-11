@@ -18,7 +18,7 @@ export interface IStandardTreeNode extends ITreeNode{
     asString?: string;
     type: string;
     parent?: IStandardTreeNode;
-    open: boolean;
+    open?: boolean;
 }
 
 export interface INodeRef{

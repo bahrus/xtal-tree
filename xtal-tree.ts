@@ -244,9 +244,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         const {addPropToOG} = await import('./addPropToOG.mjs');
         addPropToOG(objectGraph, newNode.name, newNode.value as NodeTypes, this, async (og) => {
             this.#openNode[newNode.name] = true;
-            const {getTreeNodeFromPath} = await import('./getTreeNodeFromPath.mjs');
-            const ref = getTreeNodeFromPath(nodesCopy as IStandardTreeNode[], newNode.name) as IStandardTreeNode;
-            (<any>ref).node[isOpenPath] = true;
+            if(newNode.name !== ''){
+                const {getTreeNodeFromPath} = await import('./getTreeNodeFromPath.mjs');
+                const ref = getTreeNodeFromPath(nodesCopy as IStandardTreeNode[], newNode.name) as IStandardTreeNode;
+                (<any>ref).node[isOpenPath] = true;
+            }
             this.updateCount++;
         });
         

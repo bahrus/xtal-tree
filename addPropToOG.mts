@@ -68,7 +68,12 @@ export function addPropToOG(
                         //og[name] = val;
                         ref.baseValue[name] = val;
                     }else{
-                        ref.baseValue[ref.prop!][name] = val;
+                        const objRef = ref.baseValue[ref.prop!];
+                        if(Array.isArray(objRef)){
+                            objRef.push(val);
+                        }else{
+                            objRef[name] = val;
+                        }
                     }
                     
                     callback(og);

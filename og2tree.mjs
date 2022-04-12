@@ -57,7 +57,7 @@ export function og2tree(obj, ancestors = []) {
 function toString(obj, max) {
     let ret = JSON.stringify(obj);
     if (ret.length > max * 2) {
-        ret = ret.substring(0, max / 2) + '...' + ret.substring(ret.length - max / 2);
+        ret = ret.substring(0, max) + '...' + ret.substring(ret.length - max);
     }
     return ret;
 }

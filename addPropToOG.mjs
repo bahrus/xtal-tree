@@ -29,11 +29,12 @@ export function addPropToOG(og, path, type, baseEl, callback) {
                     break;
                 case 'confirm':
                     dialogEl.close();
+                    const currentType = dialogEl.dataset.type;
                     const name = dialogEl.querySelector('.name').value;
                     const valueEl = dialogEl.querySelector('.value');
                     const jsonValueEl = dialogEl.querySelector('.json-value');
                     let val = valueEl.value;
-                    switch (type) {
+                    switch (currentType) {
                         case 'string':
                             val = valueEl.value;
                             break;
@@ -51,8 +52,9 @@ export function addPropToOG(og, path, type, baseEl, callback) {
                             break;
                     }
                     const { getOGFromPath } = await import('./getOGFromPath.mjs');
-                    const ref = getOGFromPath(og, path);
-                    if (path === '') {
+                    let currentPath = dialogEl.dataset.path;
+                    const ref = getOGFromPath(og, currentPath);
+                    if (currentPath === '') {
                         //og[name] = val;
                         ref.baseValue[name] = val;
                     }
@@ -70,6 +72,8 @@ export function addPropToOG(og, path, type, baseEl, callback) {
         });
     }
     const valEl = dialogEl.querySelector('.value');
+    const nameEl = dialogEl.querySelector('.name');
+    nameEl.value = '';
     const jsonEl = dialogEl.querySelector('.json-value');
     const jsonLabel = dialogEl.querySelector('label.json');
     const primitiveLabel = dialogEl.querySelector('label.primitive');
@@ -104,6 +108,8 @@ export function addPropToOG(og, path, type, baseEl, callback) {
             jsonEl.value = '[]';
             break;
     }
+    dialogEl.dataset.type = type;
+    dialogEl.dataset.path = path;
     dialogEl.showModal();
 }
 const typeLookup = {

@@ -33,6 +33,7 @@ export function addPropToOG(
             </fieldset>
         </form>`;
         baseEl.appendChild(dialogEl);
+
         dialogEl.addEventListener('click', async e => {
             switch ((e.target as HTMLButtonElement).value) {
                 case 'cancel':
@@ -40,11 +41,12 @@ export function addPropToOG(
                     break;
                 case 'confirm':
                     dialogEl.close();
+                    const currentType = dialogEl.dataset.type!;
                     const name = (dialogEl.querySelector('.name') as HTMLInputElement).value;
                     const valueEl = dialogEl.querySelector('.value') as HTMLInputElement;
                     const jsonValueEl = dialogEl.querySelector('.json-value') as HTMLTextAreaElement;
                     let val: any = valueEl.value;
-                    switch (type) {
+                    switch (currentType) {
                         case 'string':
                             val = valueEl.value;
                             break;
@@ -63,8 +65,9 @@ export function addPropToOG(
 
                     }
                     const { getOGFromPath } = await import('./getOGFromPath.mjs');
-                    const ref = getOGFromPath(og, path);
-                    if(path === ''){
+                    let currentPath = dialogEl.dataset.path!;
+                    const ref = getOGFromPath(og, currentPath);
+                    if(currentPath === ''){
                         //og[name] = val;
                         ref.baseValue[name] = val;
                     }else{
@@ -82,6 +85,8 @@ export function addPropToOG(
         })
     }
     const valEl = dialogEl.querySelector('.value') as HTMLInputElement;
+    const nameEl = dialogEl.querySelector('.name') as HTMLInputElement;
+    nameEl.value = '';
     const jsonEl = dialogEl.querySelector('.json-value') as HTMLTextAreaElement;
     const jsonLabel = dialogEl.querySelector('label.json') as HTMLTextAreaElement;
     const primitiveLabel = dialogEl.querySelector('label.primitive') as HTMLLabelElement;
@@ -118,7 +123,8 @@ export function addPropToOG(
 
 
     }
-
+    dialogEl.dataset.type = type;
+    dialogEl.dataset.path = path;
     dialogEl.showModal();
 }
 

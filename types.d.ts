@@ -40,7 +40,7 @@ export interface XtalTreeProps{
      * A bit of performance penalty, but can avoid unexpected side effects
      */
     clone: boolean;
-    childrenFn: (tn: ITreeNode) => ITreeNode[];
+    childrenFn: (tn: IStandardTreeNode) => IStandardTreeNode[];
     childrenPath: string;
     hasChildrenFn: (tn: ITreeNode) => boolean;
     hasChildrenPath: string;
@@ -60,7 +60,7 @@ export interface XtalTreeProps{
     viewableNodes: ITreeNode[];
     toggleNodeFn: (tn: ITreeNode) => void;
     toggleNodePath: string;
-    toggledNode: ITreeNode;
+    toggledNode: IStandardTreeNode;
     toggledNodePath: string | number;
     openedNode: IStandardTreeNode;
     closedNode: ITreeNode;

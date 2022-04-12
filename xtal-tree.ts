@@ -75,7 +75,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             }
         }
     }
-    setHasChildren({childrenFn, hasChildrenPath}: this, tn: ITreeNode, recursive: boolean){
+    setHasChildren({childrenFn, hasChildrenPath}: this, tn: IStandardTreeNode, recursive: boolean){
         const children = childrenFn(tn);
         const hasChildren = children !== undefined && children.length > 0;
         (<any>tn)[hasChildrenPath] = hasChildren;
@@ -187,7 +187,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         return foundMatch;
     }
 
-    onCollapseAll({nodesCopy, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: ITreeNode[]){
+    onCollapseAll({nodesCopy, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: IStandardTreeNode[]){
         const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
             if(isOpenFn(node)) toggleNodeFn(node);
@@ -197,17 +197,18 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         if(passedInNodes === undefined) return this.updateViewableNodes(this);
     }
 
-    onExpandAll({nodesCopy, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: ITreeNode[]){
+    onExpandAll({nodesCopy, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: IStandardTreeNode[]){
         const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
             if(!isOpenFn(node)) toggleNodeFn(node);
+            this.#openNode[node.path] = true;
             const children = childrenFn(node);
             if(children !== undefined) this.onExpandAll(this, children);
         });
         if(passedInNodes === undefined) return this.updateViewableNodes(this);
     }
 
-    onSort({nodesCopy, compareFn, childrenFn}: this, passedInNodes?: ITreeNode[]){
+    onSort({nodesCopy, compareFn, childrenFn}: this, passedInNodes?: IStandardTreeNode[]){
         const nodes = passedInNodes || nodesCopy;
         nodes.sort(compareFn);
         nodes.forEach(node => {

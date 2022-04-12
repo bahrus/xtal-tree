@@ -213,6 +213,7 @@ export class XtalTree extends HTMLElement {
         nodes.forEach(node => {
             if (!isOpenFn(node))
                 toggleNodeFn(node);
+            this.#openNode[node.path] = true;
             const children = childrenFn(node);
             if (children !== undefined)
                 this.onExpandAll(this, children);

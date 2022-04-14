@@ -191,6 +191,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
             if(isOpenFn(node)) toggleNodeFn(node);
+            this.#openNode[node.path] = false;
             const children = childrenFn(node);
             if(children !== undefined) this.onCollapseAll(this, children);
         });

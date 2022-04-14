@@ -29,8 +29,8 @@ export interface XtalTreeProps{
      */
     clone: boolean;
 
-    idFn: (tn: ITreeNode) => string | number;
-    idPath: string;
+    // idFn: (tn: ITreeNode) => string | number;
+    // idPath: string;
     nodes: ITreeNode[];
     searchString: string;
     testNodePaths: string[];
@@ -68,9 +68,9 @@ export interface XtalTreeFormElement {
 export interface XtalTreeActions{
 
 
-    defineIdFn(self: this): {
-        idFn: (tn: ITreeNode) => string | number;
-    }
+    // defineIdFn(self: this): {
+    //     idFn: (tn: ITreeNode) => string | number;
+    // }
 
     setHasChildren(self: this, tn: ITreeNode, recursive: boolean): void;
 

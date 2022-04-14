@@ -11,7 +11,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             nodesCopy,
         }
     }
-    calculateViewableNodes({idFn, searchString}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
+    calculateViewableNodes({searchString}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
         if (!nodesCopy) return acc;
         nodesCopy.forEach(node => {
             //TODO:  less hardcoding
@@ -21,7 +21,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             if (searchString) {
                 if (!this.isOpen(node) && !this.matchesSearch(node)) return;
             }
-            this.#idToNodeLookup[idFn(node)] = node;
+            this.#idToNodeLookup[node.path] = node;
             acc.push(node);
             if (this.isOpen(node)) {
                 const children = node.children;
@@ -81,11 +81,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         return false;
     }
 
-    defineIdFn({idPath}: this) {
-        return {
-            idFn: (tn: ITreeNode) => (<any>tn)[idPath],
-        }
-    }
+    // defineIdFn({idPath}: this) {
+    //     return {
+    //         idFn: (tn: ITreeNode) => (<any>tn)[idPath],
+    //     }
+    // }
     updateViewableNodes({nodesCopy}: this){
         return {
             viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
@@ -292,7 +292,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
         tagName: 'xtal-tree',
         propDefaults: {
             testNodePaths: ['name', 'value'],
-            idPath: 'id',
+            //idPath: 'id',
             //toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',
@@ -329,13 +329,13 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             downloadHref: noDryNoP,
         },
         actions: {
-            defineIdFn: 'idPath',
+            //defineIdFn: 'idPath',
             //defineToggledNodeFn: 'toggleNodePath',
             toggleNode: {
-                ifAllOf: ['toggledNode', 'idFn']
+                ifAllOf: ['toggledNode']
             },
             updateViewableNodes:{
-                ifAllOf: ['nodesCopy', 'idFn']
+                ifAllOf: ['nodesCopy']
             },
             onToggledNodePath: 'toggledNodePath',
             setLevels:{

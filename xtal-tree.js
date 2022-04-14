@@ -8,7 +8,7 @@ export class XtalTree extends HTMLElement {
             nodesCopy,
         };
     }
-    calculateViewableNodes({ idFn, searchString }, nodesCopy, acc) {
+    calculateViewableNodes({ searchString }, nodesCopy, acc) {
         if (!nodesCopy)
             return acc;
         nodesCopy.forEach(node => {
@@ -20,7 +20,7 @@ export class XtalTree extends HTMLElement {
                 if (!this.isOpen(node) && !this.matchesSearch(node))
                     return;
             }
-            this.#idToNodeLookup[idFn(node)] = node;
+            this.#idToNodeLookup[node.path] = node;
             acc.push(node);
             if (this.isOpen(node)) {
                 const children = node.children;
@@ -80,11 +80,11 @@ export class XtalTree extends HTMLElement {
         }
         return false;
     }
-    defineIdFn({ idPath }) {
-        return {
-            idFn: (tn) => tn[idPath],
-        };
-    }
+    // defineIdFn({idPath}: this) {
+    //     return {
+    //         idFn: (tn: ITreeNode) => (<any>tn)[idPath],
+    //     }
+    // }
     updateViewableNodes({ nodesCopy }) {
         return {
             viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
@@ -287,7 +287,7 @@ const xe = new XE({
         tagName: 'xtal-tree',
         propDefaults: {
             testNodePaths: ['name', 'value'],
-            idPath: 'id',
+            //idPath: 'id',
             //toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',
@@ -324,13 +324,13 @@ const xe = new XE({
             downloadHref: noDryNoP,
         },
         actions: {
-            defineIdFn: 'idPath',
+            //defineIdFn: 'idPath',
             //defineToggledNodeFn: 'toggleNodePath',
             toggleNode: {
-                ifAllOf: ['toggledNode', 'idFn']
+                ifAllOf: ['toggledNode']
             },
             updateViewableNodes: {
-                ifAllOf: ['nodesCopy', 'idFn']
+                ifAllOf: ['nodesCopy']
             },
             onToggledNodePath: 'toggledNodePath',
             setLevels: {

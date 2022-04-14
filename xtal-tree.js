@@ -12,7 +12,6 @@ export class XtalTree extends HTMLElement {
         if (!nodesCopy)
             return acc;
         nodesCopy.forEach(node => {
-            //TODO:  less hardcoding
             if (this.#openNode[node.path]) {
                 node.open = true;
             }
@@ -26,7 +25,6 @@ export class XtalTree extends HTMLElement {
                 const children = node.children;
                 if (children) {
                     for (const child of children) {
-                        //(<any>child)[parentPath] = node;
                         child.parent = node;
                     }
                     this.calculateViewableNodes(this, children, acc);
@@ -80,11 +78,6 @@ export class XtalTree extends HTMLElement {
         }
         return false;
     }
-    // defineIdFn({idPath}: this) {
-    //     return {
-    //         idFn: (tn: ITreeNode) => (<any>tn)[idPath],
-    //     }
-    // }
     updateViewableNodes({ nodesCopy }) {
         return {
             viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
@@ -287,8 +280,6 @@ const xe = new XE({
         tagName: 'xtal-tree',
         propDefaults: {
             testNodePaths: ['name', 'value'],
-            //idPath: 'id',
-            //toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',
             collapseAll: false,
@@ -324,8 +315,6 @@ const xe = new XE({
             downloadHref: noDryNoP,
         },
         actions: {
-            //defineIdFn: 'idPath',
-            //defineToggledNodeFn: 'toggleNodePath',
             toggleNode: {
                 ifAllOf: ['toggledNode']
             },

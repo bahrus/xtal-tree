@@ -17,7 +17,19 @@ This scenario seems to come up so frequently with various components, that this 
 For simplicity and better performance, xtal-tree does make some assumptions about the structure of the data.  It assumes each node has the following fields (some of which are optional):
 
 ```TypeScript
+export interface ITreeNode{
+    children?: ITreeNode[];
+    name: string;
+    path: string;
+    value: any;
+    asString?: string;
+    type: string;
+    parent?: ITreeNode;
+    open?: boolean;
+}
 ```
+
+Some of the properties are computed dynamically by the the component.  This can result in adding unexpected properties to a user-defined data structure.  To avoid this, set property "clone" to true.
 
  -- it allows the specific structure of the tree data to be pretty much anything, and passes no judgment on it.   It doesn't accidentally overwrite anything it shouldn't. The user of xtal-tree, i.e. the developer, then needs to train xtal-tree how to interpret the data -- how to get the children, how to represent an open node vs a closed node, etc.  Some common defaults are established meant to match common structures.
 

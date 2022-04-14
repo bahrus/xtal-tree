@@ -40,13 +40,12 @@ export interface XtalTreeProps{
      * A bit of performance penalty, but can avoid unexpected side effects
      */
     clone: boolean;
-    // isOpenFn: (tn: ITreeNode) => boolean;
-    // isOpenPath: string;
+
     idFn: (tn: ITreeNode) => string | number;
     idPath: string;
     nodes: ITreeNode[];
     searchString: string;
-    testNodeFn: (tn: ITreeNode, search: string) => boolean;
+    //testNodeFn: (tn: ITreeNode, search: string) => boolean;
     testNodePaths: string[];
     compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
     comparePath: string;
@@ -86,12 +85,8 @@ export interface XtalTreeFormElement {
 }
 
 export interface XtalTreeActions{
-    // defineIsOpenFn(self: this): {
-    //     isOpenFn: (tn: ITreeNode) => boolean;
-    // }
-    defineTestNodeFn(self: this): {
-        testNodeFn: (tn: ITreeNode, search: string) => boolean;
-    }
+
+
     defineParentFn(self: this): {
         parentFn: (tn: ITreeNode) => ITreeNode;
     }

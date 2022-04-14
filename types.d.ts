@@ -34,8 +34,6 @@ export interface XtalTreeProps{
     nodes: ITreeNode[];
     searchString: string;
     testNodePaths: string[];
-    // parentFn: (tn: ITreeNode) => ITreeNode;
-    // parentPath: string;
     sort: 'asc' | 'desc' | 'none' | undefined;
     viewableNodes: ITreeNode[];
     toggleNodeFn: (tn: ITreeNode) => void;

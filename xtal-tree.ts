@@ -80,11 +80,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         }
         return false;
     }
-    // defineParentFn({parentPath}: this){
-    //     return {
-    //         parentFn: (tn: ITreeNode) => (<any>tn)[parentPath]
-    //     }
-    // }
+
     defineIdFn({idPath}: this) {
         return {
             idFn: (tn: ITreeNode) => (<any>tn)[idPath],
@@ -246,7 +242,6 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     async onDeleteNode({deleteNode, objectGraph}: this){
         const {deleteOGNodeFromPath} = await import('./deleteOGNodeFromPath.mjs');
         await deleteOGNodeFromPath(objectGraph, deleteNode.name);
-        //delete this.#openNode[deleteNode.name];
         this.updateCount++;
     }
 
@@ -299,7 +294,6 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
         propDefaults: {
             testNodePaths: ['name', 'value'],
             idPath: 'id',
-            //parentPath: 'parent',
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',

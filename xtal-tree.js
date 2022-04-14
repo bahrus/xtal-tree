@@ -80,11 +80,6 @@ export class XtalTree extends HTMLElement {
         }
         return false;
     }
-    // defineParentFn({parentPath}: this){
-    //     return {
-    //         parentFn: (tn: ITreeNode) => (<any>tn)[parentPath]
-    //     }
-    // }
     defineIdFn({ idPath }) {
         return {
             idFn: (tn) => tn[idPath],
@@ -254,7 +249,6 @@ export class XtalTree extends HTMLElement {
     async onDeleteNode({ deleteNode, objectGraph }) {
         const { deleteOGNodeFromPath } = await import('./deleteOGNodeFromPath.mjs');
         await deleteOGNodeFromPath(objectGraph, deleteNode.name);
-        //delete this.#openNode[deleteNode.name];
         this.updateCount++;
     }
     async onCopyNodeToClipboard({ copyNodeToClipboard, objectGraph }) {
@@ -296,7 +290,6 @@ const xe = new XE({
         propDefaults: {
             testNodePaths: ['name', 'value'],
             idPath: 'id',
-            //parentPath: 'parent',
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',

@@ -90,10 +90,10 @@ export class XtalTree extends HTMLElement {
             viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
         };
     }
-    toggleNode({ toggledNode, toggleNodeFn }) {
+    toggleNode({ toggledNode }) {
         if (!toggledNode.children)
             return;
-        toggleNodeFn(toggledNode);
+        this.doToggleNode(toggledNode);
         const path = toggledNode.path;
         this.#openNode[path] = !this.#openNode[path];
         return this.updateViewableNodes(this);
@@ -118,10 +118,13 @@ export class XtalTree extends HTMLElement {
         const toggledNode = this.#idToNodeLookup[toggledNodePath];
         return { toggledNode };
     }
-    defineToggledNodeFn({ toggleNodePath }) {
-        return {
-            toggleNodeFn: (tn) => tn[toggleNodePath] = !tn[toggleNodePath]
-        };
+    // defineToggledNodeFn({}: this){
+    //     return {
+    //         toggleNodeFn: (tn: ITreeNode) => tn.open = !tn.open,
+    //     }
+    // }
+    doToggleNode(tn) {
+        tn.open = !tn.open;
     }
     setLevels({ nodesCopy, levelPath, marginStylePath, indentFactor }, passedInNodes, level) {
         if (passedInNodes === undefined)
@@ -138,7 +141,7 @@ export class XtalTree extends HTMLElement {
             this.setLevels(this, children, level + 1);
         }
     }
-    search({ nodesCopy, searchString, toggleNodeFn }, passedInNodes, passedInParent) {
+    search({ nodesCopy, searchString }, passedInNodes, passedInParent) {
         if (passedInNodes === undefined)
             this.onCollapseAll(this);
         let foundMatch = false;
@@ -147,7 +150,7 @@ export class XtalTree extends HTMLElement {
             if (this.matchesSearch(node)) {
                 foundMatch = true;
                 if (!this.isOpen(node)) {
-                    toggleNodeFn(node);
+                    this.doToggleNode(node);
                 }
             }
             else {
@@ -157,25 +160,25 @@ export class XtalTree extends HTMLElement {
                     if (foundChildMatch)
                         foundMatch = true;
                     if (passedInParent && this.isOpen(node) && !this.isOpen(passedInParent)) {
-                        toggleNodeFn(passedInParent);
+                        this.doToggleNode(passedInParent);
                     }
                 }
             }
         }
         ;
         if (foundMatch && passedInParent && !this.isOpen(passedInParent)) {
-            toggleNodeFn(passedInParent);
+            this.doToggleNode(passedInParent);
         }
         if (passedInNodes === undefined) {
             this.viewableNodes = this.updateViewableNodes(this).viewableNodes;
         }
         return foundMatch;
     }
-    onCollapseAll({ nodesCopy, toggleNodeFn }, passedInNodes) {
+    onCollapseAll({ nodesCopy }, passedInNodes) {
         const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
             if (this.isOpen(node))
-                toggleNodeFn(node);
+                this.doToggleNode(node);
             this.#openNode[node.path] = false;
             const children = node.children;
             if (children !== undefined)
@@ -184,11 +187,11 @@ export class XtalTree extends HTMLElement {
         if (passedInNodes === undefined)
             return this.updateViewableNodes(this);
     }
-    onExpandAll({ nodesCopy, toggleNodeFn }, passedInNodes) {
+    onExpandAll({ nodesCopy }, passedInNodes) {
         const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
             if (!this.isOpen(node))
-                toggleNodeFn(node);
+                this.doToggleNode(node);
             this.#openNode[node.path] = true;
             const children = node.children;
             if (children !== undefined)
@@ -290,7 +293,7 @@ const xe = new XE({
         propDefaults: {
             testNodePaths: ['name', 'value'],
             idPath: 'id',
-            toggleNodePath: 'open',
+            //toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',
             collapseAll: false,
@@ -327,9 +330,9 @@ const xe = new XE({
         },
         actions: {
             defineIdFn: 'idPath',
-            defineToggledNodeFn: 'toggleNodePath',
+            //defineToggledNodeFn: 'toggleNodePath',
             toggleNode: {
-                ifAllOf: ['toggledNode', 'toggleNodeFn', 'idFn']
+                ifAllOf: ['toggledNode', 'idFn']
             },
             updateViewableNodes: {
                 ifAllOf: ['nodesCopy', 'idFn']

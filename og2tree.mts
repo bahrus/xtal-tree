@@ -1,7 +1,7 @@
-import {IStandardTreeNode} from  './types';
+import {ITreeNode} from  './types';
 
-export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]{
-    const nodes: IStandardTreeNode[] = [];
+export function og2tree(obj: any, ancestors: string[] = []): ITreeNode[]{
+    const nodes: ITreeNode[] = [];
     if(Array.isArray(obj)){
         let count = 0;
         for(const value of obj){
@@ -9,7 +9,7 @@ export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]
             if(Array.isArray(value)) type = 'array';
             const name = '[' + count.toString() + ']';
             const dlim = ancestors.length === 0 ? '' : '.';
-            const node: IStandardTreeNode = {
+            const node: ITreeNode = {
                 name, 
                 path: ancestors.join('.') + dlim + name,
                 type,
@@ -32,7 +32,7 @@ export function og2tree(obj: any, ancestors: string[] = []): IStandardTreeNode[]
             let type: string = typeof value;
             if(Array.isArray(value)) type = 'array';
             const dlim = ancestors.length === 0 ? '' : '.';
-            const node: IStandardTreeNode = {
+            const node: ITreeNode = {
                 name,
                 type,
                 value,

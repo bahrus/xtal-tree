@@ -1,11 +1,11 @@
-import {IStandardTreeNode, INodeRef} from './types';
+import {ITreeNode, INodeRef} from './types';
 
-export function getTreeNodeFromPath(nodes: IStandardTreeNode[], path: string): INodeRef{
+export function getTreeNodeFromPath(nodes: ITreeNode[], path: string): INodeRef{
     const split = path.split('.');
     return getTreeNodeFromSplit(nodes, split);
 }
 
-export function getTreeNodeFromSplit(nodes: IStandardTreeNode[], split: string[]): INodeRef{
+export function getTreeNodeFromSplit(nodes: ITreeNode[], split: string[]): INodeRef{
     let first = split[0];
     let rest = split.slice(1);
     if(first[0] === '['){

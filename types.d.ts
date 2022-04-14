@@ -42,7 +42,7 @@ export interface XtalTreeProps{
     closedNode: ITreeNode;
     levelPath: string;
     marginStylePath: string;
-    levelSetterFn: (nodes: ITreeNode[], level: number) => string;
+    //levelSetterFn: (nodes: ITreeNode[], level: number) => string;
     nodesCopy: ITreeNode[];
     expandAll: boolean;
     collapseAll: boolean;

@@ -321,7 +321,6 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',
-            hasChildrenPath: 'hasChildren',
             collapseAll: false,
             expandAll: false,
             sort: 'none',

@@ -40,10 +40,6 @@ export interface XtalTreeProps{
      * A bit of performance penalty, but can avoid unexpected side effects
      */
     clone: boolean;
-    //childrenFn: (tn: ITreeNode) => ITreeNode[];
-    //childrenPath: string;
-    hasChildrenFn: (tn: ITreeNode) => boolean;
-    hasChildrenPath: string;
     isOpenFn: (tn: ITreeNode) => boolean;
     isOpenPath: string;
     idFn: (tn: ITreeNode) => string | number;

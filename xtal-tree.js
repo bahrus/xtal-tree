@@ -321,7 +321,6 @@ const xe = new XE({
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',
-            hasChildrenPath: 'hasChildren',
             collapseAll: false,
             expandAll: false,
             sort: 'none',

@@ -36,8 +36,6 @@ export interface XtalTreeProps{
     testNodePaths: string[];
     sort: 'asc' | 'desc' | 'none' | undefined;
     viewableNodes: ITreeNode[];
-    //toggleNodeFn: (tn: ITreeNode) => void;
-    //toggleNodePath: string;
     toggledNode: ITreeNode;
     toggledNodePath: string | number;
     openedNode: ITreeNode;
@@ -70,17 +68,12 @@ export interface XtalTreeFormElement {
 export interface XtalTreeActions{
 
 
-    // defineParentFn(self: this): {
-    //     parentFn: (tn: ITreeNode) => ITreeNode;
-    // }
     defineIdFn(self: this): {
         idFn: (tn: ITreeNode) => string | number;
     }
 
     setHasChildren(self: this, tn: ITreeNode, recursive: boolean): void;
-    // defineToggledNodeFn(self: this): {
-    //     toggleNodeFn: (tn: ITreeNode) => void;
-    // }
+
     calculateViewableNodes(self: this, nodes: ITreeNode[], acc: ITreeNode[]): ITreeNode[];
     updateViewableNodes(self: this): {
         viewableNodes: ITreeNode[];

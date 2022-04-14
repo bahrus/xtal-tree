@@ -117,11 +117,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         const toggledNode = this.#idToNodeLookup[toggledNodePath];
         return {toggledNode};
     }
-    // defineToggledNodeFn({}: this){
-    //     return {
-    //         toggleNodeFn: (tn: ITreeNode) => tn.open = !tn.open,
-    //     }
-    // }
+
     doToggleNode(tn: ITreeNode){
         tn.open = !tn.open;
     }

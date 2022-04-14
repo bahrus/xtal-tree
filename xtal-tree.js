@@ -8,7 +8,7 @@ export class XtalTree extends HTMLElement {
             nodesCopy,
         };
     }
-    calculateViewableNodes({ idFn, searchString, parentPath }, nodesCopy, acc) {
+    calculateViewableNodes({ idFn, searchString }, nodesCopy, acc) {
         if (!nodesCopy)
             return acc;
         nodesCopy.forEach(node => {
@@ -26,7 +26,8 @@ export class XtalTree extends HTMLElement {
                 const children = node.children;
                 if (children) {
                     for (const child of children) {
-                        child[parentPath] = node;
+                        //(<any>child)[parentPath] = node;
+                        child.parent = node;
                     }
                     this.calculateViewableNodes(this, children, acc);
                 }
@@ -37,29 +38,6 @@ export class XtalTree extends HTMLElement {
     isOpen(tn) {
         return tn.open || this.#openNode[tn.path];
     }
-    // defineCompareFn({comparePath, sort}: this) {
-    //     let multiplier = 1;
-    //     switch(sort){
-    //         case 'none':
-    //         case undefined:
-    //             return {
-    //                 compareFn: undefined,
-    //             }
-    //         case 'desc':
-    //             multiplier = -1;
-    //             break;
-    //     }
-    //     return {
-    //         compareFn: (lhs: ITreeNode, rhs: ITreeNode) => {
-    //             const lhsVal = (<any>lhs)[comparePath];
-    //             const rhsVal = (<any>rhs)[comparePath];
-    //             if(lhsVal === undefined && rhsVal === undefined) return 0;
-    //             if(lhsVal === undefined) return -1 * multiplier;
-    //             if(rhsVal === undefined) return 1 * multiplier;
-    //             return (lhsVal > rhsVal ? 1 : lhsVal < rhsVal ? -1 : 0) * multiplier;
-    //         }
-    //     }
-    // }
     compare(lhs, rhs) {
         const { sort } = this;
         let multiplier = 1;
@@ -102,11 +80,11 @@ export class XtalTree extends HTMLElement {
         }
         return false;
     }
-    defineParentFn({ parentPath }) {
-        return {
-            parentFn: (tn) => tn[parentPath]
-        };
-    }
+    // defineParentFn({parentPath}: this){
+    //     return {
+    //         parentFn: (tn: ITreeNode) => (<any>tn)[parentPath]
+    //     }
+    // }
     defineIdFn({ idPath }) {
         return {
             idFn: (tn) => tn[idPath],
@@ -318,7 +296,7 @@ const xe = new XE({
         propDefaults: {
             testNodePaths: ['name', 'value'],
             idPath: 'id',
-            parentPath: 'parent',
+            //parentPath: 'parent',
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',

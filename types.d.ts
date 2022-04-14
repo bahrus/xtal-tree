@@ -34,10 +34,8 @@ export interface XtalTreeProps{
     nodes: ITreeNode[];
     searchString: string;
     testNodePaths: string[];
-    //compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
-    //comparePath: string;
-    parentFn: (tn: ITreeNode) => ITreeNode;
-    parentPath: string;
+    // parentFn: (tn: ITreeNode) => ITreeNode;
+    // parentPath: string;
     sort: 'asc' | 'desc' | 'none' | undefined;
     viewableNodes: ITreeNode[];
     toggleNodeFn: (tn: ITreeNode) => void;
@@ -74,9 +72,9 @@ export interface XtalTreeFormElement {
 export interface XtalTreeActions{
 
 
-    defineParentFn(self: this): {
-        parentFn: (tn: ITreeNode) => ITreeNode;
-    }
+    // defineParentFn(self: this): {
+    //     parentFn: (tn: ITreeNode) => ITreeNode;
+    // }
     defineIdFn(self: this): {
         idFn: (tn: ITreeNode) => string | number;
     }
@@ -102,9 +100,7 @@ export interface XtalTreeActions{
         viewableNodes: ITreeNode[],
     } | void;
     search(self: this): void;
-    // defineCompareFn(self: this): {
-    //     compareFn: ((lhs: ITreeNode, rhs: ITreeNode) => number) | undefined;
-    // }
+
     onSort(self: this, passedInNodes?: ITreeNode[]): {
         viewableNodes: ITreeNode[],
     } | void;

@@ -11,7 +11,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             nodesCopy,
         }
     }
-    calculateViewableNodes({idFn, searchString, parentPath}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
+    calculateViewableNodes({idFn, searchString}: this, nodesCopy: ITreeNode[], acc: ITreeNode[]) {
         if (!nodesCopy) return acc;
         nodesCopy.forEach(node => {
             //TODO:  less hardcoding
@@ -27,7 +27,8 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
                 const children = node.children;
                 if (children) {
                     for(const child of children){
-                        (<any>child)[parentPath] = node;
+                        //(<any>child)[parentPath] = node;
+                        child.parent = node;
                     }
                     this.calculateViewableNodes(this, children as ITreeNode[], acc);
                 }
@@ -41,29 +42,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         return tn.open || this.#openNode[tn.path];
     }
 
-    // defineCompareFn({comparePath, sort}: this) {
-    //     let multiplier = 1;
-    //     switch(sort){
-    //         case 'none':
-    //         case undefined:
-    //             return {
-    //                 compareFn: undefined,
-    //             }
-    //         case 'desc':
-    //             multiplier = -1;
-    //             break;
-    //     }
-    //     return {
-    //         compareFn: (lhs: ITreeNode, rhs: ITreeNode) => {
-    //             const lhsVal = (<any>lhs)[comparePath];
-    //             const rhsVal = (<any>rhs)[comparePath];
-    //             if(lhsVal === undefined && rhsVal === undefined) return 0;
-    //             if(lhsVal === undefined) return -1 * multiplier;
-    //             if(rhsVal === undefined) return 1 * multiplier;
-    //             return (lhsVal > rhsVal ? 1 : lhsVal < rhsVal ? -1 : 0) * multiplier;
-    //         }
-    //     }
-    // }
+
     compare(lhs: ITreeNode, rhs: ITreeNode): number{
         const {sort} = this;
         let multiplier = 1;
@@ -101,11 +80,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         }
         return false;
     }
-    defineParentFn({parentPath}: this){
-        return {
-            parentFn: (tn: ITreeNode) => (<any>tn)[parentPath]
-        }
-    }
+    // defineParentFn({parentPath}: this){
+    //     return {
+    //         parentFn: (tn: ITreeNode) => (<any>tn)[parentPath]
+    //     }
+    // }
     defineIdFn({idPath}: this) {
         return {
             idFn: (tn: ITreeNode) => (<any>tn)[idPath],
@@ -320,7 +299,7 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
         propDefaults: {
             testNodePaths: ['name', 'value'],
             idPath: 'id',
-            parentPath: 'parent',
+            //parentPath: 'parent',
             toggleNodePath: 'open',
             marginStylePath: 'marginStyle',
             levelPath: 'level',

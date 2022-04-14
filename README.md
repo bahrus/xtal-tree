@@ -2,7 +2,7 @@
 
 <a href="https://nodei.co/npm/xtal-tree/"><img src="https://nodei.co/npm/xtal-tree.png"></a>
 
-<img src="https://badgen.net/bundlephobia/minzip/xtal-tree">
+[![Actions Status](https://github.com/bahrus/xtal-tree/workflows/CI/badge.svg)](https://github.com/bahrus/xtal-tree/actions?query=workflow%3ACI)
 
 # \<xtal-tree\>
 

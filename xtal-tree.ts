@@ -1,9 +1,9 @@
-import {XtalTreeProps, XtalTreeActions, ITreeNode, IStandardTreeNode, NodeTypes} from './types';
+import {XtalTreeProps, XtalTreeActions, IStandardTreeNode, NodeTypes} from './types';
 import {XE, PropInfoExt} from 'xtal-element/src/XE.js';
 declare function structuredClone<T>(inp: T): T;
 
 export class XtalTree extends HTMLElement implements XtalTreeActions{
-    #idToNodeLookup: {[id: string | number]: ITreeNode} = {};
+    #idToNodeLookup: {[id: string | number]: IStandardTreeNode} = {};
     #openNode: {[path: string]: boolean} = {};
     onNodes({nodes, cloneNodes}: this){
         const nodesCopy = cloneNodes ? structuredClone(nodes) : nodes;
@@ -11,7 +11,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             nodesCopy,
         }
     }
-    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString, parentPath, isOpenPath}: this, nodesCopy: IStandardTreeNode[], acc: ITreeNode[]) {
+    calculateViewableNodes({isOpenFn, testNodeFn, childrenFn, idFn, searchString, parentPath, isOpenPath}: this, nodesCopy: IStandardTreeNode[], acc: IStandardTreeNode[]) {
         if (!nodesCopy) return acc;
         nodesCopy.forEach(node => {
             //TODO:  less hardcoding
@@ -39,7 +39,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
     defineIsOpenFn({isOpenPath}: this) {
         return {
-            isOpenFn: (tn: ITreeNode) => {
+            isOpenFn: (tn: IStandardTreeNode) => {
                 const stn = tn as IStandardTreeNode;
                 if(stn.path && this.#openNode[stn.path]) return true;
                 //TODO:  resolve redundancy
@@ -49,7 +49,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
     defineChildrenFn({childrenPath}: this){
         return {
-            childrenFn: (tn: ITreeNode) => (<any>tn)[childrenPath]
+            childrenFn: (tn: IStandardTreeNode) => (<any>tn)[childrenPath]
         }
     }
     defineCompareFn({comparePath, sort}: this) {
@@ -65,7 +65,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
                 break;
         }
         return {
-            compareFn: (lhs: ITreeNode, rhs: ITreeNode) => {
+            compareFn: (lhs: IStandardTreeNode, rhs: IStandardTreeNode) => {
                 const lhsVal = (<any>lhs)[comparePath];
                 const rhsVal = (<any>rhs)[comparePath];
                 if(lhsVal === undefined && rhsVal === undefined) return 0;
@@ -87,7 +87,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
     defineTestNodeFn({testNodePaths}: this) {
         return {
-            testNodeFn: (tn: ITreeNode, searchString: string) => {
+            testNodeFn: (tn: IStandardTreeNode, searchString: string) => {
                 for(const path of testNodePaths){
                     const val = (<any>tn)[path];
                     if(typeof val != 'string') continue;
@@ -99,12 +99,12 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
     defineParentFn({parentPath}: this){
         return {
-            parentFn: (tn: ITreeNode) => (<any>tn)[parentPath]
+            parentFn: (tn: IStandardTreeNode) => (<any>tn)[parentPath]
         }
     }
     defineIdFn({idPath}: this) {
         return {
-            idFn: (tn: ITreeNode) => (<any>tn)[idPath],
+            idFn: (tn: IStandardTreeNode) => (<any>tn)[idPath],
         }
     }
     updateViewableNodes({nodesCopy}: this){
@@ -140,10 +140,10 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
     defineToggledNodeFn({toggleNodePath}: this){
         return {
-            toggleNodeFn: (tn: ITreeNode) => (<any>tn)[toggleNodePath] = !(<any>tn)[toggleNodePath]
+            toggleNodeFn: (tn: IStandardTreeNode) => (<any>tn)[toggleNodePath] = !(<any>tn)[toggleNodePath]
         }
     }
-    setLevels({nodesCopy, levelPath, marginStylePath, childrenFn, indentFactor}: this, passedInNodes?: ITreeNode[], level?: number): void {
+    setLevels({nodesCopy, levelPath, marginStylePath, childrenFn, indentFactor}: this, passedInNodes?: IStandardTreeNode[], level?: number): void {
         if(passedInNodes === undefined) passedInNodes = nodesCopy;
         if(level === undefined) level = 0;
         for(const node of passedInNodes){
@@ -156,7 +156,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         }
     }
 
-    search({nodesCopy, testNodeFn, searchString, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: ITreeNode[], passedInParent?: ITreeNode){
+    search({nodesCopy, testNodeFn, searchString, isOpenFn, toggleNodeFn, childrenFn}: this, passedInNodes?: IStandardTreeNode[], passedInParent?: IStandardTreeNode){
         if(passedInNodes === undefined) this.onCollapseAll(this);
         let foundMatch = false;
         const nodes = passedInNodes || nodesCopy;

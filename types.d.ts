@@ -3,14 +3,13 @@ interface INodeState {
 }
 
 interface INodePosition {
-    node: ITreeNode,
+    node: IStandardTreeNode,
     position: number
 }
 
-export interface ITreeNode {
-}
 
-export interface IStandardTreeNode extends ITreeNode{
+
+export interface IStandardTreeNode{
     children?: IStandardTreeNode[];
     name: string;
     path: string;
@@ -42,31 +41,31 @@ export interface XtalTreeProps{
     clone: boolean;
     childrenFn: (tn: IStandardTreeNode) => IStandardTreeNode[];
     childrenPath: string;
-    hasChildrenFn: (tn: ITreeNode) => boolean;
+    hasChildrenFn: (tn: IStandardTreeNode) => boolean;
     hasChildrenPath: string;
-    isOpenFn: (tn: ITreeNode) => boolean;
+    isOpenFn: (tn: IStandardTreeNode) => boolean;
     isOpenPath: string;
-    idFn: (tn: ITreeNode) => string | number;
+    idFn: (tn: IStandardTreeNode) => string | number;
     idPath: string;
     nodes: IStandardTreeNode[];
     searchString: string;
-    testNodeFn: (tn: ITreeNode, search: string) => boolean;
+    testNodeFn: (tn: IStandardTreeNode, search: string) => boolean;
     testNodePaths: string[];
-    compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
+    compareFn: (lhs: IStandardTreeNode, rhs: IStandardTreeNode) => number;
     comparePath: string;
-    parentFn: (tn: ITreeNode) => ITreeNode;
+    parentFn: (tn: IStandardTreeNode) => IStandardTreeNode;
     parentPath: string;
     sort: 'asc' | 'desc' | 'none' | undefined;
-    viewableNodes: ITreeNode[];
-    toggleNodeFn: (tn: ITreeNode) => void;
+    viewableNodes: IStandardTreeNode[];
+    toggleNodeFn: (tn: IStandardTreeNode) => void;
     toggleNodePath: string;
     toggledNode: IStandardTreeNode;
     toggledNodePath: string | number;
     openedNode: IStandardTreeNode;
-    closedNode: ITreeNode;
+    closedNode: IStandardTreeNode;
     levelPath: string;
     marginStylePath: string;
-    levelSetterFn: (nodes: ITreeNode[], level: number) => string;
+    levelSetterFn: (nodes: IStandardTreeNode[], level: number) => string;
     nodesCopy: IStandardTreeNode[];
     expandAll: boolean;
     collapseAll: boolean;
@@ -92,52 +91,52 @@ export interface XtalTreeFormElement {
 export interface XtalTreeActions{
     //sort(self: this): void;
     defineIsOpenFn(self: this): {
-        isOpenFn: (tn: ITreeNode) => boolean;
+        isOpenFn: (tn: IStandardTreeNode) => boolean;
     }
     defineTestNodeFn(self: this): {
-        testNodeFn: (tn: ITreeNode, search: string) => boolean;
+        testNodeFn: (tn: IStandardTreeNode, search: string) => boolean;
     }
     defineParentFn(self: this): {
-        parentFn: (tn: ITreeNode) => ITreeNode;
+        parentFn: (tn: IStandardTreeNode) => IStandardTreeNode;
     }
     defineIdFn(self: this): {
-        idFn: (tn: ITreeNode) => string | number;
+        idFn: (tn: IStandardTreeNode) => string | number;
     }
     defineChildrenFn(self: this): {
-        childrenFn: (tn: ITreeNode) => ITreeNode[];
+        childrenFn: (tn: IStandardTreeNode) => IStandardTreeNode[];
     }
-    setHasChildren(self: this, tn: ITreeNode, recursive: boolean): void;
+    setHasChildren(self: this, tn: IStandardTreeNode, recursive: boolean): void;
     defineToggledNodeFn(self: this): {
-        toggleNodeFn: (tn: ITreeNode) => void;
+        toggleNodeFn: (tn: IStandardTreeNode) => void;
     }
-    calculateViewableNodes(self: this, nodes: ITreeNode[], acc: ITreeNode[]): ITreeNode[];
+    calculateViewableNodes(self: this, nodes: IStandardTreeNode[], acc: IStandardTreeNode[]): IStandardTreeNode[];
     updateViewableNodes(self: this): {
-        viewableNodes: ITreeNode[];
+        viewableNodes: IStandardTreeNode[];
     };
     toggleNode(self: this): void;
     openNode(self: this): void;
     onToggledNodePath(self: this): {
-        toggledNode: ITreeNode;
+        toggledNode: IStandardTreeNode;
     }
-    setLevels(self: this, nodes?: ITreeNode, level?: number): void;
-    onCollapseAll(self: this, passedInNodes?: ITreeNode[]): {
-        viewableNodes: ITreeNode[],
+    setLevels(self: this, nodes?: IStandardTreeNode[], level?: number): void;
+    onCollapseAll(self: this, passedInNodes?: IStandardTreeNode[]): {
+        viewableNodes: IStandardTreeNode[],
     } | void;
-    onExpandAll(self: this, passedInNodes?: ITreeNode[]): {
-        viewableNodes: ITreeNode[],
+    onExpandAll(self: this, passedInNodes?: IStandardTreeNode[]): {
+        viewableNodes: IStandardTreeNode[],
     } | void;
     search(self: this): void;
     defineCompareFn(self: this): {
-        compareFn: ((lhs: ITreeNode, rhs: ITreeNode) => number) | undefined;
+        compareFn: ((lhs: IStandardTreeNode, rhs: IStandardTreeNode) => number) | undefined;
     }
-    onSort(self: this, passedInNodes?: ITreeNode[]): {
-        viewableNodes: ITreeNode[],
+    onSort(self: this, passedInNodes?: IStandardTreeNode[]): {
+        viewableNodes: IStandardTreeNode[],
     } | void;
     onNodes(self: this): {
-        nodesCopy: ITreeNode[],
+        nodesCopy: IStandardTreeNode[],
     }
     onObjectGraph(self: this): Promise<{
-        nodes: ITreeNode[],
+        nodes: IStandardTreeNode[],
     }>
     onEditedNode(self: this): void;
 

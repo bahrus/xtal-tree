@@ -1,4 +1,4 @@
-import {ITreeNode, IStandardTreeNode, IOGRef} from './types';
+import {IStandardTreeNode, IOGRef} from './types';
 
 export function getOGFromPath(og: any, path: string): IOGRef{
     const split = path.split('.');

@@ -8,7 +8,7 @@ export class XtalTree extends HTMLElement {
             nodesCopy,
         };
     }
-    calculateViewableNodes({ isOpenFn, testNodeFn, idFn, searchString, parentPath, isOpenPath }, nodesCopy, acc) {
+    calculateViewableNodes({ testNodeFn, idFn, searchString, parentPath }, nodesCopy, acc) {
         if (!nodesCopy)
             return acc;
         nodesCopy.forEach(node => {
@@ -17,12 +17,12 @@ export class XtalTree extends HTMLElement {
                 node.open = true;
             }
             if (searchString) {
-                if (!isOpenFn(node) && !testNodeFn(node, this.searchString))
+                if (!this.isOpen(node) && !testNodeFn(node, this.searchString))
                     return;
             }
             this.#idToNodeLookup[idFn(node)] = node;
             acc.push(node);
-            if (isOpenFn(node)) {
+            if (this.isOpen(node)) {
                 const children = node.children;
                 if (children) {
                     for (const child of children) {
@@ -34,22 +34,19 @@ export class XtalTree extends HTMLElement {
         });
         return acc;
     }
-    defineIsOpenFn({ isOpenPath }) {
-        return {
-            isOpenFn: (tn) => {
-                const stn = tn;
-                if (stn.path && this.#openNode[stn.path])
-                    return true;
-                //TODO:  resolve redundancy
-                return tn[isOpenPath];
-            }
-        };
-    }
-    // defineChildrenFn({childrenPath}: this){
+    // defineIsOpenFn({isOpenPath}: this) {
     //     return {
-    //         childrenFn: (tn: ITreeNode) => (<any>tn)[childrenPath]
+    //         isOpenFn: (tn: ITreeNode) => {
+    //             const stn = tn as ITreeNode;
+    //             if(stn.path && this.#openNode[stn.path]) return true;
+    //             //TODO:  resolve redundancy
+    //             return (<any>tn)[isOpenPath]
+    //         }
     //     }
     // }
+    isOpen(tn) {
+        return tn.open || this.#openNode[tn.path];
+    }
     defineCompareFn({ comparePath, sort }) {
         let multiplier = 1;
         switch (sort) {
@@ -115,7 +112,7 @@ export class XtalTree extends HTMLElement {
             viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
         };
     }
-    toggleNode({ toggledNode, toggleNodeFn, isOpenFn }) {
+    toggleNode({ toggledNode, toggleNodeFn }) {
         if (!toggledNode.children)
             return;
         toggleNodeFn(toggledNode);
@@ -123,8 +120,8 @@ export class XtalTree extends HTMLElement {
         this.#openNode[path] = !this.#openNode[path];
         return this.updateViewableNodes(this);
     }
-    openNode({ openedNode, isOpenFn }) {
-        if (!isOpenFn(openedNode)) {
+    openNode({ openedNode }) {
+        if (!this.isOpen(openedNode)) {
             this.toggledNode = openedNode;
             this.#openNode[openedNode.path] = true;
         }
@@ -132,8 +129,8 @@ export class XtalTree extends HTMLElement {
             this.#openNode[openedNode.path] = false;
         }
     }
-    closeNode({ closedNode, isOpenFn }) {
-        if (isOpenFn(closedNode)) {
+    closeNode({ closedNode }) {
+        if (this.isOpen(closedNode)) {
             return {
                 toggledNode: closedNode
             };
@@ -163,7 +160,7 @@ export class XtalTree extends HTMLElement {
             this.setLevels(this, children, level + 1);
         }
     }
-    search({ nodesCopy, testNodeFn, searchString, isOpenFn, toggleNodeFn }, passedInNodes, passedInParent) {
+    search({ nodesCopy, testNodeFn, searchString, toggleNodeFn }, passedInNodes, passedInParent) {
         if (passedInNodes === undefined)
             this.onCollapseAll(this);
         let foundMatch = false;
@@ -171,7 +168,7 @@ export class XtalTree extends HTMLElement {
         for (const node of nodes) {
             if (testNodeFn(node, searchString)) {
                 foundMatch = true;
-                if (!isOpenFn(node)) {
+                if (!this.isOpen(node)) {
                     toggleNodeFn(node);
                 }
             }
@@ -181,14 +178,14 @@ export class XtalTree extends HTMLElement {
                     const foundChildMatch = this.search(this, children, node);
                     if (foundChildMatch)
                         foundMatch = true;
-                    if (passedInParent && isOpenFn(node) && !isOpenFn(passedInParent)) {
+                    if (passedInParent && this.isOpen(node) && !this.isOpen(passedInParent)) {
                         toggleNodeFn(passedInParent);
                     }
                 }
             }
         }
         ;
-        if (foundMatch && passedInParent && !isOpenFn(passedInParent)) {
+        if (foundMatch && passedInParent && !this.isOpen(passedInParent)) {
             toggleNodeFn(passedInParent);
         }
         if (passedInNodes === undefined) {
@@ -196,10 +193,10 @@ export class XtalTree extends HTMLElement {
         }
         return foundMatch;
     }
-    onCollapseAll({ nodesCopy, isOpenFn, toggleNodeFn }, passedInNodes) {
+    onCollapseAll({ nodesCopy, toggleNodeFn }, passedInNodes) {
         const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
-            if (isOpenFn(node))
+            if (this.isOpen(node))
                 toggleNodeFn(node);
             this.#openNode[node.path] = false;
             const children = node.children;
@@ -209,10 +206,10 @@ export class XtalTree extends HTMLElement {
         if (passedInNodes === undefined)
             return this.updateViewableNodes(this);
     }
-    onExpandAll({ nodesCopy, isOpenFn, toggleNodeFn }, passedInNodes) {
+    onExpandAll({ nodesCopy, toggleNodeFn }, passedInNodes) {
         const nodes = passedInNodes || nodesCopy;
         nodes.forEach(node => {
-            if (!isOpenFn(node))
+            if (!this.isOpen(node))
                 toggleNodeFn(node);
             this.#openNode[node.path] = true;
             const children = node.children;
@@ -256,7 +253,7 @@ export class XtalTree extends HTMLElement {
         };
     }
     #addedName = '';
-    async onNewNode({ newNode, objectGraph, isOpenPath }) {
+    async onNewNode({ newNode, objectGraph }) {
         const { addPropToOG } = await import('./addPropToOG.mjs');
         this.#addedName = newNode.name;
         addPropToOG(objectGraph, this.#addedName, newNode.value, this, async (og) => {
@@ -266,7 +263,7 @@ export class XtalTree extends HTMLElement {
             if (name !== '') {
                 const { getTreeNodeFromPath } = await import('./getTreeNodeFromPath.mjs');
                 const ref = getTreeNodeFromPath(this.nodesCopy, name);
-                ref.node[isOpenPath] = true;
+                ref.node.open = true;
             }
             this.updateCount++;
         });
@@ -314,7 +311,6 @@ const xe = new XE({
     config: {
         tagName: 'xtal-tree',
         propDefaults: {
-            isOpenPath: 'open',
             testNodePaths: ['name', 'value'],
             idPath: 'id',
             parentPath: 'parent',
@@ -355,7 +351,6 @@ const xe = new XE({
             downloadHref: noDryNoP,
         },
         actions: {
-            defineIsOpenFn: 'isOpenPath',
             defineIdFn: 'idPath',
             defineTestNodeFn: 'testNodePaths',
             defineToggledNodeFn: 'toggleNodePath',

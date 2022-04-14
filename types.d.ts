@@ -1,14 +1,3 @@
-
-interface INodeState {
-}
-
-interface INodePosition {
-    node: ITreeNode,
-    position: number
-}
-
-
-
 export interface ITreeNode{
     children?: ITreeNode[];
     name: string;
@@ -22,7 +11,6 @@ export interface ITreeNode{
 }
 
 export interface INodeRef{
-    //baseValue: any;
     prop?: string;
     idx?: number;
     node?: ITreeNode;
@@ -45,10 +33,9 @@ export interface XtalTreeProps{
     idPath: string;
     nodes: ITreeNode[];
     searchString: string;
-    //testNodeFn: (tn: ITreeNode, search: string) => boolean;
     testNodePaths: string[];
-    compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
-    comparePath: string;
+    //compareFn: (lhs: ITreeNode, rhs: ITreeNode) => number;
+    //comparePath: string;
     parentFn: (tn: ITreeNode) => ITreeNode;
     parentPath: string;
     sort: 'asc' | 'desc' | 'none' | undefined;
@@ -115,9 +102,9 @@ export interface XtalTreeActions{
         viewableNodes: ITreeNode[],
     } | void;
     search(self: this): void;
-    defineCompareFn(self: this): {
-        compareFn: ((lhs: ITreeNode, rhs: ITreeNode) => number) | undefined;
-    }
+    // defineCompareFn(self: this): {
+    //     compareFn: ((lhs: ITreeNode, rhs: ITreeNode) => number) | undefined;
+    // }
     onSort(self: this, passedInNodes?: ITreeNode[]): {
         viewableNodes: ITreeNode[],
     } | void;

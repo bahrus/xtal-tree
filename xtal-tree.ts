@@ -41,28 +41,46 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         return tn.open || this.#openNode[tn.path];
     }
 
-    defineCompareFn({comparePath, sort}: this) {
+    // defineCompareFn({comparePath, sort}: this) {
+    //     let multiplier = 1;
+    //     switch(sort){
+    //         case 'none':
+    //         case undefined:
+    //             return {
+    //                 compareFn: undefined,
+    //             }
+    //         case 'desc':
+    //             multiplier = -1;
+    //             break;
+    //     }
+    //     return {
+    //         compareFn: (lhs: ITreeNode, rhs: ITreeNode) => {
+    //             const lhsVal = (<any>lhs)[comparePath];
+    //             const rhsVal = (<any>rhs)[comparePath];
+    //             if(lhsVal === undefined && rhsVal === undefined) return 0;
+    //             if(lhsVal === undefined) return -1 * multiplier;
+    //             if(rhsVal === undefined) return 1 * multiplier;
+    //             return (lhsVal > rhsVal ? 1 : lhsVal < rhsVal ? -1 : 0) * multiplier;
+    //         }
+    //     }
+    // }
+    compare(lhs: ITreeNode, rhs: ITreeNode): number{
+        const {sort} = this;
         let multiplier = 1;
         switch(sort){
             case 'none':
             case undefined:
-                return {
-                    compareFn: undefined,
-                }
+                return 0;
             case 'desc':
                 multiplier = -1;
                 break;
         }
-        return {
-            compareFn: (lhs: ITreeNode, rhs: ITreeNode) => {
-                const lhsVal = (<any>lhs)[comparePath];
-                const rhsVal = (<any>rhs)[comparePath];
-                if(lhsVal === undefined && rhsVal === undefined) return 0;
-                if(lhsVal === undefined) return -1 * multiplier;
-                if(rhsVal === undefined) return 1 * multiplier;
-                return (lhsVal > rhsVal ? 1 : lhsVal < rhsVal ? -1 : 0) * multiplier;
-            }
-        }
+        const lhsVal = lhs.value || lhs.name;
+        const rhsVal = rhs.value || rhs.name;
+        if(lhsVal === undefined && rhsVal === undefined) return 0;
+        if(lhsVal === undefined) return -1 * multiplier;
+        if(rhsVal === undefined) return 1 * multiplier;
+        return (lhsVal > rhsVal ? 1 : lhsVal < rhsVal ? -1 : 0) * multiplier;  
     }
     setHasChildren({}: this, tn: ITreeNode, recursive: boolean){
         const {children} = tn;
@@ -195,9 +213,9 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         if(passedInNodes === undefined) return this.updateViewableNodes(this);
     }
 
-    onSort({nodesCopy, compareFn}: this, passedInNodes?: ITreeNode[]){
+    onSort({nodesCopy}: this, passedInNodes?: ITreeNode[]){
         const nodes = passedInNodes || nodesCopy;
-        nodes.sort(compareFn);
+        nodes.sort(this.compare);
         nodes.forEach(node => {
             const children = node.children;
             if(children !== undefined) this.onSort(this, children);
@@ -309,7 +327,6 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             collapseAll: false,
             expandAll: false,
             sort: 'none',
-            comparePath: 'name',
             updateCount: 0,
             updateCountEcho: 0,
             cloneNodes: false,
@@ -342,10 +359,6 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
         actions: {
             defineIdFn: 'idPath',
             defineToggledNodeFn: 'toggleNodePath',
-            defineCompareFn:{
-                ifAllOf:['sort', 'comparePath']
-            },
-            onSort:'compareFn',
             toggleNode: {
                 ifAllOf: ['toggledNode', 'toggleNodeFn', 'idFn']
             },

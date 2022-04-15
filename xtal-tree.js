@@ -69,6 +69,8 @@ export class XtalTree extends HTMLElement {
     }
     matchesSearch(node) {
         const { testNodePaths, searchString } = this;
+        if (!searchString)
+            return false;
         for (const path of testNodePaths) {
             const val = node[path];
             if (typeof val != 'string')

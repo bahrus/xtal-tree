@@ -71,6 +71,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     }
     matchesSearch(node: ITreeNode){
         const {testNodePaths, searchString} = this;
+        if(!searchString) return false;
         for(const path of testNodePaths){
             const val = (<any>node)[path];
             if(typeof val != 'string') continue;
@@ -127,6 +128,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             this.setLevels(this, children, level + 1);
         }
     }
+
 
     search({nodesCopy, searchString}: this, passedInNodes?: ITreeNode[], passedInParent?: ITreeNode){
         if(passedInNodes === undefined) this.onCollapseAll(this);

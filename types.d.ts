@@ -29,8 +29,7 @@ export interface XtalTreeProps{
      */
     clone: boolean;
 
-    // idFn: (tn: ITreeNode) => string | number;
-    // idPath: string;
+
     nodes: ITreeNode[];
     searchString: string;
     testNodePaths: string[];
@@ -42,7 +41,6 @@ export interface XtalTreeProps{
     closedNode: ITreeNode;
     levelPath: string;
     marginStylePath: string;
-    //levelSetterFn: (nodes: ITreeNode[], level: number) => string;
     nodesCopy: ITreeNode[];
     expandAll: boolean;
     collapseAll: boolean;
@@ -62,15 +60,10 @@ export interface XtalTreeProps{
 
 export interface XtalTreeFormElement {
     name: string,
-    value: string,
+    value: string
 }
 
 export interface XtalTreeActions{
-
-
-    // defineIdFn(self: this): {
-    //     idFn: (tn: ITreeNode) => string | number;
-    // }
 
     setHasChildren(self: this, tn: ITreeNode, recursive: boolean): void;
 

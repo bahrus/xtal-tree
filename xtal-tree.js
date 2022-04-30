@@ -211,8 +211,20 @@ export class XtalTree extends HTMLElement {
         if (objectGraph === undefined)
             return;
         const { name, value } = editedNode;
+        let val = value;
+        if (editedNode instanceof HTMLInputElement) {
+            const { type, checked, valueAsNumber } = editedNode;
+            switch (type) {
+                case 'checkbox':
+                    val = checked;
+                    break;
+                case 'number':
+                    val = valueAsNumber;
+                    break;
+            }
+        }
         const { updateOGFromPath } = await import('./updateOGFromPath.mjs');
-        updateOGFromPath(objectGraph, name, value);
+        updateOGFromPath(objectGraph, name, val);
         this.updateCount++;
     }
     synchNodesCopyOrObjectGraph({ nodes, cloneNodes, objectGraph }) {

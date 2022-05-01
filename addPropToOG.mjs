@@ -39,7 +39,7 @@ export function addPropToOG(og, path, type, baseEl, callback) {
                         case 'string':
                             val = '';
                             break;
-                        case 'boolean':
+                        case 'bool':
                             val = false;
                             break;
                         case 'number':

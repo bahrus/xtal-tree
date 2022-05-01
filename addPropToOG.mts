@@ -51,7 +51,7 @@ export function addPropToOG(
                         case 'string':
                             val = '';
                             break;
-                        case 'boolean':
+                        case 'bool':
                             val = false;
                             break;
                         case 'number':

@@ -43,9 +43,10 @@ export function addPropToOG(
                     dialogEl.close();
                     const currentType = dialogEl.dataset.type!;
                     const name = (dialogEl.querySelector('.name') as HTMLInputElement).value;
-                    const valueEl = dialogEl.querySelector('.value') as HTMLInputElement;
-                    const jsonValueEl = dialogEl.querySelector('.json-value') as HTMLTextAreaElement;
-                    let val: any = valueEl.value;
+                    // const valueEl = dialogEl.querySelector('.value') as HTMLInputElement;
+                    // const jsonValueEl = dialogEl.querySelector('.json-value') as HTMLTextAreaElement;
+                    // let val: any = valueEl.value;
+                    let val : any = '';
                     switch (currentType) {
                         case 'string':
                             val = '';

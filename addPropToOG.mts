@@ -20,12 +20,12 @@ export function addPropToOG(
                 <label>
                     Name: <input class=name type=text>
                 </label>
-                <label class=primitive>
+                <!-- <label class=primitive>
                     Value: <input class=value>
                 </label>
                 <label class=json>
                     Value: <textarea class=json-value></textarea>
-                </label>
+                </label> -->
                 <menu>
                     <button type=button value="cancel">Cancel</button>
                     <button type=button value="confirm">Confirm</button>
@@ -48,19 +48,19 @@ export function addPropToOG(
                     let val: any = valueEl.value;
                     switch (currentType) {
                         case 'string':
-                            val = valueEl.value;
+                            val = '';
                             break;
                         case 'boolean':
-                            val = valueEl.checked;
+                            val = false;
                             break;
                         case 'number':
-                            val = valueEl.valueAsNumber;
+                            val = 0;
                             break;
                         case 'object':
-                            val = JSON.parse(jsonValueEl.value);
+                            val = {};
                             break;
                         case 'arr':
-                            val = JSON.parse(jsonValueEl.value);
+                            val = [];
                             break;
 
                     }

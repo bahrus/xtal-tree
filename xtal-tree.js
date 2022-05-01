@@ -61,6 +61,7 @@ export class XtalTree extends HTMLElement {
         const { children } = tn;
         const hasChildren = children !== undefined && children.length > 0;
         tn.hasChildren = hasChildren;
+        tn.canHaveChildren = tn.type === 'array' || tn.type === 'object';
         if (recursive && hasChildren) {
             for (const child of children) {
                 this.setHasChildren(this, child, true);

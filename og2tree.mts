@@ -1,11 +1,11 @@
-import {ITreeNode} from  './types';
+import {ITreeNode, TreeNodeType} from  './types';
 
 export function og2tree(obj: any, ancestors: string[] = []): ITreeNode[]{
     const nodes: ITreeNode[] = [];
     if(Array.isArray(obj)){
         let count = 0;
         for(const value of obj){
-            let type: string = typeof value;
+            let type = typeof value as TreeNodeType;
             if(Array.isArray(value)) type = 'array';
             const name = '[' + count.toString() + ']';
             const dlim = ancestors.length === 0 ? '' : '.';
@@ -29,7 +29,7 @@ export function og2tree(obj: any, ancestors: string[] = []): ITreeNode[]{
     }else{
         for(const name in obj){
             const value = obj[name];
-            let type: string = typeof value;
+            let type = typeof value as TreeNodeType;
             if(Array.isArray(value)) type = 'array';
             const dlim = ancestors.length === 0 ? '' : '.';
             const node: ITreeNode = {

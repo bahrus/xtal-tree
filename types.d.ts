@@ -4,11 +4,14 @@ export interface ITreeNode{
     path: string;
     value: any;
     asString?: string;
-    type: string;
+    type: TreeNodeType;
     parent?: ITreeNode;
     open?: boolean;
     hasChildren?: boolean;
+    canHaveChildren?: boolean;
 }
+
+export type TreeNodeType = 'array' | 'object' | 'string' | 'number' | 'boolean';
 
 export interface INodeRef{
     prop?: string;

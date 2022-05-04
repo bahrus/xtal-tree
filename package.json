@@ -8,11 +8,12 @@
   "main": "XtalTreeDeco.js",
   "module": "XtalTreeDeco.js",
   "dependencies": {
-    "trans-render": "0.0.535",
-    "xtal-element": "0.0.492"
+    "trans-render": "0.0.536",
+    "xtal-element": "0.0.493"
   },
   "devDependencies": {
-    "xtal-test": "0.0.56",
+    "@playwright/test": "1.21.1",
+    "may-it-serve": "0.0.0",
     "xtal-vlist": "0.0.60",
     "be-reformable": "0.0.41",
     "be-channeling": "0.0.16",
@@ -22,7 +23,7 @@
     "xtal-shell": "0.0.27"
   },
   "scripts": {
-    "serve": "node node_modules/xtal-test/serve.js",
-    "test": "node test/test-all.js"
+    "serve": "node node_modules/may-it-serve/serve.js",
+    "test": "playwright test"
   }
 }

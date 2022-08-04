@@ -3,12 +3,15 @@ export interface ITreeNode{
     name: string;
     path: string;
     value: any;
+    level: number;
     asString?: string;
     type: TreeNodeType;
     parent?: ITreeNode;
     open?: boolean;
     hasChildren?: boolean;
     canHaveChildren?: boolean;
+    marginStyle: string;
+    timeStamp?: string;
 }
 
 export type TreeNodeType = 'array' | 'object' | 'string' | 'number' | 'boolean';
@@ -42,8 +45,8 @@ export interface XtalTreeProps{
     toggledNodePath: string | number;
     openedNode: ITreeNode;
     closedNode: ITreeNode;
-    levelPath: string;
-    marginStylePath: string;
+    //levelPath: string;
+    //marginStylePath: string;
     nodesCopy: ITreeNode[];
     expandAll: boolean;
     collapseAll: boolean;

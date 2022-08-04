@@ -13,7 +13,7 @@ export class XtalTree extends HTMLElement {
             return acc;
         nodesCopy.forEach(node => {
             if (this.#openNode[node.path]) {
-                node.open = true;
+                this.#updateNode(node, 'open', true);
             }
             if (searchString) {
                 if (!this.isOpen(node) && !this.matchesSearch(node))
@@ -25,7 +25,7 @@ export class XtalTree extends HTMLElement {
                 const children = node.children;
                 if (children) {
                     for (const child of children) {
-                        child.parent = node;
+                        this.#updateNode(child, 'parent', node);
                     }
                     this.calculateViewableNodes(this, children, acc);
                 }
@@ -60,8 +60,8 @@ export class XtalTree extends HTMLElement {
     setHasChildren({}, tn, recursive) {
         const { children } = tn;
         const hasChildren = children !== undefined && children.length > 0;
-        tn.hasChildren = hasChildren;
-        tn.canHaveChildren = tn.type === 'array' || tn.type === 'object';
+        this.#updateNode(tn, 'hasChildren', hasChildren);
+        this.#updateNode(tn, 'canHaveChildren', tn.type === 'array' || tn.type === 'object');
         if (recursive && hasChildren) {
             for (const child of children) {
                 this.setHasChildren(this, child, true);
@@ -115,17 +115,17 @@ export class XtalTree extends HTMLElement {
         return { toggledNode };
     }
     doToggleNode(tn) {
-        tn.open = !tn.open;
+        this.#updateNode(tn, 'open', !tn.open);
     }
-    setLevels({ nodesCopy, levelPath, marginStylePath, indentFactor }, passedInNodes, level) {
+    setLevels({ nodesCopy, indentFactor }, passedInNodes, level) {
         if (passedInNodes === undefined)
             passedInNodes = nodesCopy;
         if (level === undefined)
             level = 0;
         for (const node of passedInNodes) {
             this.setHasChildren(this, node, false);
-            node[levelPath] = level;
-            node[marginStylePath] = "margin-left:" + level * indentFactor + "px";
+            this.#updateNode(node, 'level', level);
+            this.#updateNode(node, 'marginStyle', "margin-left:" + level * indentFactor + "px");
             const children = node.children;
             if (children === undefined)
                 continue;
@@ -277,6 +277,12 @@ export class XtalTree extends HTMLElement {
         const file = new Blob([JSON.stringify(objectGraph, null, 2)], { type: 'text/json' });
         this.downloadHref = URL.createObjectURL(file);
     }
+    #updateNode(node, prop, val) {
+        if (node[prop] === val)
+            return;
+        node[prop] = val;
+        node.timeStamp = crypto.randomUUID();
+    }
 }
 const dispatch = {
     notify: {
@@ -295,8 +301,8 @@ const xe = new XE({
         tagName: 'xtal-tree',
         propDefaults: {
             testNodePaths: ['name', 'value'],
-            marginStylePath: 'marginStyle',
-            levelPath: 'level',
+            //marginStylePath: 'marginStyle',
+            //levelPath: 'level',
             collapseAll: false,
             expandAll: false,
             sort: 'none',
@@ -338,7 +344,7 @@ const xe = new XE({
             },
             onToggledNodePath: 'toggledNodePath',
             setLevels: {
-                ifAllOf: ['nodesCopy', 'levelPath', 'marginStylePath']
+                ifAllOf: ['nodesCopy']
             },
             onCollapseAll: 'collapseAll',
             onExpandAll: 'expandAll',

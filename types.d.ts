@@ -3,14 +3,14 @@ export interface ITreeNode{
     name: string;
     path: string;
     value: any;
-    level: number;
+    level?: number;
     asString?: string;
     type: TreeNodeType;
     parent?: ITreeNode;
     open?: boolean;
     hasChildren?: boolean;
     canHaveChildren?: boolean;
-    marginStyle: string;
+    marginStyle?: string;
     timeStamp?: string;
 }
 

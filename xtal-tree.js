@@ -283,7 +283,7 @@ export class XtalTree extends HTMLElement {
         if (node[prop] === val)
             return;
         node[prop] = val;
-        node.timeStamp = this.#timestamp++;
+        node.timestamp = this.#timestamp++;
     }
 }
 const dispatch = {

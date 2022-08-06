@@ -283,7 +283,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     #updateNode(node: ITreeNode, prop: keyof ITreeNode, val: any){
         if(node[prop] === val) return;
         (node as any)[prop] = val;
-        node.timeStamp = this.#timestamp++;
+        node.timestamp = this.#timestamp++;
     }
 
 }

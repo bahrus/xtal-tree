@@ -5,6 +5,7 @@ declare function structuredClone<T>(inp: T): T;
 export class XtalTree extends HTMLElement implements XtalTreeActions{
     #idToNodeLookup: {[id: string | number]: ITreeNode} = {};
     #openNode: {[path: string]: boolean} = {};
+    #timestamp = 0;
     onNodes({nodes, cloneNodes}: this){
         const nodesCopy = cloneNodes ? structuredClone(nodes) : nodes;
         return {
@@ -83,8 +84,12 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
 
     updateViewableNodes({nodesCopy}: this){
+        const viewableNodes = this.calculateViewableNodes(this, nodesCopy, []);
+        for(const node of viewableNodes){
+            node.timeStamp = this.#timestamp++;
+        }
         return {
-            viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
+            viewableNodes 
         };
     }
     toggleNode({toggledNode}: this){
@@ -279,7 +284,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     #updateNode(node: ITreeNode, prop: keyof ITreeNode, val: any){
         if(node[prop] === val) return;
         (node as any)[prop] = val;
-        node.timeStamp = crypto.randomUUID();
+        node.timeStamp = this.#timestamp++;
     }
 
 }

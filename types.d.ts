@@ -11,7 +11,7 @@ export interface ITreeNode{
     hasChildren?: boolean;
     canHaveChildren?: boolean;
     marginStyle?: string;
-    timeStamp?: string;
+    timeStamp?: number;
 }
 
 export type TreeNodeType = 'array' | 'object' | 'string' | 'number' | 'boolean';

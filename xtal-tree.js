@@ -2,6 +2,7 @@ import { XE } from 'xtal-element/src/XE.js';
 export class XtalTree extends HTMLElement {
     #idToNodeLookup = {};
     #openNode = {};
+    #timestamp = 0;
     onNodes({ nodes, cloneNodes }) {
         const nodesCopy = cloneNodes ? structuredClone(nodes) : nodes;
         return {
@@ -82,8 +83,12 @@ export class XtalTree extends HTMLElement {
         return false;
     }
     updateViewableNodes({ nodesCopy }) {
+        const viewableNodes = this.calculateViewableNodes(this, nodesCopy, []);
+        for (const node of viewableNodes) {
+            node.timeStamp = this.#timestamp++;
+        }
         return {
-            viewableNodes: this.calculateViewableNodes(this, nodesCopy, [])
+            viewableNodes
         };
     }
     toggleNode({ toggledNode }) {
@@ -281,7 +286,7 @@ export class XtalTree extends HTMLElement {
         if (node[prop] === val)
             return;
         node[prop] = val;
-        node.timeStamp = crypto.randomUUID();
+        node.timeStamp = this.#timestamp++;
     }
 }
 const dispatch = {

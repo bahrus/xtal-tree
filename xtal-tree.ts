@@ -82,15 +82,11 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         return false;
     }
 
+    
 
-    updateViewableNodes({nodesCopy}: this, updateTimestamps: boolean){
+
+    updateViewableNodes({nodesCopy}: this){
         const viewableNodes = this.calculateViewableNodes(this, nodesCopy, []);
-        if(updateTimestamps){
-            for(const node of viewableNodes){
-                node.timeStamp = this.#timestamp++;
-            }
-        }
-
         return {
             viewableNodes 
         };
@@ -100,7 +96,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         this.doToggleNode(toggledNode);
         const path = (toggledNode as ITreeNode).path
         this.#openNode[path] = !this.#openNode[path];
-        return this.updateViewableNodes(this, !toggledNode.open);
+        return this.updateViewableNodes(this);
     }
     openNode({openedNode}: this){
         if(!this.isOpen(openedNode)){
@@ -165,7 +161,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             this.doToggleNode(passedInParent);
         }
         if(passedInNodes === undefined) {
-            this.viewableNodes = this.updateViewableNodes(this, true).viewableNodes;
+            this.viewableNodes = this.updateViewableNodes(this).viewableNodes;
         }
         return foundMatch;
     }
@@ -178,7 +174,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             const children = node.children;
             if(children !== undefined) this.onCollapseAll(this, children);
         });
-        if(passedInNodes === undefined) return this.updateViewableNodes(this, true);
+        if(passedInNodes === undefined) return this.updateViewableNodes(this);
     }
 
     onExpandAll({nodesCopy}: this, passedInNodes?: ITreeNode[]){
@@ -189,7 +185,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             const children = node.children;
             if(children !== undefined) this.onExpandAll(this, children);
         });
-        if(passedInNodes === undefined) return this.updateViewableNodes(this, false);
+        if(passedInNodes === undefined) return this.updateViewableNodes(this);
     }
 
     onSort({nodesCopy}: this, passedInNodes?: ITreeNode[]){
@@ -199,7 +195,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
             const children = node.children;
             if(children !== undefined) this.onSort(this, children);
         });
-        if(passedInNodes === undefined) return this.updateViewableNodes(this, true);
+        if(passedInNodes === undefined) return this.updateViewableNodes(this);
     }
 
     async onObjectGraph({objectGraph}: this)  {
@@ -269,14 +265,14 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
         const {getTreeNodeFromPath} = await import('./getTreeNodeFromPath.mjs');
         const node = getTreeNodeFromPath(nodesCopy as ITreeNode[], expandAllNode.name);
         this.onExpandAll(this, [node.node!]);
-        return this.updateViewableNodes(this, false);
+        return this.updateViewableNodes(this);
     }
 
     async onCollapseAllNode({collapseAllNode, nodesCopy}: this) {
         const {getTreeNodeFromPath} = await import('./getTreeNodeFromPath.mjs');
         const node = getTreeNodeFromPath(nodesCopy as ITreeNode[], collapseAllNode.name);
         this.onCollapseAll(this, [node.node!]);
-        return this.updateViewableNodes(this, true);
+        return this.updateViewableNodes(this);
     }
 
     makeDownloadBlob({objectGraph}: this){

@@ -8,13 +8,13 @@
   "main": "XtalTreeDeco.js",
   "module": "XtalTreeDeco.js",
   "dependencies": {
-    "trans-render": "0.0.540",
+    "trans-render": "0.0.545",
     "xtal-element": "0.0.493"
   },
   "devDependencies": {
     "@playwright/test": "1.24.2",
     "may-it-serve": "0.0.2",
-    "xtal-vlist": "0.0.66",
+    "xtal-vlist": "0.0.69",
     "be-reformable": "0.0.62",
     "be-channeling": "0.0.17",
     "be-noticed": "0.0.65",

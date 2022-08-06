@@ -201,7 +201,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     async onObjectGraph({objectGraph}: this)  {
         const {og2tree} = await import('./og2tree.mjs');
         return {
-            nodes: og2tree(objectGraph),
+            nodes: og2tree(objectGraph, this),
         };
     }
 
@@ -283,6 +283,10 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
     #updateNode(node: ITreeNode, prop: keyof ITreeNode, val: any){
         if(node[prop] === val) return;
         (node as any)[prop] = val;
+        node.timestamp = this.#timestamp++;
+    }
+
+    ts(node: ITreeNode){
         node.timestamp = this.#timestamp++;
     }
 

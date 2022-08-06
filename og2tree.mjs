@@ -1,4 +1,4 @@
-export function og2tree(obj, ancestors = []) {
+export function og2tree(obj, xt, ancestors = []) {
     const nodes = [];
     if (Array.isArray(obj)) {
         let count = 0;
@@ -14,9 +14,10 @@ export function og2tree(obj, ancestors = []) {
                 type,
                 value,
             };
+            xt.ts(node);
             if (typeof value === 'object') {
                 ancestors.push(name);
-                node.children = og2tree(value, ancestors);
+                node.children = og2tree(value, xt, ancestors);
                 ancestors.pop();
                 node.asString = toString(value, 75);
             }
@@ -42,7 +43,7 @@ export function og2tree(obj, ancestors = []) {
             };
             if (typeof value === 'object') {
                 ancestors.push(name);
-                node.children = og2tree(value, ancestors);
+                node.children = og2tree(value, xt, ancestors);
                 ancestors.pop();
                 node.asString = toString(value, 75);
             }

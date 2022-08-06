@@ -1,6 +1,7 @@
 import {ITreeNode, TreeNodeType} from  './types';
+import { XtalTree } from './xtal-tree.js';
 
-export function og2tree(obj: any, ancestors: string[] = []): ITreeNode[]{
+export function og2tree(obj: any, xt: XtalTree, ancestors: string[] = []): ITreeNode[]{
     const nodes: ITreeNode[] = [];
     if(Array.isArray(obj)){
         let count = 0;
@@ -15,9 +16,10 @@ export function og2tree(obj: any, ancestors: string[] = []): ITreeNode[]{
                 type,
                 value,
             };
+            xt.ts(node);
             if(typeof value === 'object'){
                 ancestors.push(name);
-                node.children = og2tree(value, ancestors);
+                node.children = og2tree(value, xt, ancestors);
                 ancestors.pop();
                 node.asString = toString(value, 75);
             }else{
@@ -40,7 +42,7 @@ export function og2tree(obj: any, ancestors: string[] = []): ITreeNode[]{
             };
             if(typeof value === 'object'){
                 ancestors.push(name);
-                node.children = og2tree(value, ancestors);
+                node.children = og2tree(value, xt, ancestors);
                 ancestors.pop();
                 node.asString = toString(value, 75);
             }else{

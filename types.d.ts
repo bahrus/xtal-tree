@@ -74,7 +74,7 @@ export interface XtalTreeActions{
     setHasChildren(self: this, tn: ITreeNode, recursive: boolean): void;
 
     calculateViewableNodes(self: this, nodes: ITreeNode[], acc: ITreeNode[]): ITreeNode[];
-    updateViewableNodes(self: this): {
+    updateViewableNodes(self: this, updateTimestamps: boolean): {
         viewableNodes: ITreeNode[];
     };
     toggleNode(self: this): void;

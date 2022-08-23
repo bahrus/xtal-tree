@@ -8,8 +8,8 @@
   "main": "XtalTreeDeco.js",
   "module": "XtalTreeDeco.js",
   "dependencies": {
-    "trans-render": "0.0.562",
-    "xtal-element": "0.0.502"
+    "trans-render": "0.0.574",
+    "xtal-element": "0.0.513"
   },
   "devDependencies": {
     "@playwright/test": "1.25.0",

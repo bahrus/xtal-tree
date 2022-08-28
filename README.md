@@ -4,6 +4,10 @@
 
 [![Actions Status](https://github.com/bahrus/xtal-tree/workflows/CI/badge.svg)](https://github.com/bahrus/xtal-tree/actions?query=workflow%3ACI)
 
+[![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/xtal-tree?style=for-the-badge)](https://bundlephobia.com/result?p=xtal-tree)
+
+<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/xtal-tree?compression=gzip">
+
 # \<xtal-tree\>
 
 [Demo](https://codepen.io/bahrus/pen/GROLwBV)

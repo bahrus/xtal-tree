@@ -1,18 +1,33 @@
 {
   "name": "xtal-tree",
   "version": "0.0.163",
+  "keywords": [
+    "web-components",
+    "web-component",
+    "custom-element",
+    "custom-elements"
+  ],
   "description": "Provide flat, virtual snapshot of a tree",
   "repository": "https://github.com/bahrus/xtal-tree",
   "author": "bahrus <anderson.bruce.b@gmail.com>",
   "license": "MIT",
-  "main": "XtalTreeDeco.js",
-  "module": "XtalTreeDeco.js",
+  "main": "xtal-tree.js",
+  "module": "xtal=tree.js",
+  "exports": {
+    ".": "./be-a-beacon.js",
+    "./be-a-beacon.js": "./be-a-beacon.js"
+  },
+  "files": [
+    "."
+  ],
+  "types": "types.d.ts",
   "dependencies": {
     "trans-render": "0.0.578",
     "xtal-element": "0.0.514"
   },
   "devDependencies": {
     "@playwright/test": "1.25.1",
+    "@skypack/package-check": "0.2.2",
     "may-it-serve": "0.0.2",
     "xtal-vlist": "0.0.75",
     "be-reformable": "0.0.65",
@@ -24,6 +39,7 @@
   },
   "scripts": {
     "serve": "node node_modules/may-it-serve/serve.js",
-    "test": "playwright test"
+    "test": "playwright test",
+    "package-check": "package-check"
   }
 }

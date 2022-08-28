@@ -14,11 +14,11 @@
   "main": "xtal-tree.js",
   "module": "xtal=tree.js",
   "exports": {
-    ".": "./be-a-beacon.js",
-    "./be-a-beacon.js": "./be-a-beacon.js"
+    ".": "./xtal-tree.js",
+    "./xtal-tree.js": "./xtal-tree.js"
   },
   "files": [
-    "."
+    "*.*"
   ],
   "types": "types.d.ts",
   "dependencies": {

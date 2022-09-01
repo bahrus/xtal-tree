@@ -23,7 +23,7 @@
   "types": "types.d.ts",
   "dependencies": {
     "trans-render": "0.0.581",
-    "xtal-element": "0.0.514"
+    "xtal-element": "0.0.515"
   },
   "devDependencies": {
     "@playwright/test": "1.25.1",
@@ -34,7 +34,7 @@
     "be-channeling": "0.0.24",
     "be-noticed": "0.0.68",
     "be-observant": "0.0.134",
-    "xtal-editor": "0.0.187",
+    "xtal-editor": "0.0.193",
     "xtal-shell": "0.0.27"
   },
   "scripts": {

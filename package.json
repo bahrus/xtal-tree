@@ -22,19 +22,19 @@
   ],
   "types": "types.d.ts",
   "dependencies": {
-    "trans-render": "0.0.585",
-    "xtal-element": "0.0.517"
+    "trans-render": "0.0.626",
+    "xtal-element": "0.0.530"
   },
   "devDependencies": {
-    "@playwright/test": "1.25.1",
+    "@playwright/test": "1.27.1",
     "@skypack/package-check": "0.2.2",
-    "may-it-serve": "0.0.2",
-    "xtal-vlist": "0.0.85",
+    "may-it-serve": "0.0.3",
+    "xtal-vlist": "0.0.88",
     "be-reformable": "0.0.66",
-    "be-channeling": "0.0.26",
-    "be-noticed": "0.0.69",
-    "be-observant": "0.0.136",
-    "xtal-editor": "0.0.193",
+    "be-channeling": "0.0.19",
+    "be-noticed": "0.0.71",
+    "be-observant": "0.0.154",
+    "xtal-editor": "0.0.196",
     "xtal-shell": "0.0.27"
   },
   "scripts": {

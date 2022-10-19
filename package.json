@@ -30,7 +30,6 @@
     "@playwright/test": "1.27.1",
     "@skypack/package-check": "0.2.2",
     "may-it-serve": "0.0.3",
-    "xtal-vlist": "0.0.88",
     "be-reformable": "0.0.67",
     "be-channeling": "0.0.30",
     "be-noticed": "0.0.72",

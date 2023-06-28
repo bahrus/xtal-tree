@@ -5,7 +5,6 @@
 		"sourceMap": false,
 		"experimentalDecorators": true,
 		"newLine": "LF",
-		"watch": true,
 		"strict": true
 	},
 	"files": [
@@ -13,8 +12,6 @@
 		"test/og2TreeTest.mts"
 	],
 	"exclude":[
-		"build",
-		"bower_components",
 		"node_modules"
 	]
 

@@ -18,21 +18,21 @@
     "./xtal-tree.js": "./xtal-tree.js"
   },
   "files": [
-    "*.*"
+    "*.js",
+    "*.mjs",
+    "types.d.ts"
   ],
   "types": "types.d.ts",
   "dependencies": {
-    "trans-render": "0.0.631",
-    "xtal-element": "0.0.532"
+    "trans-render": "0.0.693",
+    "xtal-element": "0.0.571"
   },
   "devDependencies": {
-    "@playwright/test": "1.27.1",
-    "@skypack/package-check": "0.2.2",
-    "may-it-serve": "0.0.3"
+    "@playwright/test": "1.35.1",
+    "may-it-serve": "0.0.5"
   },
   "scripts": {
     "serve": "node node_modules/may-it-serve/serve.js",
-    "test": "playwright test",
-    "package-check": "package-check"
+    "test": "playwright test"
   }
 }

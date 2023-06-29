@@ -1,5 +1,6 @@
 import {XtalTreeProps, XtalTreeActions, ITreeNode, NodeTypes} from './types';
-import {XE, PropInfoExt} from 'xtal-element/src/XE.js';
+import {XE} from 'xtal-element/XE.js';
+import {PropInfoExt} from 'xtal-element/types';
 declare function structuredClone<T>(inp: T): T;
 
 export class XtalTree extends HTMLElement implements XtalTreeActions{
@@ -342,8 +343,10 @@ const xe = new XE<XtalTreeProps, XtalTreeActions>({
             collapseAllNode:noDryNoP,
             updateCount:{
                 notify:{
-                    echoDelay: 200,
-                    echoTo: 'updateCountEcho',
+                    echoTo: {
+                        key: 'updateCountEcho',
+                        delay: 200,
+                    }
                 }
             },
             copyNodeToClipboard: noDryNoP,

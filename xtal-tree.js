@@ -1,4 +1,4 @@
-import { XE } from 'xtal-element/src/XE.js';
+import { XE } from 'xtal-element/XE.js';
 export class XtalTree extends HTMLElement {
     #idToNodeLookup = {};
     #openNode = {};
@@ -333,8 +333,10 @@ const xe = new XE({
             collapseAllNode: noDryNoP,
             updateCount: {
                 notify: {
-                    echoDelay: 200,
-                    echoTo: 'updateCountEcho',
+                    echoTo: {
+                        key: 'updateCountEcho',
+                        delay: 200,
+                    }
                 }
             },
             copyNodeToClipboard: noDryNoP,

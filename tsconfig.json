@@ -8,8 +8,7 @@
 		"strict": true
 	},
 	"files": [
-		"xtal-tree.ts",
-		"test/og2TreeTest.mts"
+		"xtal-tree.ts"
 	],
 	"exclude":[
 		"node_modules"

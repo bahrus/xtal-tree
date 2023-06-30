@@ -135,6 +135,8 @@ export class XtalTree extends HTMLElement {
         }
     }
     search({ nodesCopy, searchString }, passedInNodes, passedInParent) {
+        if (searchString === undefined)
+            return;
         if (passedInNodes === undefined)
             this.onCollapseAll(this);
         let foundMatch = false;

@@ -137,6 +137,7 @@ export class XtalTree extends HTMLElement implements XtalTreeActions{
 
 
     search({nodesCopy, searchString}: this, passedInNodes?: ITreeNode[], passedInParent?: ITreeNode){
+        if(searchString === undefined) return;
         if(passedInNodes === undefined) this.onCollapseAll(this);
         let foundMatch = false;
         const nodes = passedInNodes || nodesCopy;

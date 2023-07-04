@@ -24,8 +24,8 @@
   ],
   "types": "types.d.ts",
   "dependencies": {
-    "trans-render": "0.0.693",
-    "xtal-element": "0.0.571"
+    "trans-render": "0.0.694",
+    "xtal-element": "0.0.572"
   },
   "devDependencies": {
     "@playwright/test": "1.35.1",
@@ -33,6 +33,7 @@
   },
   "scripts": {
     "serve": "node node_modules/may-it-serve/serve.js",
-    "test": "playwright test"
+    "test": "playwright test",
+    "update": "ncu -u && npm install"
   }
 }

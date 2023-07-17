@@ -24,11 +24,11 @@
   ],
   "types": "types.d.ts",
   "dependencies": {
-    "trans-render": "0.0.694",
-    "xtal-element": "0.0.572"
+    "trans-render": "0.0.699",
+    "xtal-element": "0.0.574"
   },
   "devDependencies": {
-    "@playwright/test": "1.35.1",
+    "@playwright/test": "1.36.1",
     "may-it-serve": "0.0.5"
   },
   "scripts": {
